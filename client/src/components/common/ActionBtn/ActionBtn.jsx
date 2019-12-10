@@ -1,14 +1,14 @@
 import React from 'react';
 import './ActionBtn.css';
 
-export default props => {
+export default ({type, className, handler, title}) => {
   return (
     <button
       type='button'
-      className={props.className || 'btn btn-outline-info'}
-      onClick={props.handler}
+      className={className || 'btn btn-outline-info'}
+      onClick={handler}
     >
-      {props.title}
+      {title}
     </button>
   );
 };
