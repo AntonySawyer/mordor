@@ -5,9 +5,10 @@ import Auth from './components/Auth/';
 import Profile from './components/Profile/';
 import AdminPanel from './components/AdminPanel/';
 import NavBar from './components/NavBar/';
+
 import './App.css';
 
-function App() {
+export default () => {
   return (
     <Router>
       <NavBar />
@@ -17,6 +18,4 @@ function App() {
       <Route path='/profile' component={Profile} />
     </Router>
   );
-}
-
-export default App;
+};
