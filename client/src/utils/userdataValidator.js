@@ -1,7 +1,7 @@
 export default async function UserdataValidator(email, password, username) {
     const passValid = checkPassword(password);
     const emailValid = checkEmail(email);
-    const usernameValid = checkUsername(username);
+    const usernameValid = username === undefined ? true : checkUsername(username);
     if (passValid && emailValid && usernameValid) {
         console.log(await checkUnique(email, username));
         return await checkUnique(email, username);
@@ -17,7 +17,7 @@ const checkEmail = email => {
     return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
 }
 
-const checkUsername = username => username && username.length >= 4;
+const checkUsername = username => username.length > 3;
 
 const checkUnique = async (email, username) => {
     const result = {

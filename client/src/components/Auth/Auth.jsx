@@ -21,7 +21,8 @@ class Auth extends Component {
     const { emailValid, passValid } = await UserdataValidator(email, password);
     this.setState({ emailValid, passValid });
 
-    if (!emailValid && passValid) {
+    if (emailValid && passValid) {
+      console.log('send');
       this.sendData('/login', JSON.stringify({ email, password }));
     }
   }
@@ -36,12 +37,12 @@ class Auth extends Component {
       username
     );
     this.setState({
-      emailValid,
-      usernameValid,
+      emailValid: !emailValid,
+      usernameValid: !usernameValid,
       passValid
     });
 
-    if (emailValid && usernameValid && passValid) {
+    if (!emailValid && !usernameValid && passValid) {
       this.sendData('/register', JSON.stringify({ email, username, password }));
     }
   }
