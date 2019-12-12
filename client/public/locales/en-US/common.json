@@ -5,7 +5,10 @@
         "adminPanel": "Admin panel",
         "profile": "Profile",
         "lang": "Изменить язык",
-        "search": "Search"
+        "search": "Search",
+        "theme": "Theme",
+        "dark": "Dark",
+        "light": "Light"
     },
     "Home": {
         "lastUpdate": "Last updated",

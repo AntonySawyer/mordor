@@ -44,6 +44,5 @@ export default function configureI18n({ i18nextConfig, redux }) {
       nonExplicitWhitelist: true,
       load: 'currentOnly'
     });
-console.log(i18n);  
   return i18n;
 }

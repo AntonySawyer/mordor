@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
 import SearchBar from '../SearchBar/';
 import LangSwitch from '../LangSwitch/';
+import ThemeSwitch from "../ThemeSwitch/";
 import './NavBar.css';
 
 function NavBar(props) {
@@ -46,6 +47,9 @@ function NavBar(props) {
             </li>
             <li>
               <LangSwitch />
+            </li>
+            <li>
+              <ThemeSwitch />
             </li>
           </ul>
           <SearchBar />

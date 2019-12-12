@@ -5,8 +5,10 @@ import adminReducer from './adminReducer';
 import profileReducer from './profileReducer';
 import loginReducer from './loginReducer';
 import homeReducer from "./homeReducer";
+import syncReducer from "./syncReducer";
 
 const redusers = combineReducers({
+  syncParams: syncReducer,
   i18next: i18nextReducer,
   homePage: homeReducer,
   profilePage: profileReducer,

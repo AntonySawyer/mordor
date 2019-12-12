@@ -1,0 +1,15 @@
+html {
+    background: white;
+}
+
+body {
+    height: 100vh;
+}
+
+.dark-body {
+    filter: invert(100) hue-rotate(180deg);
+}
+
+.dark-body img {
+    filter: invert(100) hue-rotate(180deg);
+}

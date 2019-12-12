@@ -12,8 +12,15 @@ import Reducers from './redux/reducers/';
 import App from './App';
 import './index.css';
 
+let defaultLang = 'en-US';
+if (localStorage.getItem('lang') === null) {
+  localStorage.setItem('lang', 'en-US');
+} else {
+  defaultLang = localStorage.getItem('lang');
+}
+
 const i18nextConfig = {
-  lng: localStorage.getItem('lang'),
+  lng: defaultLang,
   language: null,
   whitelist: ['en', 'ru'],
   ns: ['common'],
