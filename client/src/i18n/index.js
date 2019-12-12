@@ -30,6 +30,7 @@ export default function configureI18n({ i18nextConfig, redux }) {
         excludeCacheFor: ['cimode']
       },
       whitelist: i18nextConfig.whitelist,
+      lng: i18nextConfig.lng,
       fallbackLng: i18nextConfig.fallbackLng,
       ns: i18nextConfig.ns,
       defaultNS: i18nextConfig.defaultNS,

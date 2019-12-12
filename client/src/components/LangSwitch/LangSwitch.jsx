@@ -6,11 +6,11 @@ import './LangSwitch.css';
 const LangSwitch = React.memo(props => {
   function onChange(lng, i18n) {
     i18n.changeLanguage(lng);
+    localStorage.setItem('lang', lng);
   }
   
   const { t, i18n } = props;
   const data = i18n.getDataByLanguage(i18n.language);
-
   return (
     <NamespacesConsumer ns={['common']} wait={true}>
       {(t, { i18n, ready }) => (

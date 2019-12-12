@@ -13,6 +13,7 @@ import App from './App';
 import './index.css';
 
 const i18nextConfig = {
+  lng: localStorage.getItem('lang'),
   language: null,
   whitelist: ['en', 'ru'],
   ns: ['common'],
