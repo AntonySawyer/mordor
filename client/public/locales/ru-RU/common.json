@@ -1,0 +1,56 @@
+{
+    "NavBar": {
+        "home": "Домой",
+        "register": "Авторизация",
+        "adminPanel": "Панель администратора",
+        "profile": "Профиль",
+        "lang": "Change lang",
+        "search": "Поиск"
+    },
+    "Home": {
+        "lastUpdate": "Последние обновления",
+        "topRate": "Лучший рейтингом",
+        "tagCloud": "Облако тегов"
+    },
+    "Auth": {
+        "login": "Вход",
+        "register": "Регистрация",
+        "redirectGreet": "",
+        "emailInput": "Введите почту",
+        "emailInvalid": "Почта введена некорректно или уже используется",
+        "username": "Имя пользователя",
+        "usernameInput": "Введите имя пользователя",
+        "usernameInvalid": "Имя пользователя не уникально или пусто",
+        "passwordInput": "Введите пароль",
+        "passwordInvalid": "Длина пароля должна быть больше 3 символов"
+    },
+    "Admin": {
+        "title": "Панель администратора",
+        "toAdmin": "В администраторы",
+        "toUser": "В пользователи",
+        "changeStatus": "Изменить статус",
+        "delete": "Удалить",
+        "username": "Имя пользователя",
+        "role": "Роль",
+        "status": "Статус",
+        "fanficCount": "Количество произведений (later)",
+        "commentCount": "Количество комментариев (later)",
+        "registerDate": "Дата регистрации (later)",
+        "lastLoginDate": "Дата последнего входа (later)",
+        "admin": "Администратор",
+        "user": "Пользователь",
+        "active": "Активен",
+        "blocked": "Заблокирован"
+    },
+    "Profile": {
+        "title": "Ваш профиль",
+        "username": "Имя пользователя",
+        "create": "Создать",
+        "delete": "Удалить",
+        "fanficTitle": "Название",
+        "link": "Ссылка",
+        "edit": "Редактировать",
+        "createdAt": "Дата создания (later)",
+        "read": "Читать"
+    }
+}

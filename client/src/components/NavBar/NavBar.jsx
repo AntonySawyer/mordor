@@ -1,9 +1,13 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { withNamespaces } from 'react-i18next';
 import SearchBar from '../SearchBar/';
+import LangSwitch from '../LangSwitch/';
 import './NavBar.css';
 
-export default () => {
+function NavBar(props) {
+  const { t, i18n } = props;
+  const data = i18n.getDataByLanguage(i18n.language);
   return (
     <header className='NavBar container'>
       <nav className='navbar navbar-expand-lg navbar-light row justify-content-center'>
@@ -22,29 +26,33 @@ export default () => {
           <ul className='navbar-nav mr-auto mt-2 mt-lg-0'>
             <li className='nav-item'>
               <NavLink className='nav-link' to='/'>
-                Home
+                {t('NavBar.home')}
               </NavLink>
             </li>
             <li className='nav-item'>
               <NavLink className='nav-link' to='/auth'>
-                SignIn/Register
+                {t('NavBar.register')}
               </NavLink>
             </li>
             <li className='nav-item'>
               <NavLink className='nav-link' to='/admin'>
-                Admin panel
+                {t('NavBar.adminPanel')}
               </NavLink>
             </li>
             <li className='nav-item'>
               <NavLink className='nav-link' to='/profile'>
-                Profile
+                {t('NavBar.profile')}
               </NavLink>
             </li>
+            <li>
+              <LangSwitch />
+            </li>
           </ul>
-
           <SearchBar />
         </div>
       </nav>
     </header>
   );
-};
+}
+
+export default withNamespaces('common')(NavBar);

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import Badge from '../common/Badge/';
 import './Home.css';
@@ -11,12 +12,13 @@ class Home extends Component {
   }
 
   render() {
-    const { lastUpdate, topRated, tags } = this.props;
+    const { lastUpdate, topRated, tags, t, i18n } = this.props;
+    const data = i18n.getDataByLanguage(i18n.language);
     return (
       <section className='Home container'>
         <div className='row'>
           <div className='col'>
-            <h3>Last update</h3>
+            <h3>{t('Home.lastUpdate')}</h3>
             <ul>
               {lastUpdate.map(el => (
                 <li key={el.id}>
@@ -34,7 +36,7 @@ class Home extends Component {
             </ul>
           </div>
           <div className='col'>
-            <h3>Rate top</h3>
+            <h3>{t('Home.topRate')}</h3>
             <ul>
               {topRated.map(el => (
                 <li key={el.id}>
@@ -54,7 +56,7 @@ class Home extends Component {
         </div>
         <div className='row'>
           <div className='col'>
-            <h3>Tags cloud</h3>
+            <h3>{t('Home.tagCloud')}</h3>
             {tags.map(tag => (
               <a href={`tag_${tag.id}`} className='badge badge-primary'>
                 {tag.title}
@@ -69,4 +71,4 @@ class Home extends Component {
 
 const mapStateToProps = state => state.homePage;
 
-export default connect(mapStateToProps)(Home);
+export default withNamespaces('common')(connect(mapStateToProps)(Home));

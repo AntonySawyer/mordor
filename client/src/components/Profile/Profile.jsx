@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import * as profileActions from '../../redux/actions/profileActions';
 
@@ -20,15 +21,17 @@ class Profile extends Component {
       fanfics,
       deleteFanfic,
       editFanfic,
-      createFanfic
+      createFanfic,
+      t,
+      i18n
     } = this.props;
     return (
       <section className='profile container'>
-        <h3>Your profile</h3>
+        <h3>{t('Profile.title')}</h3>
         <section className='row'>
           <article className='col'>
             <ul>
-              <li>{`Username: ${userdata.username}`}</li>
+              <li>{`${t('Profile.username')}: ${userdata.username}`}</li>
               <li>Something else</li>
               <li>And else</li>
               <li>Maybe password reset btn(?)</li>
@@ -40,18 +43,18 @@ class Profile extends Component {
             ))}
           </article>
         </section>
-        <ActionBtn title='Create new' handler={createFanfic} />
-        <ActionBtn title='Delete' handler={deleteFanfic} />
+        <ActionBtn title={t('Profile.create')} handler={createFanfic} />
+        <ActionBtn title={t('Profile.delete')} handler={deleteFanfic} />
         <table className='table table-hover'>
           <thead>
             <tr>
               <th>
                 <input type='checkbox' id='mainCheckbox' onChange={checkAll} />
               </th>
-              <th>Title</th>
-              <th>Link</th>
-              <th>Edit</th>
-              <th>Create datetime (later)</th>
+              <th>{t('Profile.fanficTitle')}</th>
+              <th>{t('Profile.link')}</th>
+              <th>{t('Profile.edit')}</th>
+              <th>{t('Profile.createdAt')}</th>
             </tr>
           </thead>
           <tbody>
@@ -66,10 +69,10 @@ class Profile extends Component {
                 </td>
                 <td>{el.title}</td>
                 <td>
-                  <a href={el.link}>Read</a>
+                  <a href={el.link}>{t('Profile.read')}</a>
                 </td>
                 <td>
-                  <ActionBtn title='Edit' handler={editFanfic} />
+                  <ActionBtn title={t('Profile.edit')} handler={editFanfic} />
                 </td>
               </tr>
             ))}
@@ -82,4 +85,6 @@ class Profile extends Component {
 
 const mapStateToProps = state => state.profilePage;
 
-export default connect(mapStateToProps, profileActions)(Profile);
+export default withNamespaces('common')(
+  connect(mapStateToProps, profileActions)(Profile)
+);

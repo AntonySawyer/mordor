@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withNamespaces } from 'react-i18next';
 import ActionBtn from '../common/ActionBtn/';
 import Input from '../common/Input/';
 import UserdataValidator from '../../utils/userdataValidator';
@@ -63,7 +64,9 @@ class Auth extends Component {
   }
 
   render() {
-    const mode = this.state.isLogin ? 'Login' : 'Register';
+    const { t, i18n } = this.props;
+    const data = i18n.getDataByLanguage(i18n.language);
+    const mode = this.state.isLogin ? t('Auth.login') : t('Auth.register');
     const authHandler = this.state.isLogin
       ? this.login.bind(this)
       : this.register.bind(this);
@@ -71,26 +74,27 @@ class Auth extends Component {
       <section className='container'>
         <h3 className='row justify-content-center'>{mode}</h3>
         <ActionBtn
-          title={`Go to ${this.state.isLogin ? 'register' : 'login'}`}
+          title={`${t('Auth.redirectGreet')} ${this.state.isLogin ? t('Auth.register') : t('Auth.login')}`}
           handler={this.changePage.bind(this)}
         />
         <div className='wrapper'>
           <form className='needs-validation justify-content-center' noValidate>
             <div className='form-group'>
-              <Input type='email' label='Enter email' />
+              <Input type='email' label={t('Auth.emailInput')} />
               {!this.state.emailValid && (
-                <span>Invalid value, please, check your email or try to login</span>
+                <span>{t('Auth.emailInvalid')}
+                </span>
               )}
             </div>
             <div className='form-group'>
-              <Input type='password' label='Enter password' />
+              <Input type='password' label={t('Auth.passwordInput')} />
               {!this.state.passValid && (
-                <span>Password length must be greater then 3</span>
+                <span>{t('Auth.passwordInvalid')}</span>
               )}
             </div>
             {!this.state.isLogin && (
               <div className='col-md-auto'>
-                <label htmlFor='username'>Username</label>
+                <label htmlFor='username'>{t('Auth.username')}</label>
                 <div className='input-group'>
                   <div className='input-group-prepend'>
                     <span className='input-group-text' id='inputGroupPrepend'>
@@ -100,10 +104,10 @@ class Auth extends Component {
                   <Input
                     type='text'
                     name='username'
-                    placeholder='Enter username'
+                    placeholder={t('Auth.usernameInput')}
                   />
                   {!this.state.usernameValid && (
-                    <span>This username is not unique or empty</span>
+                    <span>{t('Auth.usernameInvalid')}</span>
                   )}
                 </div>
               </div>
@@ -117,4 +121,4 @@ class Auth extends Component {
   }
 }
 
-export default Auth;
+export default withNamespaces('common')(Auth);

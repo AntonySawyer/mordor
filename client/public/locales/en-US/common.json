@@ -1,0 +1,56 @@
+{
+    "NavBar": {
+        "home": "Home Page",
+        "register": "Authorization",
+        "adminPanel": "Admin panel",
+        "profile": "Profile",
+        "lang": "Изменить язык",
+        "search": "Search"
+    },
+    "Home": {
+        "lastUpdate": "Last updated",
+        "topRate": "Top rated",
+        "tagCloud": "Tag cloud"
+    },
+    "Auth": {
+        "login": "Login",
+        "register": "Register",
+        "redirectGreet": "Go to",
+        "emailInput": "Enter email",
+        "emailInvalid": "Invalid value, please, check your email or try to login",
+        "username": "Username",
+        "usernameInput": "Enter username",
+        "usernameInvalid": "This username is not unique or empty",
+        "passwordInput": "Enter password",
+        "passwordInvalid": "Password length must be greater then 3"
+    },
+    "Admin": {
+        "title": "Admin panel",
+        "toAdmin": "To admin",
+        "toUser": "To user",
+        "changeStatus": "Change status",
+        "delete": "Delete",
+        "username": "Username",
+        "role": "Role",
+        "status": "Status",
+        "fanficCount": "Fanfics count (later)",
+        "commentCount": "Comments count (later)",
+        "registerDate": "Register datetime (later)",
+        "lastLoginDate": "Last login (later)",
+        "admin": "Admin",
+        "user": "User",
+        "active": "Active",
+        "blocked": "Blocked"
+    },
+    "Profile": {
+        "title": "Your profile",
+        "username": "Username",
+        "create": "Create new",
+        "delete": "Delete",
+        "fanficTitle": "Title",
+        "link": "Link",
+        "edit": "Edit",
+        "createdAt": "Create datetime (later)",
+        "read": "Read"
+    }
+}

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import * as adminActions from '../../redux/actions/adminActions';
 import ActionBtn from '../common/ActionBtn/';
@@ -18,28 +19,30 @@ class AdminPanel extends Component {
       deleteUsers,
       userToAdmin,
       adminToUser,
-      changeUserStatus
+      changeUserStatus,
+      t,
+      i18n
     } = this.props;
     return (
       <section className='AdminPanel container'>
-        <h3>Admin Panel</h3>
-        <ActionBtn title='To admin' handler={userToAdmin} />
-        <ActionBtn title='To user' handler={adminToUser} />
-        <ActionBtn title='Change status' handler={changeUserStatus} />
-        <ActionBtn title='Delete' handler={deleteUsers} />
+        <h3>{t('Admin.title')}</h3>
+        <ActionBtn title={t('Admin.toAdmin')} handler={userToAdmin} />
+        <ActionBtn title={t('Admin.toUser')} handler={adminToUser} />
+        <ActionBtn title={t('Admin.changeStatus')} handler={changeUserStatus} />
+        <ActionBtn title={t('Admin.delete')} handler={deleteUsers} />
         <table className='table table-hover'>
           <thead>
             <tr>
               <th>
                 <input type='checkbox' id='mainCheckbox' onChange={checkAll} />
               </th>
-              <th>Username</th>
-              <th>Role</th>
-              <th>Status</th>
-              <th>Fanfics count (later)</th>
-              <th>Comments count (later)</th>
-              <th>Register datetime (later)</th>
-              <th>Last login (later)</th>
+              <th>{t('Admin.username')}</th>
+              <th>{t('Admin.role')}</th>
+              <th>{t('Admin.status')}</th>
+              <th>{t('Admin.fanficCount')}</th>
+              <th>{t('Admin.commentCount')}</th>
+              <th>{t('Admin.registerDate')}</th>
+              <th>{t('Admin.lastLoginDate')}</th>
             </tr>
           </thead>
           <tbody>
@@ -55,8 +58,8 @@ class AdminPanel extends Component {
                 <td>
                   <a href={user.link}>{user.username}</a>
                 </td>
-                <td>{user.role}</td>
-                <td>{user.status}</td>
+                <td>{user.role === 'Admin' ? t('Admin.admin') : t('Admin.user')}</td>
+                <td>{user.status === 'active' ? t('Admin.active') : t('Admin.blocked')}</td>
               </tr>
             ))}
           </tbody>
@@ -68,4 +71,6 @@ class AdminPanel extends Component {
 
 const mapStateToProps = state => state.adminPage;
 
-export default connect(mapStateToProps, adminActions)(AdminPanel);
+export default withNamespaces('common')(
+  connect(mapStateToProps, adminActions)(AdminPanel)
+);

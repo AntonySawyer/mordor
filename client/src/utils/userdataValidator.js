@@ -3,10 +3,8 @@ export default async function UserdataValidator(email, password, username) {
     const emailValid = checkEmail(email);
     const usernameValid = username === undefined ? true : checkUsername(username);
     if (passValid && emailValid && usernameValid) {
-        console.log(await checkUnique(email, username));
         return await checkUnique(email, username);
     } else {
-        console.log({emailValid, usernameValid, passValid});
         return {emailValid, usernameValid, passValid}
     }
 }
@@ -34,7 +32,6 @@ const checkUnique = async (email, username) => {
       body: JSON.stringify({ email, username })
     });
     const rs = await response.json();
-    console.log(rs);
     if (rs.email) {
         result.emailValid = false;
     } 
