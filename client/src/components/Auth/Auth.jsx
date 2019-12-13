@@ -64,8 +64,7 @@ class Auth extends Component {
   }
 
   render() {
-    const { t, i18n } = this.props;
-    const data = i18n.getDataByLanguage(i18n.language);
+    const { t } = this.props;
     const mode = this.state.isLogin ? t('Auth.login') : t('Auth.register');
     const authHandler = this.state.isLogin
       ? this.login.bind(this)

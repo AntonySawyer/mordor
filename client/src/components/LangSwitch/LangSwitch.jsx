@@ -10,18 +10,18 @@ const LangSwitch = React.memo(props => {
   }
   
   const { t, i18n } = props;
-  const data = i18n.getDataByLanguage(i18n.language);
+
   return (
     <NamespacesConsumer ns={['common']} wait={true}>
       {(t, { i18n, ready }) => (
-        <div class='input-group mb-3'>
-          <div class='input-group-prepend'>
-            <label class='input-group-text' for='inputGroupSelect01'>
+        <div className='input-group mb-3'>
+          <div className='input-group-prepend'>
+            <label className='input-group-text' htmlFor='inputGroupSelect01'>
               {t('NavBar.lang')}
             </label>
           </div>
           <select
-            class='custom-select LanguageSwitcher'
+            className='custom-select LanguageSwitcher'
             id='inputGroupSelect01'
             defaultValue={props.lang}
             onChange={e => onChange(e.target.value, i18n)}

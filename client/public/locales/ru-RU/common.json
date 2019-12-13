@@ -34,6 +34,7 @@
         "changeStatus": "Изменить статус",
         "delete": "Удалить",
         "username": "Имя пользователя",
+        "email": "Почта",
         "role": "Роль",
         "status": "Статус",
         "fanficCount": "Количество произведений (later)",
@@ -48,6 +49,7 @@
     "Profile": {
         "title": "Ваш профиль",
         "username": "Имя пользователя",
+        "email": "Почта",
         "create": "Создать",
         "delete": "Удалить",
         "fanficTitle": "Название",

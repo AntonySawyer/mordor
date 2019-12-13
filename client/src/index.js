@@ -3,13 +3,15 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { I18nextProvider } from 'react-i18next';
 import { languageChange } from 'i18next-redux-languagedetector';
 
 import configureI18n from './i18n';
 import Reducers from './redux/reducers/';
 import App from './App';
+import logger from 'redux-logger';
+import thunk from 'redux-thunk';
 import './index.css';
 
 let defaultLang = 'en-US';
@@ -27,7 +29,10 @@ const i18nextConfig = {
   defaultNS: 'common'
 };
 
-const store = createStore(Reducers, {i18next: i18nextConfig}, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(Reducers, {i18next: i18nextConfig}, 
+composeEnhancer(applyMiddleware(thunk, logger)));
 
 const i18n = configureI18n({
   i18nextConfig,

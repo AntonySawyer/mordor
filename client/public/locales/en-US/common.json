@@ -34,6 +34,7 @@
         "changeStatus": "Change status",
         "delete": "Delete",
         "username": "Username",
+        "email": "Email",
         "role": "Role",
         "status": "Status",
         "fanficCount": "Fanfics count (later)",
@@ -48,6 +49,7 @@
     "Profile": {
         "title": "Your profile",
         "username": "Username",
+        "email": "Email",
         "create": "Create new",
         "delete": "Delete",
         "fanficTitle": "Title",

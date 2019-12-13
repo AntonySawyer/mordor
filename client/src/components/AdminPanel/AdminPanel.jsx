@@ -20,8 +20,7 @@ class AdminPanel extends Component {
       userToAdmin,
       adminToUser,
       changeUserStatus,
-      t,
-      i18n
+      t
     } = this.props;
     return (
       <section className='AdminPanel container'>
@@ -37,6 +36,7 @@ class AdminPanel extends Component {
                 <input type='checkbox' id='mainCheckbox' onChange={checkAll} />
               </th>
               <th>{t('Admin.username')}</th>
+              <th>{t('Admin.email')}</th>              
               <th>{t('Admin.role')}</th>
               <th>{t('Admin.status')}</th>
               <th>{t('Admin.fanficCount')}</th>
@@ -57,6 +57,9 @@ class AdminPanel extends Component {
                 </td>
                 <td>
                   <a href={user.link}>{user.username}</a>
+                </td>
+                <td>
+                  <a href={`mailto:${user.email}`}>{user.email}</a>
                 </td>
                 <td>{user.role === 'Admin' ? t('Admin.admin') : t('Admin.user')}</td>
                 <td>{user.status === 'active' ? t('Admin.active') : t('Admin.blocked')}</td>

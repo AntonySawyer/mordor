@@ -1,22 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { NamespacesConsumer, withNamespaces } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import * as syncActions from '../../redux/actions/syncActions';
 import './ThemeSwitch.css';
 
 const ThemeSwitch = React.memo(props => {
-  const { t, i18n, setTheme } = props;
+  const { t, setTheme } = props;
   return (
-    <NamespacesConsumer ns={['common']} wait={true}>
-      {(t, { i18n, ready }) => (
-        <div class='input-group mb-3'>
-          <div class='input-group-prepend'>
-            <label class='input-group-text' for='themeSelect'>
+        <div className='input-group mb-3'>
+          <div className='input-group-prepend'>
+            <label className='input-group-text' htmlFor='themeSelect'>
               {t('NavBar.theme')}
             </label>
           </div>
           <select
-            class='custom-select LanguageSwitcher'
+            className='custom-select LanguageSwitcher'
             id='themeSelect'
             defaultValue={props.activeTheme}
             onChange={e => setTheme(e.target.value)}
@@ -26,9 +24,7 @@ const ThemeSwitch = React.memo(props => {
           </select>
         </div>
       )}
-    </NamespacesConsumer>
   );
-});
 
 const mapStateToProps = state => state.syncParams;
 

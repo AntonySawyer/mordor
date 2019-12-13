@@ -2,11 +2,13 @@ import * as types from '../actions/adminActions';
 import findIds from '../../utils/idsCollector';
 
 let initialState = {
+  isFetching: false,
   userlist: [
     {
       id: '1',
       username: 'User1',
       link: '/user1',
+      email: 'test1@test.com',
       role: 'Admin',
       status: 'active'
     },
@@ -14,6 +16,7 @@ let initialState = {
       id: '2',
       username: 'User2',
       link: '/user2',
+      email: 'test2@test.com',
       role: 'User',
       status: 'blocked'
     },
@@ -21,6 +24,7 @@ let initialState = {
       id: '3',
       username: 'User3',
       link: '/user3',
+      email: 'test3@test.com',
       role: 'User',
       status: 'active'
     },
@@ -28,6 +32,7 @@ let initialState = {
       id: '4',
       username: 'User4',
       link: '/user4',
+      email: 'test4@test.com',
       role: 'User',
       status: 'active'
     }

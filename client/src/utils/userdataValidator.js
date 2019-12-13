@@ -12,7 +12,7 @@ export default async function UserdataValidator(email, password, username) {
 const checkPassword = password => password.length >= 4;
 
 const checkEmail = email => {
-    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
+    return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
 }
 
 const checkUsername = username => username.length > 3;

@@ -1,23 +1,15 @@
 import * as types from '../actions/profileActions';
+import { GET_PROFILE } from "../actions/preloadActions";
 import findIds from '../../utils/idsCollector';
 
-let initialState = {
-  userdata: {
-    username: 'Test_nickname'
-  },
-  achieves: [
-    { id: '1', title: 'Best of the best' },
-    { id: '2', title: 'Freshman' },
-    { id: '3', title: 'Rock-n-roll' }
-  ],
-  fanfics: [
-    { id: '12122', title: 'Cool story', link: 'story_12122' },
-    { id: '213245', title: 'Nothing else matter', link: 'story_213245' }
-  ]
-};
+let initialState = {};
 
 const profileReducer = (state = initialState, action) => {
   switch (action.type) {
+    case GET_PROFILE:
+      console.log(`now fetch profile #${action.payload}`);
+
+      return action.payload;
     case types.DELETE_FANFICS:
       const ids = findIds();
       return {

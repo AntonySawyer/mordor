@@ -22,8 +22,7 @@ class Profile extends Component {
       deleteFanfic,
       editFanfic,
       createFanfic,
-      t,
-      i18n
+      t
     } = this.props;
     return (
       <section className='profile container'>
@@ -32,7 +31,7 @@ class Profile extends Component {
           <article className='col'>
             <ul>
               <li>{`${t('Profile.username')}: ${userdata.username}`}</li>
-              <li>Something else</li>
+              <li>{`${t('Profile.email')}: ${userdata.email}`}</li>
               <li>And else</li>
               <li>Maybe password reset btn(?)</li>
             </ul>

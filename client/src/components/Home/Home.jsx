@@ -12,8 +12,7 @@ class Home extends Component {
   }
 
   render() {
-    const { lastUpdate, topRated, tags, t, i18n } = this.props;
-    const data = i18n.getDataByLanguage(i18n.language);
+    const { lastUpdate, topRated, tags, t } = this.props;
     return (
       <section className='Home container'>
         <div className='row'>
@@ -58,7 +57,7 @@ class Home extends Component {
           <div className='col'>
             <h3>{t('Home.tagCloud')}</h3>
             {tags.map(tag => (
-              <a href={`tag_${tag.id}`} className='badge badge-primary'>
+              <a key={tag.id} href={`tag_${tag.id}`} className='badge badge-primary'>
                 {tag.title}
               </a>
             ))}
