@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 
@@ -20,7 +21,8 @@ class AdminPanel extends Component {
       userToAdmin,
       adminToUser,
       changeUserStatus,
-      t
+      t,
+      profilePreload
     } = this.props;
     return (
       <section className='AdminPanel container'>
@@ -36,7 +38,7 @@ class AdminPanel extends Component {
                 <input type='checkbox' id='mainCheckbox' onChange={checkAll} />
               </th>
               <th>{t('Admin.username')}</th>
-              <th>{t('Admin.email')}</th>              
+              <th>{t('Admin.email')}</th>
               <th>{t('Admin.role')}</th>
               <th>{t('Admin.status')}</th>
               <th>{t('Admin.fanficCount')}</th>
@@ -56,13 +58,21 @@ class AdminPanel extends Component {
                   />
                 </td>
                 <td>
-                  <a href={user.link}>{user.username}</a>
+                  <NavLink className='nav-link' to={`/profile/${user.id}`} onClick={() => profilePreload(user.id)}>
+                    {user.username}
+                  </NavLink>
                 </td>
                 <td>
                   <a href={`mailto:${user.email}`}>{user.email}</a>
                 </td>
-                <td>{user.role === 'Admin' ? t('Admin.admin') : t('Admin.user')}</td>
-                <td>{user.status === 'active' ? t('Admin.active') : t('Admin.blocked')}</td>
+                <td>
+                  {user.role === 'Admin' ? t('Admin.admin') : t('Admin.user')}
+                </td>
+                <td>
+                  {user.status === 'active'
+                    ? t('Admin.active')
+                    : t('Admin.blocked')}
+                </td>
               </tr>
             ))}
           </tbody>

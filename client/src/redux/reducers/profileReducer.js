@@ -7,8 +7,6 @@ let initialState = {};
 const profileReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_PROFILE:
-      console.log(`now fetch profile #${action.payload}`);
-
       return action.payload;
     case types.DELETE_FANFICS:
       const ids = findIds();

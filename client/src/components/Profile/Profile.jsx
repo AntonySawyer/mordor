@@ -32,7 +32,7 @@ class Profile extends Component {
             <ul>
               <li>{`${t('Profile.username')}: ${userdata.username}`}</li>
               <li>{`${t('Profile.email')}: ${userdata.email}`}</li>
-              <li>And else</li>
+              <li>{`${t('Profile.role')}: ${userdata.role === 'admin' ? t('Profile.admin') : t('Profile.user')}`}</li>
               <li>Maybe password reset btn(?)</li>
             </ul>
           </article>

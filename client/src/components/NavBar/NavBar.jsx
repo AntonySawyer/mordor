@@ -7,7 +7,7 @@ import ThemeSwitch from '../ThemeSwitch/';
 import './NavBar.css';
 
 function NavBar(props) {
-  const { t, isAuth, isAdmin } = props;
+  const { t, isAuth, isAdmin, currentId, profilePreload } = props;
   return (
     <header className='NavBar container'>
       <nav className='navbar navbar-expand-lg navbar-light row justify-content-center'>
@@ -43,8 +43,12 @@ function NavBar(props) {
             ) : null}
             {isAuth ? (
               <li className='nav-item'>
-                <NavLink className='nav-link' to='/profile'>
-                  {t('NavBar.profile')}
+                <NavLink
+                  className='nav-link'
+                  to={`/profile/${currentId}`}
+                  onClick={() => profilePreload(currentId)}
+                >
+                Profile
                 </NavLink>
               </li>
             ) : null}

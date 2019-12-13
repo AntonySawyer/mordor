@@ -5,11 +5,11 @@ import * as preloadActions from "./redux/actions/preloadActions";
 
 import Home from './components/Home/';
 import Auth from './components/Auth/';
-import Profile from './components/Profile/';
-import AdminPanel from './components/AdminPanel/';
 import Spinner from './components/common/Spinner/';
 import './App.css';
 const NavBar = lazy(() => import('./components/NavBar/'));
+const AdminPanel = lazy(() => import('./components/AdminPanel/'));
+const Profile = lazy(() => import('./components/Profile/'));
 
 class App extends React.Component {
   constructor(props) {
@@ -18,6 +18,7 @@ class App extends React.Component {
     this.isAuth = this.props.isAuth;
     this.isAdmin = this.props.role === 'admin';
     this.getProfile = this.props.getProfile;
+    this.getUsers = this.props.getUsers;
     this.userId = this.props.userId;
   }
   
@@ -28,20 +29,23 @@ class App extends React.Component {
 
   adminPreload() {
     console.log('admin preload');
-    return <Route path='/admin' component={AdminPanel} />;
+    this.getUsers();
+    return <Route path='/admin' render={() => <AdminPanel profilePreload={this.profilePreload.bind(this)} />} />;
   }
 
-  profilePreload() {
+  profilePreload(id = this.userId) {
+    console.log(this.userId);
+    console.log(id);
     console.log('profile preload');
-    this.getProfile(this.userId);
-    return <Route path='/profile' component={Profile} />;
+    this.getProfile(id);
+    return <Route path='/profile/:id' component={Profile} />;
   }
 
   render() {
     return (
       <Router>
         <Suspense fallback={<Spinner />}>
-          <NavBar isAuth={this.isAuth} isAdmin={this.isAdmin} />
+          <NavBar isAuth={this.isAuth} isAdmin={this.isAdmin} currentId={this.userId} profilePreload={this.profilePreload.bind(this)} />
           <Route exact path='/' component={Home} />
           <Route path='/auth' component={Auth} />
           {this.isAdmin ? this.adminPreload() : null}
