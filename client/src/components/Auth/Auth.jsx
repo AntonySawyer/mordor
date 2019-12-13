@@ -23,7 +23,6 @@ class Auth extends Component {
     this.setState({ emailValid, passValid });
 
     if (emailValid && passValid) {
-      console.log('send');
       this.sendData('/login', JSON.stringify({ email, password }));
     }
   }

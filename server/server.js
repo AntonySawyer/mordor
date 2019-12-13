@@ -21,11 +21,6 @@ app.use(
     resave: true
   })
 );
-// app.use(function(req, res, next) {
-//   // Website you wish to allow to connect
-//   console.log('setHeader cors');
-//     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-// });
 
 mongoose
   .connect('mongodb://localhost/mordor')

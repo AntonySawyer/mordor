@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as preloadActions from "./redux/actions/preloadActions";
+import * as preloadActions from './redux/actions/preloadActions';
 
 import Home from './components/Home/';
 import Auth from './components/Auth/';
@@ -21,31 +21,46 @@ class App extends React.Component {
     this.getUsers = this.props.getUsers;
     this.userId = this.props.userId;
   }
-  
-  componentWillMount() {
-    console.log(this.props);
-    console.log('cwm');
-  }
 
   adminPreload() {
-    console.log('admin preload');
     this.getUsers();
-    return <Route path='/admin' render={() => <AdminPanel profilePreload={this.profilePreload.bind(this)} />} />;
+    return (
+      <Route
+        path='/admin'
+        render={() => (
+          <AdminPanel profilePreload={this.profilePreload.bind(this)} />
+        )}
+      />
+    );
   }
 
   profilePreload(id = this.userId) {
-    console.log(this.userId);
-    console.log(id);
-    console.log('profile preload');
-    this.getProfile(id);
-    return <Route path='/profile/:id' component={Profile} />;
+    if (id === this.userId || this.isAdmin) {
+      this.getProfile(id);
+      return (
+        <Route
+          path='/profile/:id'
+          component={matchProps => (
+            <Profile
+              {...matchProps}
+              profilePreload={this.profilePreload.bind(this)}
+            />
+          )}
+        />
+      );
+    }
   }
 
   render() {
     return (
       <Router>
         <Suspense fallback={<Spinner />}>
-          <NavBar isAuth={this.isAuth} isAdmin={this.isAdmin} currentId={this.userId} profilePreload={this.profilePreload.bind(this)} />
+          <NavBar
+            isAuth={this.isAuth}
+            isAdmin={this.isAdmin}
+            currentId={this.userId}
+            profilePreload={this.profilePreload.bind(this)}
+          />
           <Route exact path='/' component={Home} />
           <Route path='/auth' component={Auth} />
           {this.isAdmin ? this.adminPreload() : null}

@@ -22,8 +22,14 @@ class Profile extends Component {
       deleteFanfic,
       editFanfic,
       createFanfic,
-      t
+      t,
+      profilePreload,
+      match
     } = this.props;
+    const id = match.params.id;
+    if (id !== userdata.id) {
+      profilePreload(id);
+    }
     return (
       <section className='profile container'>
         <h3>{t('Profile.title')}</h3>
@@ -32,7 +38,11 @@ class Profile extends Component {
             <ul>
               <li>{`${t('Profile.username')}: ${userdata.username}`}</li>
               <li>{`${t('Profile.email')}: ${userdata.email}`}</li>
-              <li>{`${t('Profile.role')}: ${userdata.role === 'admin' ? t('Profile.admin') : t('Profile.user')}`}</li>
+              <li>{`${t('Profile.role')}: ${
+                userdata.role === 'admin'
+                  ? t('Profile.admin')
+                  : t('Profile.user')
+              }`}</li>
               <li>Maybe password reset btn(?)</li>
             </ul>
           </article>
