@@ -1,4 +1,8 @@
-let initialState = {};
+let initialState = {
+    isAuth: true,
+    userId: 1,
+    role: 'admin'
+};
 
 const loginReducer = (state = initialState, action) => {
 

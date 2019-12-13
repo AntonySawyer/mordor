@@ -13,7 +13,7 @@ const redusers = combineReducers({
   homePage: homeReducer,
   profilePage: profileReducer,
   adminPage: adminReducer,
-  loginPage: loginReducer
+  loginStatus: loginReducer
 });
 
 export default redusers;
