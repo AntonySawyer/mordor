@@ -127,38 +127,46 @@ app.post('/getProfile', (req, res) => {
   const id = req.body.id.toString();
   User.findOne({ _id: id })
     .then(rs => JSON.parse(JSON.stringify(rs)))
-    .then(data => {
-      const result = {
-        userdata: {
-          username: data.username,
-          email: data.email,
-          role: data.role,
-          id: data._id
-        },
-        achieves: data.achieves,
-        fanfics: data.fanfics
-      };
-      res.json(result);
+    .then(user => {
+      Fanfic.find({ userId: id }, { title: 1 })
+        .then(rs => JSON.parse(JSON.stringify(rs)))
+        .then(fanfics => {
+          const result = {
+            userdata: {
+              username: user.username,
+              email: user.email,
+              role: user.role,
+              id: user._id
+            },
+            achieves: user.achieves,
+            fanfics: fanfics.map(el => ({...el, id: el._id}))
+          };
+          console.log(result);
+          res.json(result);
+        });
     });
 });
 
-app.post('/fanfic/add', (req, res, next) => {
-  const { title, userId, tags, rate, datestamp, chapters, images } = req.body;
+app.post('/fanfic/save', (req, res, next) => {
+  const { title, tags, category, userId, chapters, images } = req.body;
+  console.log(req.body);
   Fanfic.create(
     {
       title: title,
       userId: userId,
       tags: tags,
-      rate: rate,
+      rate: 0,
       datestamp: Date.now(),
       chapters: chapters,
       images: images
     },
     (err, data) => {
       if (err) {
-        console.log(err);
+        console.log(err); // error handler for client, dont clean store before write succesfully!
       } else {
-        res.redirect('/profile');
+        console.log(data);
+        // socket - last updated, table in profile of author (for admin and user)
+        res.redirect(`/fanfic/read/${data._id}`);
       }
     }
   );

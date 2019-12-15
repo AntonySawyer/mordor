@@ -67,7 +67,10 @@ class App extends React.Component {
           {this.isAuth ? this.profilePreload() : null}
           <Route path='/fanfic/read' component={() => <Fanfic mode='read' />} />
           <Route path='/fanfic/edit' component={() => <Fanfic mode='edit' />} />
-          <Route path='/fanfic/create/new' component={() => <Fanfic mode='create' />} />
+          <Route
+            path='/fanfic/create/new'
+            component={() => <Fanfic mode='create' userId={this.userId} />}
+          />
         </Suspense>
       </Router>
     );

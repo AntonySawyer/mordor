@@ -9,13 +9,13 @@ const FanficSchema = new mongoose.Schema({
   },
   userId: {
     type: String,
-    unique: true,
-    required: true,
-    trim: true
+    unique: false,
+    required: true
   },  
   tags: {
     type: Array,
-    required: false
+    required: false,
+    trim: true
   },
   rate: {
     type: String,
