@@ -6,6 +6,7 @@ import profileReducer from './profileReducer';
 import loginReducer from './loginReducer';
 import homeReducer from "./homeReducer";
 import syncReducer from "./syncReducer";
+import fanficReducer from "./fanficReducer";
 
 const redusers = combineReducers({
   syncParams: syncReducer,
@@ -13,7 +14,8 @@ const redusers = combineReducers({
   homePage: homeReducer,
   profilePage: profileReducer,
   adminPage: adminReducer,
-  loginStatus: loginReducer
+  loginStatus: loginReducer,
+  fanfic: fanficReducer
 });
 
 export default redusers;

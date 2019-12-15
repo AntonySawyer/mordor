@@ -10,16 +10,13 @@ const profileReducer = (state = initialState, action) => {
       return action.payload;
     case types.DELETE_FANFICS:
       const ids = findIds();
-      return {
-        ...state,
-        fanfics: state.fanfics.filter(el => !ids.includes(el.id))
-      };
-    case types.CREATE_FANFIC:
-      console.log('CREATE_FANFIC work');
-      return state;
-    case types.EDIT_FANFIC:
-      console.log('EDIT_FANFIC work');
-      return state;
+      return action.payload;
+    // case types.CREATE_FANFIC:
+    //   return action.payload;
+    // case types.READ_FANFIC:
+    //   return action.payload;
+    // case types.EDIT_FANFIC:
+    //   return action.payload;
     default:
       return state;
   }

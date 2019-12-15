@@ -28,6 +28,8 @@ mongoose
   .catch(err => console.error(err));
 
 const User = require('./models/user');
+const Fanfic = require('./models/fanfic');
+const Comment = require('./models/coments');
 
 passport.serializeUser((user, done) => {
   done(null, user);
@@ -93,9 +95,7 @@ app.post('/register', (req, res, next) => {
       username: username,
       role: 'user',
       verified: false,
-      status: 'blocked',
-      achieves: {},
-      fanfics: {}
+      status: 'blocked'
     },
     (err, data) => {
       if (err) {
@@ -140,6 +140,28 @@ app.post('/getProfile', (req, res) => {
       };
       res.json(result);
     });
+});
+
+app.post('/fanfic/add', (req, res, next) => {
+  const { title, userId, tags, rate, datestamp, chapters, images } = req.body;
+  Fanfic.create(
+    {
+      title: title,
+      userId: userId,
+      tags: tags,
+      rate: rate,
+      datestamp: Date.now(),
+      chapters: chapters,
+      images: images
+    },
+    (err, data) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.redirect('/profile');
+      }
+    }
+  );
 });
 
 function getUserlist(res) {

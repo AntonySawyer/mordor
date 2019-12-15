@@ -10,6 +10,7 @@ import './App.css';
 const NavBar = lazy(() => import('./components/NavBar/'));
 const AdminPanel = lazy(() => import('./components/AdminPanel/'));
 const Profile = lazy(() => import('./components/Profile/'));
+const Fanfic = lazy(() => import('./components/Fanfic/'));
 
 class App extends React.Component {
   constructor(props) {
@@ -64,6 +65,9 @@ class App extends React.Component {
           <Route path='/auth' component={Auth} />
           {this.isAdmin ? this.adminPreload() : null}
           {this.isAuth ? this.profilePreload() : null}
+          <Route path='/fanfic/read' component={() => <Fanfic mode='read' />} />
+          <Route path='/fanfic/edit' component={() => <Fanfic mode='edit' />} />
+          <Route path='/fanfic/create/new' component={() => <Fanfic mode='create' />} />
         </Suspense>
       </Router>
     );
