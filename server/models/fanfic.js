@@ -11,20 +11,24 @@ const FanficSchema = new mongoose.Schema({
     type: String,
     unique: false,
     required: true
-  },  
+  },
   tags: {
     type: Array,
     required: false,
     trim: true
   },
+  category: {
+    type: String,
+    required: true
+  },
   rate: {
     type: String,
     required: true
-  },  
+  },
   datestamp: {
     type: Date,
     required: true
-  },  
+  },
   chapters: {
     type: Array,
     required: true

@@ -139,11 +139,22 @@ app.post('/getProfile', (req, res) => {
               id: user._id
             },
             achieves: user.achieves,
-            fanfics: fanfics.map(el => ({...el, id: el._id}))
+            fanfics: fanfics.map(el => ({ ...el, id: el._id }))
           };
           console.log(result);
           res.json(result);
         });
+    });
+});
+
+app.post('/fanfic/get', (req, res, next) => {
+  const { id } = req.body;
+  console.log(id);
+  Fanfic.find({ _id: id })
+    .then(rs => JSON.parse(JSON.stringify(rs)))
+    .then(fanfics => {
+      console.log(fanfics);
+      res.json(fanfics[0]);
     });
 });
 
