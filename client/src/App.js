@@ -59,7 +59,6 @@ class App extends React.Component {
             isAuth={this.isAuth}
             isAdmin={this.isAdmin}
             currentId={this.userId}
-            profilePreload={this.profilePreload.bind(this)}
           />
           <Route exact path='/' component={Home} />
           <Route path='/auth' component={Auth} />

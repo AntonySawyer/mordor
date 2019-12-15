@@ -38,11 +38,10 @@ class Auth extends Component {
     );
     this.setState({
       emailValid: !emailValid,
-      usernameValid: !usernameValid,
+      usernameValid: usernameValid,
       passValid
     });
-
-    if (!emailValid && !usernameValid && passValid) {
+    if (!emailValid && usernameValid && passValid) {
       this.sendData('/register', JSON.stringify({ email, username, password }));
     }
   }

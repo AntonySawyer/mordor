@@ -20,6 +20,22 @@ const UserSchema = new mongoose.Schema({
   verified: {
     type: Boolean,
     required: true
+  },  
+  status: {
+    type: String,
+    required: true
+  },  
+  role: {
+    type: String,
+    required: true
+  },  
+  fanfics: {
+    type: Object,
+    required: false
+  },  
+  achieves: {
+    type: Object,
+    required: false
   }
 });
 

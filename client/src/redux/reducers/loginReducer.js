@@ -1,6 +1,6 @@
 let initialState = {
     isAuth: true,
-    userId: 1,
+    userId:'5df37d62d391b219cc41d32d',
     role: 'admin'
 };
 

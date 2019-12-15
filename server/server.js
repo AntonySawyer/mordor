@@ -91,7 +91,11 @@ app.post('/register', (req, res, next) => {
       email: email,
       password: password,
       username: username,
-      verified: false
+      role: 'user',
+      verified: false,
+      status: 'blocked',
+      achieves: {},
+      fanfics: {}
     },
     (err, data) => {
       if (err) {
@@ -121,7 +125,7 @@ app.get('/logout', function(req, res) {
 
 app.post('/getProfile', (req, res) => {
   const id = req.body.id.toString();
-  User.findOne({ id })
+  User.findOne({ _id: id })
     .then(rs => JSON.parse(JSON.stringify(rs)))
     .then(data => {
       const result = {
@@ -129,7 +133,7 @@ app.post('/getProfile', (req, res) => {
           username: data.username,
           email: data.email,
           role: data.role,
-          id: data.id
+          id: data._id
         },
         achieves: data.achieves,
         fanfics: data.fanfics
@@ -138,12 +142,68 @@ app.post('/getProfile', (req, res) => {
     });
 });
 
-app.post('/getUsers', (req, res) => {
-  User.find({}, { _id: 0, username: 1, status: 1, email: 1, id: 1, role: 1 })
+function getUserlist(res) {
+  User.find({}, { username: 1, status: 1, email: 1, role: 1 })
     .then(rs => JSON.parse(JSON.stringify(rs)))
     .then(data => {
+      console.log(data);
       res.json({ userlist: data });
     });
+}
+
+app.post('/getUsers', (req, res) => {
+  getUserlist(res);
+});
+
+app.post('/users/delete', (req, res) => {
+  User.deleteMany({ _id: { $in: req.body.ids } }, (err, rs) => {
+    err && console.log(err);
+    getUserlist(res);
+  });
+});
+
+app.post('/users/toadmin', (req, res) => {
+  User.updateMany(
+    { _id: { $in: req.body.ids } },
+    { $set: { role: 'admin' } },
+    (err, rs) => {
+      err && console.log(err);
+      getUserlist(res);
+    }
+  );
+});
+
+app.post('/users/touser', (req, res) => {
+  User.updateMany(
+    { _id: { $in: req.body.ids } },
+    { $set: { role: 'user' } },
+    (err, rs) => {
+      err && console.log(err);
+      getUserlist(res);
+    }
+  );
+});
+
+app.post('/users/block', (req, res) => {
+  User.updateMany(
+    { _id: { $in: req.body.ids } },
+    { $set: { status: 'blocked' } },
+    (err, rs) => {
+      err && console.log(err);
+      getUserlist(res);
+    }
+  );
+});
+
+app.post('/users/unblock', (req, res) => {
+  User.updateMany(
+    { _id: { $in: req.body.ids } },
+    { $set: { status: 'active' } },
+    (err, rs) => {
+      err && console.log(err);
+      getUserlist(res);
+    }
+  );
 });
 
 // function mustAuthenticatedMw(req, res, next) {

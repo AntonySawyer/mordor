@@ -20,7 +20,8 @@ class AdminPanel extends Component {
       deleteUsers,
       userToAdmin,
       adminToUser,
-      changeUserStatus,
+      blockUser,
+      unblockUser,
       t,
       profilePreload
     } = this.props;
@@ -29,7 +30,8 @@ class AdminPanel extends Component {
         <h3>{t('Admin.title')}</h3>
         <ActionBtn title={t('Admin.toAdmin')} handler={userToAdmin} />
         <ActionBtn title={t('Admin.toUser')} handler={adminToUser} />
-        <ActionBtn title={t('Admin.changeStatus')} handler={changeUserStatus} />
+        <ActionBtn title={t('Admin.block')} handler={blockUser} />
+        <ActionBtn title={t('Admin.unblock')} handler={unblockUser} />
         <ActionBtn title={t('Admin.delete')} handler={deleteUsers} />
         <table className='table table-hover'>
           <thead>
@@ -49,16 +51,16 @@ class AdminPanel extends Component {
           </thead>
           <tbody>
             {userlist.map(user => (
-              <tr key={user.id}>
+              <tr key={user._id}>
                 <td>
                   <input
                     type='checkbox'
                     onChange={setIndeterminate}
-                    value={`user_${user.id}`}
+                    value={`user_${user._id}`}
                   />
                 </td>
                 <td>
-                  <NavLink className='nav-link' to={`/profile/${user.id}`} onClick={() => profilePreload(user.id)}>
+                  <NavLink className='nav-link' to={`/profile/${user._id}`} onClick={() => profilePreload(user._id)}>
                     {user.username}
                   </NavLink>
                 </td>
@@ -66,7 +68,7 @@ class AdminPanel extends Component {
                   <a href={`mailto:${user.email}`}>{user.email}</a>
                 </td>
                 <td>
-                  {user.role === 'Admin' ? t('Admin.admin') : t('Admin.user')}
+                  {user.role === 'admin' ? t('Admin.admin') : t('Admin.user')}
                 </td>
                 <td>
                   {user.status === 'active'

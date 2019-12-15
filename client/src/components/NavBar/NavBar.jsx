@@ -1,13 +1,15 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
+import { connect } from 'react-redux';
 import SearchBar from '../SearchBar/';
 import LangSwitch from '../LangSwitch/';
 import ThemeSwitch from '../ThemeSwitch/';
+import * as preloadActions from '../../redux/actions/preloadActions';
 import './NavBar.css';
 
 function NavBar(props) {
-  const { t, isAuth, isAdmin, currentId, profilePreload } = props;
+  const { t, isAuth, isAdmin, currentId, getProfile, getUsers } = props;
   return (
     <header className='NavBar container'>
       <nav className='navbar navbar-expand-lg navbar-light row justify-content-center'>
@@ -36,7 +38,7 @@ function NavBar(props) {
             </li>
             {isAdmin && isAuth ? (
               <li className='nav-item'>
-                <NavLink className='nav-link' to='/admin'>
+                <NavLink className='nav-link' to='/admin' onClick={getUsers}>
                   {t('NavBar.adminPanel')}
                 </NavLink>
               </li>
@@ -46,9 +48,9 @@ function NavBar(props) {
                 <NavLink
                   className='nav-link'
                   to={`/profile/${currentId}`}
-                  onClick={() => profilePreload(currentId)}
+                  onClick={() => getProfile(currentId)}
                 >
-                Profile
+                {t('NavBar.profile')}
                 </NavLink>
               </li>
             ) : null}
@@ -66,4 +68,4 @@ function NavBar(props) {
   );
 }
 
-export default withNamespaces('common')(NavBar);
+export default withNamespaces('common')(connect(null, preloadActions)(NavBar));
