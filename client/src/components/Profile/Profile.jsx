@@ -26,6 +26,7 @@ class Profile extends Component {
       profilePreload,
       match
     } = this.props;
+
     const id = match.params.id;
     if (id !== userdata.id) {
       profilePreload(id);
@@ -46,11 +47,13 @@ class Profile extends Component {
               <li>Maybe password reset btn(?)</li>
             </ul>
           </article>
-          <article className='col'>
-            {achieves.map(el => (
-              <p key={el.id}>{el.title}</p>
-            ))}
-          </article>
+          {achieves !== undefined && (
+            <article className='col'>
+              {achieves.map(el => (
+                <p key={el.id}>{el.title}</p>
+              ))}
+            </article>
+          )}
         </section>
         <ActionBtn title={t('Profile.create')} handler={createFanfic} />
         <ActionBtn title={t('Profile.delete')} handler={deleteFanfic} />
@@ -67,24 +70,25 @@ class Profile extends Component {
             </tr>
           </thead>
           <tbody>
-            {fanfics.map(el => (
-              <tr key={el.id}>
-                <td>
-                  <input
-                    type='checkbox'
-                    onChange={setIndeterminate}
-                    value={`fanfic_${el.id}`}
-                  />
-                </td>
-                <td>{el.title}</td>
-                <td>
-                  <a href={el.link}>{t('Profile.read')}</a>
-                </td>
-                <td>
-                  <ActionBtn title={t('Profile.edit')} handler={editFanfic} />
-                </td>
-              </tr>
-            ))}
+            {fanfics !== undefined &&
+              fanfics.map(el => (
+                <tr key={el.id}>
+                  <td>
+                    <input
+                      type='checkbox'
+                      onChange={setIndeterminate}
+                      value={`fanfic_${el.id}`}
+                    />
+                  </td>
+                  <td>{el.title}</td>
+                  <td>
+                    <a href={el.link}>{t('Profile.read')}</a>
+                  </td>
+                  <td>
+                    <ActionBtn title={t('Profile.edit')} handler={editFanfic} />
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </section>
