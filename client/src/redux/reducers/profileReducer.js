@@ -9,14 +9,7 @@ const profileReducer = (state = initialState, action) => {
     case GET_PROFILE:
       return action.payload;
     case types.DELETE_FANFICS:
-      const ids = findIds();
-      return action.payload;
-    // case types.CREATE_FANFIC:
-    //   return action.payload;
-    // case types.READ_FANFIC:
-    //   return action.payload;
-    // case types.EDIT_FANFIC:
-    //   return action.payload;
+      return {...state, fanfics: action.payload};
     default:
       return state;
   }

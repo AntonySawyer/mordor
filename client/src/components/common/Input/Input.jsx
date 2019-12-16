@@ -1,7 +1,7 @@
 import React from 'react';
 import './Input.css';
 
-export default ({type, name, id, label, required, placeholder}) => {
+export default ({type, value, name, id, label, onChange, required, placeholder}) => {
   const requiredBool = required === false ? false : true;
   return (
     <>
@@ -10,6 +10,8 @@ export default ({type, name, id, label, required, placeholder}) => {
         type={type}
         name={name ? name : type}
         id={id ? id : (name ? name : type)}
+        value={value}
+        onChange={onChange}
         className='form-control'
         autoComplete='on'
         placeholder={placeholder ? placeholder : label}

@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import MarkdownEditor from '@uiw/react-markdown-editor';
+import ReactMde from 'react-mde';
+import 'react-mde/lib/styles/css/react-mde-all.css';
 
 import * as fanficActions from '../../redux/actions/fanficActions';
 
@@ -16,94 +18,106 @@ class Fanfic extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isFetching: false,
-      showSpinner: true
+      markdown: '# Chapter 1 \n\n Type text here',
+      selectedTab: 'write',
+      title: '',
+      isStillFetching: true
     };
     this.updateMarkdown = this.updateMarkdown.bind(this);
   }
 
   componentDidMount() {
-    if (this.props.title === undefined) {
-      this.loadData();
-    } else {
-      this.setState({ showSpinner: false, isFetching: false });
-    }
+    document.title = `Fanfic ${this.props.mode}`;
   }
 
-  loadData() {
-    const targetId = this.props.match.params.id;
-    if (!this.isFetching) {
-      this.props.readFanfic(targetId);
-      this.setState({ isFetching: true });
-    } else if (this.props.title !== undefined) {
-      this.setState({ showSpinner: false });
-    }
+  setSelectedTab() {
+    this.setState((prevState, props) => {
+      return {
+        selectedTab: prevState.selectedTab === 'write' ? 'preview' : 'write'
+      };
+    });
   }
 
   tempCreateNew() {
     const title = document.getElementById('newFanficTitle').value;
     const tags = 'tag 1, tag 2';
     const category = 'parody';
+    console.log(this.props);
     const userId = this.props.userId;
-    const chapters = this.state.markdown; //utilFunc with return object in future
+    const chapters = [this.state.markdown]; //utilFunc with return object in future
+    console.log(chapters);
     const images = 'sample.png';
-    this.props.saveFanfic(title, tags, category, userId, chapters, images);
+    this.props.saveFanfic(this.props.match.params.id, title, tags, category, userId, chapters, images);
   }
 
-  updateMarkdown(editor, data, value) {
+  updateMarkdown(value) {
     this.setState({ markdown: value });
+  }
+
+  updateTitle(e) {
+    this.setState({ title: e.target.value });
   }
 
   render() {
     const { readFanfic, saveFanfic, t, match, title } = this.props;
     const { id, mode } = match.params;
-    if (this.props._id !== id) {
+    const needToFetch =
+      mode !== 'create' && (this.props._id !== id || title === undefined);
+
+    if (needToFetch) {
       this.props.readFanfic(id);
     }
+
+    if (!needToFetch && mode === 'edit' && this.state.isStillFetching) {
+      this.setState({
+        markdown: this.props.chapters.join('\n\n'),
+        title: this.props.title,
+        isStillFetching: false
+      });
+    }
+
+    console.log(this.state);
+
     return (
       <div>
-        {title === undefined ? (
-          this.state.showSpinner && <Spinner />
-        ) : (
+        {needToFetch && <Spinner />}
+        {!needToFetch && mode !== 'read' && (
           <section className='profile container'>
             <section>
-              {mode !== 'read' && (
-                <ActionBtn
-                  title='Save'
-                  handler={this.tempCreateNew.bind(this)}
+              <ActionBtn title='Save' handler={this.tempCreateNew.bind(this)} />
+              <div>
+                <Input
+                  placeholder='title'
+                  id='newFanficTitle'
+                  value={this.state.title}
+                  onChange={this.updateTitle.bind(this)}
                 />
-              )}
-              {mode === 'read' ? (
-                <div>
-                  <h1>{this.props.title}</h1>
-                  <span>category</span>
-                  <span>{this.props.tags}</span>
-                </div>
-              ) : (
-                <div>
-                  <Input placeholder='title' id='newFanficTitle' />
-                  <Input placeholder='category' />
-                  <Input placeholder='tags' />
-                </div>
-              )}
+                <Input placeholder='category' />
+                <Input placeholder='tags' />
+              </div>
             </section>
-            {mode === 'read' ? (
-              <ReactMarkdown source={this.props.chapters[0]} />
-            ) : null}
-            {mode === 'create' ? (
-              <MarkdownEditor
-                height='500'
-                value={'# Type here'}
-                onChange={() => this.updateMarkdown}
-              />
-            ) : null}
-            {mode === 'edit' ? (
-              <MarkdownEditor
-                height='500'
-                value={this.props.chapters[0]}
-                onChange={() => this.updateMarkdown}
-              />
-            ) : null}
+            <ReactMde
+              value={this.state.markdown}
+              onChange={value => this.updateMarkdown(value)}
+              selectedTab={this.state.selectedTab}
+              onTabChange={this.setSelectedTab.bind(this)}
+              generateMarkdownPreview={markdown =>
+                Promise.resolve(<ReactMarkdown source={this.state.markdown} />)
+              }
+            />
+          </section>
+        )}
+
+        {!needToFetch && mode === 'read' && (
+          <section className='profile container'>
+            <section>
+              <div>
+                <h1>{this.props.title}</h1>
+                <span>category</span>
+                <span>{this.props.tags}</span>
+              </div>
+            </section>
+            <ReactMarkdown source={this.props.chapters[0]} />
           </section>
         )}
       </div>

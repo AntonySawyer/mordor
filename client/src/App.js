@@ -67,12 +67,12 @@ class App extends React.Component {
           {this.isAuth ? this.profilePreload() : null}
           <Route
             path='/fanfic/:mode/:id'
-            component={matchProps => <Fanfic {...matchProps} mode='read' />}
-          />
-          <Route
+            render={matchProps => <Fanfic {...matchProps} userId={this.userId} />}
+          />          
+          {/* <Route
             path='/fanfic/:mode/new'
-            component={() => <Fanfic userId={this.userId} />}
-          />
+            component={matchProps => <Fanfic {...matchProps} userId={this.userId} />}
+          /> */}
         </Suspense>
       </Router>
     );

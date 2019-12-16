@@ -149,39 +149,73 @@ app.post('/getProfile', (req, res) => {
 
 app.post('/fanfic/get', (req, res, next) => {
   const { id } = req.body;
-  console.log(id);
   Fanfic.find({ _id: id })
     .then(rs => JSON.parse(JSON.stringify(rs)))
-    .then(fanfics => {
-      console.log(fanfics);
-      res.json(fanfics[0]);
-    });
+    .then(fanfics => res.json(fanfics[0]));
+});
+
+app.post('/fanfic/delete', (req, res) => {
+  Fanfic.deleteMany({ _id: { $in: req.body.ids } }, (err, rs) => {
+    err && console.log(err);
+    Fanfic.find({ userId: req.body.userId }, { title: 1 })
+      .then(rs => JSON.parse(JSON.stringify(rs)))
+      .then(fanfics => res.json(fanfics.map(el => ({ ...el, id: el._id }))));
+  });
 });
 
 app.post('/fanfic/save', (req, res, next) => {
-  const { title, tags, category, userId, chapters, images } = req.body;
+  const { id, title, tags, category, userId, chapters, images } = req.body;
   console.log(req.body);
-  Fanfic.create(
-    {
-      title: title,
-      userId: userId,
-      tags: tags,
-      rate: 0,
-      datestamp: Date.now(),
-      chapters: chapters,
-      images: images
-    },
-    (err, data) => {
-      if (err) {
-        console.log(err); // error handler for client, dont clean store before write succesfully!
-      } else {
-        console.log(data);
-        // socket - last updated, table in profile of author (for admin and user)
-        res.redirect(`/fanfic/read/${data._id}`);
+  if (id === 'new') {
+    Fanfic.create(
+      {
+        title: title,
+        userId: userId,
+        tags: tags,
+        category: category,
+        rate: 0,
+        datestamp: Date.now(),
+        chapters: chapters,
+        images: images
+      },
+      (err, data) => {
+        if (err) {
+          console.log(err); // error handler for client, dont clean store before write succesfully!
+        } else {
+          console.log(data);
+          // socket - last updated, table in profile of author (for admin and user)
+          res.redirect(`/fanfic/read/${data._id}`);
+        }
       }
-    }
-  );
+    );
+  } else {
+    Fanfic.updateMany(
+      { _id: id },
+      {
+        $set: {
+          title: title,
+          tags: tags,
+          category: category,
+          chapters: chapters,
+          images: images
+        }
+      },
+      (err, rs) => {
+        err && console.log(err);
+      }
+    );
+    Fanfic.find({ _id: id })
+      .then(rs => JSON.parse(JSON.stringify(rs)))
+      .then(fanfics => res.json(fanfics[0]));
+  }
 });
+
+// DRY
+// function getFanfic(params) {
+//       Fanfic.find({ _id: id })
+//       .then(rs => JSON.parse(JSON.stringify(rs)))
+//       .then(fanfics => res.json(fanfics[0]));
+// }
 
 function getUserlist(res) {
   User.find({}, { username: 1, status: 1, email: 1, role: 1 })
