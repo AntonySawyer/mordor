@@ -31,7 +31,6 @@ export const saveFanfic = (id, title, tags, category, userId, chapters, images) 
     })
       .then(rs => rs.json())
       .then(payload => {
-        console.log(payload);
         return dispatch({ type: SAVE_FANFIC, payload });
       });
   };

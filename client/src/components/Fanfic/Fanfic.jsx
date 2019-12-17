@@ -11,6 +11,8 @@ import * as fanficActions from '../../redux/actions/fanficActions';
 import Spinner from '../common/Spinner/';
 import ActionBtn from '../common/ActionBtn/';
 import Input from '../common/Input/';
+import Select from '../common/Select/';
+
 import { checkAll, setIndeterminate } from '../../utils/checkboxWorker';
 import './Fanfic.css';
 
@@ -21,7 +23,7 @@ class Fanfic extends Component {
       markdown: '# Chapter 1 \n\n Type text here',
       selectedTab: 'write',
       title: '',
-      category: '',
+      category: this.props.categories[0],
       isStillFetching: true
     };
     this.updateMarkdown = this.updateMarkdown.bind(this);
@@ -46,15 +48,6 @@ class Fanfic extends Component {
     const userId = this.props.userdata.id;
     const chapters = [this.state.markdown]; //utilFunc with return object in future
     const images = 'sample.png';
-    console.log(
-      this.props.match.params.id,
-      title,
-      tags,
-      category,
-      userId,
-      chapters,
-      images
-    );
     this.props.saveFanfic(
       this.props.match.params.id,
       title,
@@ -79,7 +72,6 @@ class Fanfic extends Component {
   }
 
   render() {
-    console.log(this.props);
     const { readFanfic, saveFanfic, t, match, title } = this.props;
     const { id, mode } = match.params;
     const needToFetch =
@@ -112,30 +104,16 @@ class Fanfic extends Component {
                   value={this.state.title}
                   onChange={this.updateTitle.bind(this)}
                 />
-                {/* common component next */}
-                <div className='input-group mb-3'>
-                  <div className='input-group-prepend'>
-                    <label
-                      className='input-group-text'
-                      htmlFor='categorySelect'
-                    >
-                      Category
-                    </label>
-                  </div>
-                  <select
-                    className='custom-select'
-                    id='categorySelect'
-                    defaultValue={this.props.category}
-                    onChange={this.updateCategory.bind(this)}
-                  >
-                    {this.props.categories.map((el, index) => (
-                      <option key={index} value={el}>
-                        {el}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {/* common component end */}
+                <Select
+                  id='categorySelect'
+                  label='Category'
+                  defaultValue={this.props.category}
+                  values={this.props.categories.map(el => ({
+                    title: el,
+                    value: el
+                  }))}
+                  handler={this.updateCategory.bind(this)}
+                />
                 <Input placeholder='tags' />
               </div>
             </section>

@@ -5,8 +5,6 @@ export const DELETE_FANFICS = 'DELETE_FANFICS';
 export const deleteFanfic = (userId) => {
   return (dispatch, getState) => {
     const ids = findIds();
-    console.log(userId);
-    console.log(ids);
     fetch('/fanfic/delete', {
       method: 'POST',
       headers: {

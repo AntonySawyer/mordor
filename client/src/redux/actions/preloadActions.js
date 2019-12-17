@@ -43,7 +43,6 @@ export const getConst = () => {
       }})
       .then(rs => rs.json())
       .then(payload => {
-        console.log(payload);
         return dispatch({ type: GET_CONST, payload });
       });
   };

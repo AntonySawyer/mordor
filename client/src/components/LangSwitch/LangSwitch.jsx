@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { NamespacesConsumer, withNamespaces } from 'react-i18next';
+import Select from '../common/Select/';
 import './LangSwitch.css';
 
 const LangSwitch = React.memo(props => {
@@ -8,28 +9,22 @@ const LangSwitch = React.memo(props => {
     i18n.changeLanguage(lng);
     localStorage.setItem('lang', lng);
   }
-  
+
   const { t, i18n } = props;
 
   return (
     <NamespacesConsumer ns={['common']} wait={true}>
       {(t, { i18n, ready }) => (
-        <div className='input-group mb-3'>
-          <div className='input-group-prepend'>
-            <label className='input-group-text' htmlFor='inputGroupSelect01'>
-              {t('NavBar.lang')}
-            </label>
-          </div>
-          <select
-            className='custom-select LanguageSwitcher'
-            id='inputGroupSelect01'
-            defaultValue={props.lang}
-            onChange={e => onChange(e.target.value, i18n)}
-          >
-            <option value='en-US'>English</option>
-            <option value='ru-RU'>Русский</option>
-          </select>
-        </div>
+        <Select
+          id='LanguageSwitcher'
+          label={t('NavBar.lang')}
+          defaultValue={props.lang}
+          values={[
+            { title: 'English', value: 'en-US' },
+            { title: 'Русский', value: 'ru-RU' }
+          ]}
+          handler={e => onChange(e.target.value, i18n)}
+        />
       )}
     </NamespacesConsumer>
   );

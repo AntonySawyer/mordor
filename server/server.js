@@ -48,7 +48,6 @@ app.use(passport.session());
 
 passport.use(
   new LocalStrategy(function(email, password, done) {
-    console.log(`search for ${email}`);
     User.findOne({ email }, function(err, user) {
       if (err) {
         return done(err);
@@ -84,7 +83,6 @@ app.post(
   '/login',
   passport.authenticate('local', { failureRedirect: '/auth' }),
   function(req, res) {
-    console.log('in login post');
     res.redirect('/profile');
   }
 );
@@ -144,7 +142,6 @@ app.post('/getProfile', (req, res) => {
             achieves: user.achieves,
             fanfics: fanfics.map(el => ({ ...el, id: el._id }))
           };
-          console.log(result);
           res.json(result);
         });
     });
@@ -181,7 +178,6 @@ app.post('/fanfic/delete', (req, res) => {
 
 app.post('/fanfic/save', (req, res, next) => {
   const { id, title, tags, category, userId, chapters, images } = req.body;
-  console.log(req.body);
   if (id === 'new') {
     Fanfic.create(
       {
@@ -222,7 +218,6 @@ app.post('/fanfic/save', (req, res, next) => {
     Fanfic.find({ _id: id })
       .then(rs => JSON.parse(JSON.stringify(rs)))
       .then(fanfics => {
-        console.log(fanfics);
         res.json(fanfics[0]);
       });
   }
@@ -239,7 +234,6 @@ function getUserlist(res) {
   User.find({}, { username: 1, status: 1, email: 1, role: 1 })
     .then(rs => JSON.parse(JSON.stringify(rs)))
     .then(data => {
-      console.log(data);
       res.json({ userlist: data });
     });
 }

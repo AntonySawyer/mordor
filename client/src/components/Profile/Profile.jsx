@@ -14,7 +14,7 @@ class Profile extends Component {
     this.state = {};
   }
 
-  fanficAction(mode, id, userId) {
+  fanficAction(mode, id) {
     this.props.history.push(`/fanfic/${mode}/${id}`);
   }
 
@@ -60,7 +60,7 @@ class Profile extends Component {
             </article>
           )}
         </section>
-        <ActionBtn title={t('Profile.create')} handler={this.fanficAction.bind(this, 'create', 'new', userdata.id)} />
+        <ActionBtn title={t('Profile.create')} handler={this.fanficAction.bind(this, 'create', 'new')} />
         <ActionBtn title={t('Profile.delete')} handler={() => deleteFanfic(userdata.id)} />
         <table className='table table-hover'>
           <thead>
