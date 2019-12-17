@@ -3,10 +3,10 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as preloadActions from './redux/actions/preloadActions';
 
-import Home from './components/Home/';
 import Auth from './components/Auth/';
 import Spinner from './components/common/Spinner/';
 import './App.css';
+const Home = lazy(() => import('./components/Home/'));
 const NavBar = lazy(() => import('./components/NavBar/'));
 const AdminPanel = lazy(() => import('./components/AdminPanel/'));
 const Profile = lazy(() => import('./components/Profile/'));
@@ -22,6 +22,8 @@ class App extends React.Component {
     this.getUsers = this.props.getUsers;
     this.getConst = this.props.getConst;
     this.userId = this.props.userId;
+    this.getRated = this.props.getRated;
+    this.getLastUpdated = this.props.getLastUpdated;
   }
 
   componentDidMount() {

@@ -1,6 +1,5 @@
 import * as types from '../actions/profileActions';
 import { GET_PROFILE } from "../actions/preloadActions";
-import findIds from '../../utils/idsCollector';
 
 let initialState = {};
 

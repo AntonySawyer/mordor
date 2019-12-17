@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 
 import * as profileActions from '../../redux/actions/profileActions';
-
 import ActionBtn from '../common/ActionBtn/';
 import { checkAll, setIndeterminate } from '../../utils/checkboxWorker';
 import './Profile.css';

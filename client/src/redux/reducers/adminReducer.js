@@ -1,11 +1,9 @@
 import * as types from '../actions/adminActions';
 import { GET_USERS } from '../actions/preloadActions';
-import findIds from '../../utils/idsCollector';
 
 let initialState = {};
 
 const adminReducer = (state = initialState, action) => {
-  const ids = findIds();
   switch (action.type) {
     case GET_USERS:
       return action.payload;

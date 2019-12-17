@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
-import MarkdownEditor from '@uiw/react-markdown-editor';
 import ReactMde from 'react-mde';
 import 'react-mde/lib/styles/css/react-mde-all.css';
 
@@ -13,7 +12,6 @@ import ActionBtn from '../common/ActionBtn/';
 import Input from '../common/Input/';
 import Select from '../common/Select/';
 
-import { checkAll, setIndeterminate } from '../../utils/checkboxWorker';
 import './Fanfic.css';
 
 class Fanfic extends Component {
@@ -72,7 +70,7 @@ class Fanfic extends Component {
   }
 
   render() {
-    const { readFanfic, saveFanfic, t, match, title } = this.props;
+    const { t, match, categories, title } = this.props;
     const { id, mode } = match.params;
     const needToFetch =
       mode !== 'create' && (this.props._id !== id || title === undefined);
@@ -112,7 +110,7 @@ class Fanfic extends Component {
                     id='categorySelect'
                     label={t('Fanfic.category')}
                     defaultValue={this.props.category}
-                    values={this.props.categories.map(el => ({
+                    values={categories.map(el => ({
                       title: el,
                       value: el
                     }))}

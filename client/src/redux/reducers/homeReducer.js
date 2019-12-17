@@ -1,69 +1,8 @@
+import { GET_LAST_UPDATED, GET_RATED, GET_TAGS } from '../actions/homeActions';
 
 let initialState = {
-  lastUpdate: [
-    {
-      id: '12122',
-      title: 'Cool story',
-      link: 'story_12122',
-      updateDate: '22.12.2019'
-    },
-    {
-      id: '213245',
-      title: 'Nothing else matter',
-      link: 'story_213245',
-      updateDate: '18.12.2019'
-    },
-    {
-      id: '21324',
-      title: 'Unforgiven 1',
-      link: 'story_21324',
-      updateDate: '14.12.2019'
-    },
-    {
-      id: '213243',
-      title: 'Unforgiven 2',
-      link: 'story_213243',
-      updateDate: '13.12.2019'
-    },
-    {
-      id: '213246',
-      title: 'Unforgiven 3',
-      link: 'story_213246',
-      updateDate: '13.12.2019'
-    }
-  ],
-  topRated: [
-    {
-      id: '12122',
-      title: 'Cool story',
-      link: 'story_12122',
-      stars: '5.0'
-    },
-    {
-      id: '213245',
-      title: 'Nothing else matter',
-      link: 'story_213245',
-      stars: '4.9'
-    },
-    {
-      id: '21324',
-      title: 'Unforgiven 1',
-      link: 'story_21324',
-      stars: '4.9'
-    },
-    {
-      id: '213243',
-      title: 'Unforgiven 2',
-      link: 'story_213243',
-      stars: '4.8'
-    },
-    {
-      id: '213246',
-      title: 'Unforgiven 3',
-      link: 'story_213246',
-      stars: '4.7'
-    }
-  ],
+  lastUpdate: [],
+  topRated: [],
   tags: [
     { id: '1', title: 'Sample 1' },
     { id: '2', title: 'Sample 2' },
@@ -80,6 +19,11 @@ let initialState = {
 
 const homeReducer = (state = initialState, action) => {
   switch (action.type) {
+    case GET_LAST_UPDATED:
+      return {...state, lastUpdate: action.payload};
+    case GET_RATED:
+      return {...state, topRated: action.payload};
+
     default:
       return state;
   }

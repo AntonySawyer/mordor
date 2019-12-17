@@ -13,7 +13,8 @@
     "Home": {
         "lastUpdate": "Last updated",
         "topRate": "Top rated",
-        "tagCloud": "Tag cloud"
+        "tagCloud": "Tag cloud",
+        "categoriesMenu": "Choose category"
     },
     "Auth": {
         "login": "Login",

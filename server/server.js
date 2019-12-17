@@ -124,6 +124,28 @@ app.get('/logout', function(req, res) {
   res.redirect('/');
 });
 
+function setId(obj) {
+  return obj.map(el => ({ ...el, id: el._id }))
+}
+
+app.post('/fanfic/lastUpdated', (req, res) => {
+  Fanfic.find({ }, { title: 1, datestamp: 1 }).sort({datestamp: -1}).limit(5)
+    .then(rs => JSON.parse(JSON.stringify(rs)))
+    .then(fanfics => {
+      fanfics = setId(fanfics)
+      res.json(fanfics);
+    });
+});
+
+app.post('/fanfic/maxRated', (req, res) => {
+  Fanfic.find({ }, { title: 1, rate: 1 }).sort({rate: -1}).limit(5)
+    .then(rs => JSON.parse(JSON.stringify(rs)))
+    .then(fanfics => {
+      fanfics = setId(fanfics)
+      res.json(fanfics);
+    });
+});
+
 app.post('/getProfile', (req, res) => {
   const id = req.body.id.toString();
   User.findOne({ _id: id })

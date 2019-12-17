@@ -1,7 +1,7 @@
 import { SET_LANG, SET_THEME } from '../actions/syncActions';
 import { GET_CONST } from '../actions/preloadActions';
 
-let initialState = {};
+let initialState = {CONST: []};
 
 initialState.activeTheme = localStorage.getItem('theme') || '';
 initialState.activeLang = localStorage.getItem('lang');

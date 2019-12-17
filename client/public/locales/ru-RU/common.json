@@ -13,7 +13,8 @@
     "Home": {
         "lastUpdate": "Последние обновления",
         "topRate": "Лучший рейтингом",
-        "tagCloud": "Облако тегов"
+        "tagCloud": "Облако тегов",
+        "categoriesMenu": "Выберите категорию"
     },
     "Auth": {
         "login": "Вход",

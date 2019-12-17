@@ -47,5 +47,6 @@ export const getConst = () => {
       });
   };
 };
+getConst();
 
 export const getMainPage = () => ({ type: GET_MAIN_PAGE });
