@@ -21,13 +21,14 @@ class Fanfic extends Component {
       markdown: '# Chapter 1 \n\n Type text here',
       selectedTab: 'write',
       title: '',
+      category: '',
       isStillFetching: true
     };
     this.updateMarkdown = this.updateMarkdown.bind(this);
   }
 
   componentDidMount() {
-    document.title = `Fanfic ${this.props.mode}`;
+    document.title = `Fanfic - ${this.props.match.params.mode}`;
   }
 
   setSelectedTab() {
@@ -41,13 +42,28 @@ class Fanfic extends Component {
   tempCreateNew() {
     const title = document.getElementById('newFanficTitle').value;
     const tags = 'tag 1, tag 2';
-    const category = 'parody';
-    console.log(this.props);
-    const userId = this.props.userId;
+    const category = this.state.category;
+    const userId = this.props.userdata.id;
     const chapters = [this.state.markdown]; //utilFunc with return object in future
-    console.log(chapters);
     const images = 'sample.png';
-    this.props.saveFanfic(this.props.match.params.id, title, tags, category, userId, chapters, images);
+    console.log(
+      this.props.match.params.id,
+      title,
+      tags,
+      category,
+      userId,
+      chapters,
+      images
+    );
+    this.props.saveFanfic(
+      this.props.match.params.id,
+      title,
+      tags,
+      category,
+      userId,
+      chapters,
+      images
+    );
   }
 
   updateMarkdown(value) {
@@ -58,7 +74,12 @@ class Fanfic extends Component {
     this.setState({ title: e.target.value });
   }
 
+  updateCategory(e) {
+    this.setState({ category: e.target.value });
+  }
+
   render() {
+    console.log(this.props);
     const { readFanfic, saveFanfic, t, match, title } = this.props;
     const { id, mode } = match.params;
     const needToFetch =
@@ -72,11 +93,10 @@ class Fanfic extends Component {
       this.setState({
         markdown: this.props.chapters.join('\n\n'),
         title: this.props.title,
+        category: this.props.category,
         isStillFetching: false
       });
     }
-
-    console.log(this.state);
 
     return (
       <div>
@@ -92,7 +112,30 @@ class Fanfic extends Component {
                   value={this.state.title}
                   onChange={this.updateTitle.bind(this)}
                 />
-                <Input placeholder='category' />
+                {/* common component next */}
+                <div className='input-group mb-3'>
+                  <div className='input-group-prepend'>
+                    <label
+                      className='input-group-text'
+                      htmlFor='categorySelect'
+                    >
+                      Category
+                    </label>
+                  </div>
+                  <select
+                    className='custom-select'
+                    id='categorySelect'
+                    defaultValue={this.props.category}
+                    onChange={this.updateCategory.bind(this)}
+                  >
+                    {this.props.categories.map((el, index) => (
+                      <option key={index} value={el}>
+                        {el}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {/* common component end */}
                 <Input placeholder='tags' />
               </div>
             </section>
@@ -113,7 +156,7 @@ class Fanfic extends Component {
             <section>
               <div>
                 <h1>{this.props.title}</h1>
-                <span>category</span>
+                <span>{this.props.category}</span>
                 <span>{this.props.tags}</span>
               </div>
             </section>
@@ -125,7 +168,11 @@ class Fanfic extends Component {
   }
 }
 
-const mapStateToProps = state => state.fanfic;
+const mapStateToProps = state => ({
+  ...state.fanfic,
+  userdata: state.profilePage.userdata,
+  categories: state.syncParams.CONST.categories
+});
 
 export default withNamespaces('common')(
   connect(mapStateToProps, fanficActions)(Fanfic)

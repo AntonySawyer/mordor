@@ -20,7 +20,12 @@ class App extends React.Component {
     this.isAdmin = this.props.role === 'admin';
     this.getProfile = this.props.getProfile;
     this.getUsers = this.props.getUsers;
+    this.getConst = this.props.getConst;
     this.userId = this.props.userId;
+  }
+
+  componentDidMount() {
+    this.getConst();
   }
 
   adminPreload() {
@@ -67,12 +72,10 @@ class App extends React.Component {
           {this.isAuth ? this.profilePreload() : null}
           <Route
             path='/fanfic/:mode/:id'
-            render={matchProps => <Fanfic {...matchProps} userId={this.userId} />}
-          />          
-          {/* <Route
-            path='/fanfic/:mode/new'
-            component={matchProps => <Fanfic {...matchProps} userId={this.userId} />}
-          /> */}
+            render={matchProps => (
+              <Fanfic {...matchProps} userId={this.userId} />
+            )}
+          />
         </Suspense>
       </Router>
     );

@@ -9,6 +9,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const path = require('path');
 
+const migration = require('./utils/migration.js');
+
 const app = express();
 
 app.use(express.static('public'));
@@ -30,6 +32,7 @@ mongoose
 const User = require('./models/user');
 const Fanfic = require('./models/fanfic');
 const Comment = require('./models/coments');
+const CONST = require('./models/const.js');
 
 passport.serializeUser((user, done) => {
   done(null, user);
@@ -147,6 +150,19 @@ app.post('/getProfile', (req, res) => {
     });
 });
 
+app.post('/getConst', (req, res) => {
+  CONST.find({})
+    .then(rs => JSON.parse(JSON.stringify(rs)))
+    .then(data => {
+      if (data.length === 0) {
+        const newData = migration.setConstCategories(CONST);
+        res.json(newData);
+      } else {
+        res.json(data);
+      }
+    });
+});
+
 app.post('/fanfic/get', (req, res, next) => {
   const { id } = req.body;
   Fanfic.find({ _id: id })
@@ -182,7 +198,6 @@ app.post('/fanfic/save', (req, res, next) => {
         if (err) {
           console.log(err); // error handler for client, dont clean store before write succesfully!
         } else {
-          console.log(data);
           // socket - last updated, table in profile of author (for admin and user)
           res.redirect(`/fanfic/read/${data._id}`);
         }
@@ -206,7 +221,10 @@ app.post('/fanfic/save', (req, res, next) => {
     );
     Fanfic.find({ _id: id })
       .then(rs => JSON.parse(JSON.stringify(rs)))
-      .then(fanfics => res.json(fanfics[0]));
+      .then(fanfics => {
+        console.log(fanfics);
+        res.json(fanfics[0]);
+      });
   }
 });
 

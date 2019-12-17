@@ -1,4 +1,5 @@
-import * as types from '../actions/syncActions';
+import { SET_LANG, SET_THEME } from '../actions/syncActions';
+import { GET_CONST } from '../actions/preloadActions';
 
 let initialState = {};
 
@@ -9,10 +10,12 @@ document.querySelector('body').classList = [initialState.activeTheme];
 
 const syncReducer = (state = initialState, action) => {
   switch (action.type) {
-    case types.SET_THEME:
-        localStorage.setItem('theme', action.payload);
-        document.querySelector('body').classList = [action.payload];
-      return {...state, activeTheme: action.payload};
+    case SET_THEME:
+      localStorage.setItem('theme', action.payload);
+      document.querySelector('body').classList = [action.payload];
+      return { ...state, activeTheme: action.payload };
+    case GET_CONST:
+      return { ...state, CONST: action.payload[0] };
     default:
       return state;
   }
