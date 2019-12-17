@@ -61,5 +61,13 @@
         "edit": "Edit",
         "createdAt": "Create datetime (later)",
         "read": "Read"
+    },
+    "Fanfic": {
+        "save": "Save",
+        "title": "Title",
+        "category": "Category",
+        "tags": "Tags",
+        "write": "Write",
+        "preview": "Preview"
     }
 }

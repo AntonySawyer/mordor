@@ -25,6 +25,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    document.title = 'Mordor - fanfics home';
     this.getConst();
   }
 

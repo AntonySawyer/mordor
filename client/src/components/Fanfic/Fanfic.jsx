@@ -91,57 +91,68 @@ class Fanfic extends Component {
     }
 
     return (
-      <div>
+      <>
         {needToFetch && <Spinner />}
-        {!needToFetch && mode !== 'read' && (
-          <section className='profile container'>
-            <section>
-              <ActionBtn title='Save' handler={this.tempCreateNew.bind(this)} />
-              <div>
-                <Input
-                  placeholder='title'
-                  id='newFanficTitle'
-                  value={this.state.title}
-                  onChange={this.updateTitle.bind(this)}
+        <section className='profile container'>
+          {!needToFetch && mode !== 'read' && (
+            <>
+              <section>
+                <ActionBtn
+                  title={t('Fanfic.save')}
+                  handler={this.tempCreateNew.bind(this)}
                 />
-                <Select
-                  id='categorySelect'
-                  label='Category'
-                  defaultValue={this.props.category}
-                  values={this.props.categories.map(el => ({
-                    title: el,
-                    value: el
-                  }))}
-                  handler={this.updateCategory.bind(this)}
-                />
-                <Input placeholder='tags' />
-              </div>
-            </section>
-            <ReactMde
-              value={this.state.markdown}
-              onChange={value => this.updateMarkdown(value)}
-              selectedTab={this.state.selectedTab}
-              onTabChange={this.setSelectedTab.bind(this)}
-              generateMarkdownPreview={markdown =>
-                Promise.resolve(<ReactMarkdown source={this.state.markdown} />)
-              }
-            />
-          </section>
-        )}
+                <div>
+                  <Input
+                    placeholder={t('Fanfic.title')}
+                    id='newFanficTitle'
+                    value={this.state.title}
+                    onChange={this.updateTitle.bind(this)}
+                  />
+                  <Select
+                    id='categorySelect'
+                    label={t('Fanfic.category')}
+                    defaultValue={this.props.category}
+                    values={this.props.categories.map(el => ({
+                      title: el,
+                      value: el
+                    }))}
+                    handler={this.updateCategory.bind(this)}
+                  />
+                  <Input placeholder={t('Fanfic.tags')} />
+                </div>
+              </section>
+              <ReactMde
+                value={this.state.markdown}
+                onChange={value => this.updateMarkdown(value)}
+                l18n={{
+                  write: t('Fanfic.write'),
+                  preview: t('Fanfic.preview')
+                }}
+                selectedTab={this.state.selectedTab}
+                onTabChange={this.setSelectedTab.bind(this)}
+                generateMarkdownPreview={markdown =>
+                  Promise.resolve(
+                    <ReactMarkdown source={this.state.markdown} />
+                  )
+                }
+              />
+            </>
+          )}
 
-        {!needToFetch && mode === 'read' && (
-          <section className='profile container'>
-            <section>
-              <div>
-                <h1>{this.props.title}</h1>
-                <span>{this.props.category}</span>
-                <span>{this.props.tags}</span>
-              </div>
-            </section>
-            <ReactMarkdown source={this.props.chapters[0]} />
-          </section>
-        )}
-      </div>
+          {!needToFetch && mode === 'read' && (
+            <>
+              <section>
+                <div>
+                  <h1>{this.props.title}</h1>
+                  <span>{this.props.category}</span>
+                  <span>{this.props.tags}</span>
+                </div>
+              </section>
+              <ReactMarkdown source={this.props.chapters[0]} />
+            </>
+          )}
+        </section>
+      </>
     );
   }
 }
