@@ -1,6 +1,6 @@
 export const SAVE_FANFIC = 'SAVE_FANFIC';
 export const READ_FANFIC = 'READ_FANFIC';
-
+export const SAVE_TAGS = 'SAVE_TAGS';
 
 export const readFanfic = (id) => {
   return (dispatch, getState) => {
@@ -32,6 +32,23 @@ export const saveFanfic = (id, title, tags, category, userId, chapters, images) 
       .then(rs => rs.json())
       .then(payload => {
         return dispatch({ type: SAVE_FANFIC, payload });
+      });
+  };
+};
+
+export const saveTags = ( tags ) => {
+  return (dispatch, getState) => {
+    fetch('/tags/save', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ tags })
+    })
+      .then(rs => rs.json())
+      .then(payload => {
+        return dispatch({ type: SAVE_TAGS, payload });
       });
   };
 };

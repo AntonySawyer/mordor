@@ -1,7 +1,8 @@
 import { SET_LANG, SET_THEME } from '../actions/syncActions';
-import { GET_CONST } from '../actions/preloadActions';
+import { GET_CONST, GET_TAGS } from '../actions/preloadActions';
+import { SAVE_TAGS } from '../actions/fanficActions';
 
-let initialState = {CONST: []};
+let initialState = { CONST: [] };
 
 initialState.activeTheme = localStorage.getItem('theme') || '';
 initialState.activeLang = localStorage.getItem('lang');
@@ -16,6 +17,10 @@ const syncReducer = (state = initialState, action) => {
       return { ...state, activeTheme: action.payload };
     case GET_CONST:
       return { ...state, CONST: action.payload[0] };
+    case GET_TAGS:
+      return { ...state, tags: action.payload};
+    case SAVE_TAGS:
+      return { ...state, tags: action.payload};
     default:
       return state;
   }

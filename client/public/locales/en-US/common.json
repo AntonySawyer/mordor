@@ -69,6 +69,7 @@
         "category": "Category",
         "tags": "Tags",
         "write": "Write",
-        "preview": "Preview"
+        "preview": "Preview",
+        "addTags": "Add tags"
     }
 }

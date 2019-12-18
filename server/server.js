@@ -33,6 +33,7 @@ const User = require('./models/user');
 const Fanfic = require('./models/fanfic');
 const Comment = require('./models/coments');
 const CONST = require('./models/const.js');
+const Tag = require('./models/tags.js');
 
 passport.serializeUser((user, done) => {
   done(null, user);
@@ -125,23 +126,27 @@ app.get('/logout', function(req, res) {
 });
 
 function setId(obj) {
-  return obj.map(el => ({ ...el, id: el._id }))
+  return obj.map(el => ({ ...el, id: el._id }));
 }
 
 app.post('/fanfic/lastUpdated', (req, res) => {
-  Fanfic.find({ }, { title: 1, datestamp: 1 }).sort({datestamp: -1}).limit(5)
+  Fanfic.find({}, { title: 1, datestamp: 1 })
+    .sort({ datestamp: -1 })
+    .limit(5)
     .then(rs => JSON.parse(JSON.stringify(rs)))
     .then(fanfics => {
-      fanfics = setId(fanfics)
+      fanfics = setId(fanfics);
       res.json(fanfics);
     });
 });
 
 app.post('/fanfic/maxRated', (req, res) => {
-  Fanfic.find({ }, { title: 1, rate: 1 }).sort({rate: -1}).limit(5)
+  Fanfic.find({}, { title: 1, rate: 1 })
+    .sort({ rate: -1 })
+    .limit(5)
     .then(rs => JSON.parse(JSON.stringify(rs)))
     .then(fanfics => {
-      fanfics = setId(fanfics)
+      fanfics = setId(fanfics);
       res.json(fanfics);
     });
 });
@@ -201,6 +206,7 @@ app.post('/fanfic/delete', (req, res) => {
 app.post('/fanfic/save', (req, res, next) => {
   const { id, title, tags, category, userId, chapters, images } = req.body;
   if (id === 'new') {
+    console.log('create work');
     Fanfic.create(
       {
         title: title,
@@ -222,6 +228,7 @@ app.post('/fanfic/save', (req, res, next) => {
       }
     );
   } else {
+    console.log('update work');
     Fanfic.updateMany(
       { _id: id },
       {
@@ -243,6 +250,31 @@ app.post('/fanfic/save', (req, res, next) => {
         res.json(fanfics[0]);
       });
   }
+});
+
+function getTags(res) {
+  Tag.find({})
+    .then(rs => JSON.parse(JSON.stringify(rs)))
+    .then(data => {
+      res.json(setId(data));
+    });
+}
+
+app.post('/tags/save', (req, res, next) => {
+  const { tags } = req.body;
+  console.log(tags);
+  Tag.insertMany(tags),
+    (err, data) => {
+      if (err) {
+        console.log(err);
+      } else {
+        getTags(res);
+      }
+    };
+});
+
+app.post('/tags/get', (req, res, next) => {
+  getTags(res);
 });
 
 // DRY

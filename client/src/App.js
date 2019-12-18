@@ -20,7 +20,6 @@ class App extends React.Component {
     this.isAdmin = this.props.role === 'admin';
     this.getProfile = this.props.getProfile;
     this.getUsers = this.props.getUsers;
-    this.getConst = this.props.getConst;
     this.userId = this.props.userId;
     this.getRated = this.props.getRated;
     this.getLastUpdated = this.props.getLastUpdated;
@@ -28,7 +27,8 @@ class App extends React.Component {
 
   componentDidMount() {
     document.title = 'Mordor - fanfics home';
-    this.getConst();
+    this.props.getConst();
+    this.props.getTags();
   }
 
   adminPreload() {

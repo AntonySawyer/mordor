@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import ReactMde from 'react-mde';
+import ReactTags from 'react-tag-autocomplete';
 import 'react-mde/lib/styles/css/react-mde-all.css';
 
 import * as fanficActions from '../../redux/actions/fanficActions';
+import * as preloadActions from '../../redux/actions/preloadActions';
 
 import Spinner from '../common/Spinner/';
 import ActionBtn from '../common/ActionBtn/';
@@ -22,7 +24,9 @@ class Fanfic extends Component {
       selectedTab: 'write',
       title: '',
       category: this.props.categories[0],
-      isStillFetching: true
+      isStillFetching: true,
+      tags: [],
+      suggestions: []
     };
     this.updateMarkdown = this.updateMarkdown.bind(this);
   }
@@ -41,7 +45,13 @@ class Fanfic extends Component {
 
   tempCreateNew() {
     const title = document.getElementById('newFanficTitle').value;
-    const tags = 'tag 1, tag 2';
+    const tags = this.state.tags;
+    const newTags = tags.filter(el => el.id === undefined);
+    console.log(tags);
+    console.log(newTags);
+    if (newTags.length > 0) {
+      this.props.saveTags(newTags);
+    }
     const category = this.state.category;
     const userId = this.props.userdata.id;
     const chapters = [this.state.markdown]; //utilFunc with return object in future
@@ -49,7 +59,7 @@ class Fanfic extends Component {
     this.props.saveFanfic(
       this.props.match.params.id,
       title,
-      tags,
+      tags.map(el => el.name),
       category,
       userId,
       chapters,
@@ -69,6 +79,26 @@ class Fanfic extends Component {
     this.setState({ category: e.target.value });
   }
 
+  handleDelete(i) {
+    const tags = this.state.tags.slice(0);
+    const suggestions = this.state.suggestions.slice(0);
+    suggestions.push(tags[i]);
+    tags.splice(i, 1);
+    this.setState({ tags, suggestions });
+  }
+
+  handleAddition(tag) {
+    const tags = [...this.state.tags, tag];
+    const suggestions = this.state.suggestions.filter(
+      el => el.name !== tag.name
+    );
+    this.setState({ tags, suggestions });
+  }
+
+  handleValidate(tag) {
+    return this.state.tags.filter(el => el.name === tag.name).length === 0;
+  }
+
   render() {
     const { t, match, categories, title } = this.props;
     const { id, mode } = match.params;
@@ -84,7 +114,16 @@ class Fanfic extends Component {
         markdown: this.props.chapters.join('\n\n'),
         title: this.props.title,
         category: this.props.category,
-        isStillFetching: false
+        isStillFetching: false,
+        suggestions: this.props.suggestions,
+        tags: this.props.tags.map(el => ({ id: 'old', name: el }))
+      });
+    }
+
+    if (mode === 'create' && this.state.isStillFetching) {
+      this.setState({
+        isStillFetching: false,
+        suggestions: this.props.suggestions
       });
     }
 
@@ -116,7 +155,15 @@ class Fanfic extends Component {
                     }))}
                     handler={this.updateCategory.bind(this)}
                   />
-                  <Input placeholder={t('Fanfic.tags')} />
+                  <ReactTags
+                    tags={this.state.tags}
+                    suggestions={this.state.suggestions}
+                    placeholder={t('Fanfic.addTags')}
+                    allowNew={true}
+                    handleDelete={this.handleDelete.bind(this)}
+                    handleAddition={this.handleAddition.bind(this)}
+                    handleValidate={this.handleValidate.bind(this)}
+                  />
                 </div>
               </section>
               <ReactMde
@@ -143,7 +190,9 @@ class Fanfic extends Component {
                 <div>
                   <h1>{this.props.title}</h1>
                   <span>{this.props.category}</span>
-                  <span>{this.props.tags}</span>
+                  {this.props.tags.map((el, index) => (
+                    <span key={index}>{el}</span>
+                  ))}
                 </div>
               </section>
               <ReactMarkdown source={this.props.chapters[0]} />
@@ -158,7 +207,8 @@ class Fanfic extends Component {
 const mapStateToProps = state => ({
   ...state.fanfic,
   userdata: state.profilePage.userdata,
-  categories: state.syncParams.CONST.categories
+  categories: state.syncParams.CONST.categories,
+  suggestions: state.syncParams.tags
 });
 
 export default withNamespaces('common')(

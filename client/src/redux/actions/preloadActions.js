@@ -1,7 +1,8 @@
 export const GET_USERS = 'GET_USERS';
 export const GET_PROFILE = 'GET_PROFILE';
-export const GET_MAIN_PAGE = 'GET_MAIN_PAGE';
 export const GET_CONST = 'GET_CONST';
+export const GET_TAGS = 'GET_TAGS';
+
 
 export const getUsers = () => {
   return (dispatch, getState) => {
@@ -47,6 +48,17 @@ export const getConst = () => {
       });
   };
 };
-getConst();
 
-export const getMainPage = () => ({ type: GET_MAIN_PAGE });
+export const getTags = () => {
+  return (dispatch, getState) => {
+    fetch('/tags/get', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json'
+      }})
+      .then(rs => rs.json())
+      .then(payload => {
+        return dispatch({ type: GET_TAGS, payload });
+      });
+  };
+};
