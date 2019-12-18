@@ -23,6 +23,7 @@ class Fanfic extends Component {
       markdown: '# Chapter 1 \n\n Type text here',
       selectedTab: 'write',
       title: '',
+      shortDescr: '',
       category: this.props.categories[0],
       isStillFetching: true,
       tags: [],
@@ -44,11 +45,10 @@ class Fanfic extends Component {
   }
 
   tempCreateNew() {
-    const title = document.getElementById('newFanficTitle').value;
+    const title = document.getElementById('fanficTitle').value;
+    const shortDescr = this.state.shortDescr;
     const tags = this.state.tags;
     const newTags = tags.filter(el => el.id === undefined);
-    console.log(tags);
-    console.log(newTags);
     if (newTags.length > 0) {
       this.props.saveTags(newTags);
     }
@@ -61,6 +61,7 @@ class Fanfic extends Component {
       title,
       tags.map(el => el.name),
       category,
+      shortDescr,
       userId,
       chapters,
       images
@@ -69,6 +70,10 @@ class Fanfic extends Component {
 
   updateMarkdown(value) {
     this.setState({ markdown: value });
+  }
+
+  updateDescr(e) {
+    this.setState({shortDescr: e.target.value});
   }
 
   updateTitle(e) {
@@ -114,6 +119,7 @@ class Fanfic extends Component {
         markdown: this.props.chapters.join('\n\n'),
         title: this.props.title,
         category: this.props.category,
+        shortDescr: this.props.shortDescr,
         isStillFetching: false,
         suggestions: this.props.suggestions,
         tags: this.props.tags.map(el => ({ id: 'old', name: el }))
@@ -141,7 +147,7 @@ class Fanfic extends Component {
                 <div>
                   <Input
                     placeholder={t('Fanfic.title')}
-                    id='newFanficTitle'
+                    id='fanficTitle'
                     value={this.state.title}
                     onChange={this.updateTitle.bind(this)}
                   />
@@ -155,6 +161,7 @@ class Fanfic extends Component {
                     }))}
                     handler={this.updateCategory.bind(this)}
                   />
+                  <textarea id='shortDescr' cols='30' rows='10' value={this.state.shortDescr} onChange={this.updateDescr.bind(this)}></textarea>
                   <ReactTags
                     tags={this.state.tags}
                     suggestions={this.state.suggestions}
@@ -195,6 +202,10 @@ class Fanfic extends Component {
                   ))}
                 </div>
               </section>
+              <div>
+                <span>Description</span>
+                <span>{this.props.shortDescr}</span>
+              </div>
               <ReactMarkdown source={this.props.chapters[0]} />
             </>
           )}

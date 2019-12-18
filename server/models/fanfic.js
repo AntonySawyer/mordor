@@ -12,6 +12,10 @@ const FanficSchema = new mongoose.Schema({
     unique: false,
     required: true
   },
+  shortDescr: {
+    type: String,
+    required: true
+  },
   tags: {
     type: Array,
     required: false,

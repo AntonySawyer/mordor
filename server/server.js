@@ -204,20 +204,10 @@ app.post('/fanfic/delete', (req, res) => {
 });
 
 app.post('/fanfic/save', (req, res, next) => {
-  const { id, title, tags, category, userId, chapters, images } = req.body;
+  const { id, title, tags, category, shortDescr, userId, chapters, images } = req.body;
   if (id === 'new') {
-    console.log('create work');
     Fanfic.create(
-      {
-        title: title,
-        userId: userId,
-        tags: tags,
-        category: category,
-        rate: 0,
-        datestamp: Date.now(),
-        chapters: chapters,
-        images: images
-      },
+      { title, userId, tags, category, shortDescr, rate: 0, datestamp: Date.now(), chapters, images },
       (err, data) => {
         if (err) {
           console.log(err); // error handler for client, dont clean store before write succesfully!
@@ -228,7 +218,6 @@ app.post('/fanfic/save', (req, res, next) => {
       }
     );
   } else {
-    console.log('update work');
     Fanfic.updateMany(
       { _id: id },
       {

@@ -96,7 +96,7 @@ class Home extends Component {
                 href={`tag_${tag.id}`}
                 className='badge badge-primary'
               >
-                {tag.title}
+                {tag.name}
               </a>
             ))}
           </div>
@@ -108,7 +108,8 @@ class Home extends Component {
 
 const mapStateToProps = state => ({
   ...state.homePage,
-  CONST: state.syncParams.CONST
+  CONST: state.syncParams.CONST,
+  tags: state.syncParams.tags
 });
 
 export default withNamespaces('common')(
