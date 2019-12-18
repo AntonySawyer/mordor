@@ -4,6 +4,7 @@ import { withNamespaces } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import ReactMde from 'react-mde';
 import ReactTags from 'react-tag-autocomplete';
+import StarRatings from 'react-star-ratings';
 import 'react-mde/lib/styles/css/react-mde-all.css';
 
 import * as fanficActions from '../../redux/actions/fanficActions';
@@ -13,6 +14,7 @@ import Spinner from '../common/Spinner/';
 import ActionBtn from '../common/ActionBtn/';
 import Input from '../common/Input/';
 import Select from '../common/Select/';
+import LikeBtn from '../LikeBtn';
 
 import './Fanfic.css';
 
@@ -22,12 +24,15 @@ class Fanfic extends Component {
     this.state = {
       markdown: '# Chapter 1 \n\n Type text here',
       selectedTab: 'write',
+      rating: 0,
       title: '',
       shortDescr: '',
       category: this.props.categories[0],
       isStillFetching: true,
       tags: [],
-      suggestions: []
+      suggestions: [],
+      liked: false,
+      activeChapter: 0
     };
     this.updateMarkdown = this.updateMarkdown.bind(this);
   }
@@ -73,7 +78,7 @@ class Fanfic extends Component {
   }
 
   updateDescr(e) {
-    this.setState({shortDescr: e.target.value});
+    this.setState({ shortDescr: e.target.value });
   }
 
   updateTitle(e) {
@@ -104,7 +109,21 @@ class Fanfic extends Component {
     return this.state.tags.filter(el => el.name === tag.name).length === 0;
   }
 
+  changeRating(rating) {
+    this.setState({ rating });
+  }
+
+  handleLike() {
+    this.setState((PrevState, props) => ({ liked: !PrevState.liked }));
+  }
+
+  changeActiveChapter(e) {
+    this.setState({ activeChapter: +e.target.value });
+  }
+
   render() {
+    console.log(this.props);
+    console.log(this.state);
     const { t, match, categories, title } = this.props;
     const { id, mode } = match.params;
     const needToFetch =
@@ -161,7 +180,13 @@ class Fanfic extends Component {
                     }))}
                     handler={this.updateCategory.bind(this)}
                   />
-                  <textarea id='shortDescr' cols='30' rows='10' value={this.state.shortDescr} onChange={this.updateDescr.bind(this)}></textarea>
+                  <textarea
+                    id='shortDescr'
+                    cols='30'
+                    rows='10'
+                    value={this.state.shortDescr}
+                    onChange={this.updateDescr.bind(this)}
+                  ></textarea>
                   <ReactTags
                     tags={this.state.tags}
                     suggestions={this.state.suggestions}
@@ -202,11 +227,34 @@ class Fanfic extends Component {
                   ))}
                 </div>
               </section>
+              <StarRatings
+                rating={this.state.rating}
+                starRatedColor='blue'
+                changeRating={rating => this.changeRating}
+                numberOfStars={5}
+                name='rating'
+              />
               <div>
-                <span>Description</span>
+                <span>Description:</span>
                 <span>{this.props.shortDescr}</span>
               </div>
-              <ReactMarkdown source={this.props.chapters[0]} />
+              <Select
+                id='chaptersSelect'
+                label={t('Fanfic.chapters')}
+                defaultValue={0}
+                values={this.props.chapters.map((el, index) => ({
+                  title: el.title,
+                  value: index
+                }))}
+                handler={this.changeActiveChapter.bind(this)}
+              />
+              <ReactMarkdown
+                source={this.props.chapters[this.state.activeChapter]['content']}
+              />
+              <LikeBtn
+                liked={this.state.liked}
+                handler={this.handleLike.bind(this)}
+              />
             </>
           )}
         </section>
