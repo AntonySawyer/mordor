@@ -25,10 +25,6 @@ const FanficSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  rate: {
-    type: String,
-    required: true
-  },
   datestamp: {
     type: Date,
     required: true
@@ -40,6 +36,10 @@ const FanficSchema = new mongoose.Schema({
   images: {
     type: Object,
     required: false
+  },
+  stars: {
+    type: Array,
+    required: true
   }
 });
 

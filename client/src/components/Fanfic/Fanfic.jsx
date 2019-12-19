@@ -15,6 +15,7 @@ import ActionBtn from '../common/ActionBtn/';
 import Input from '../common/Input/';
 import Select from '../common/Select/';
 import LikeBtn from '../LikeBtn';
+import ChapterNav from '../ChapterNav/';
 
 import './Fanfic.css';
 
@@ -22,23 +23,36 @@ class Fanfic extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      markdown: '# Chapter 1 \n\n Type text here',
+      markdown: '',
       selectedTab: 'write',
       rating: 0,
-      title: '',
+      fanficTitle: '',
       shortDescr: '',
-      category: this.props.categories[0],
+      category: [],
       isStillFetching: true,
       tags: [],
       suggestions: [],
       liked: false,
-      activeChapter: 0
+      activeChapter: 0,
+      chapters: [{ title: 'Unnamed', content: 'Add text here' }],
+      chapterTitle: '',
+      stars: [1, 2, 4, 8, 3],
+      userStars: 0
     };
     this.updateMarkdown = this.updateMarkdown.bind(this);
   }
 
   componentDidMount() {
     document.title = `Fanfic - ${this.props.match.params.mode}`;
+  }
+
+  rateCount() {
+    const votes = this.state.stars.reduce((a, b) => a + b, 0);
+    const sum = this.state.stars
+      .map((el, i) => el * (i + 1))
+      .reduce((a, b) => a + b, 0);
+    const calcRate = sum / votes;
+    this.setState({ rating: calcRate });
   }
 
   setSelectedTab() {
@@ -59,8 +73,11 @@ class Fanfic extends Component {
     }
     const category = this.state.category;
     const userId = this.props.userdata.id;
-    const chapters = [this.state.markdown]; //utilFunc with return object in future
+    const chapters = this.state.chapters; //utilFunc with return object in future
+    console.log(chapters);
     const images = 'sample.png';
+    const likes = this.state.likes;
+    const stars = this.state.stars;
     this.props.saveFanfic(
       this.props.match.params.id,
       title,
@@ -69,12 +86,26 @@ class Fanfic extends Component {
       shortDescr,
       userId,
       chapters,
-      images
+      images,
+      stars
     );
   }
 
   updateMarkdown(value) {
-    this.setState({ markdown: value });
+    this.setState(PrevState => {
+      const newChapters = PrevState.chapters.slice(0);
+      newChapters[PrevState.activeChapter]['content'] = value;
+      return { markdown: value, chapters: newChapters };
+    });
+  }
+
+  updateChapterTitle() {
+    this.setState(PrevState => {
+      const newChapters = PrevState.chapters.slice(0);
+      const newChapteTitle = document.getElementById('chapterTitle').value;
+      newChapters[PrevState.activeChapter]['title'] = newChapteTitle;
+      return { chapters: newChapters, chapterTitle: newChapteTitle };
+    });
   }
 
   updateDescr(e) {
@@ -82,7 +113,7 @@ class Fanfic extends Component {
   }
 
   updateTitle(e) {
-    this.setState({ title: e.target.value });
+    this.setState({ fanficTitle: e.target.value });
   }
 
   updateCategory(e) {
@@ -110,20 +141,48 @@ class Fanfic extends Component {
   }
 
   changeRating(rating) {
-    this.setState({ rating });
+    const newStars = this.state.stars.slice(0);
+    if (this.state.userStars !== 0) {
+      newStars[this.state.userStars - 1] -= 1;
+    }
+    newStars[rating - 1] += 1;
+    this.setState({ rating: rating, stars: newStars });
   }
 
   handleLike() {
-    this.setState((PrevState, props) => ({ liked: !PrevState.liked }));
+    this.setState((PrevState, props) => {
+      const newChapters = PrevState.chapters.slice(0);
+      const prevLikesCount = +newChapters[PrevState.activeChapter]['likes'];
+      PrevState.liked
+        ? (newChapters[PrevState.activeChapter]['likes'] = prevLikesCount - 1)
+        : (newChapters[PrevState.activeChapter]['likes'] = prevLikesCount + 1);
+      return { liked: !PrevState.liked, chapters: newChapters };
+    });
   }
 
   changeActiveChapter(e) {
-    this.setState({ activeChapter: +e.target.value });
+    this.setState({
+      activeChapter: +e.target.value,
+      chapterTitle: this.state.chapters[+e.target.value]['title'],
+      markdown: this.state.chapters[+e.target.value]['content'],
+      liked: false //fix me
+    });
+  }
+
+  addNewChapter() {
+    this.setState(PrevState => {
+      const newChapters = this.state.chapters.slice(0);
+      newChapters.push({ title: 'Unnamed', content: 'Add text here' });
+      return {
+        chapters: newChapters,
+        activeChapter: newChapters.length - 1,
+        chapterTitle: 'Unnamed',
+        markdown: 'Add text here'
+      };
+    });
   }
 
   render() {
-    console.log(this.props);
-    console.log(this.state);
     const { t, match, categories, title } = this.props;
     const { id, mode } = match.params;
     const needToFetch =
@@ -135,20 +194,37 @@ class Fanfic extends Component {
 
     if (!needToFetch && mode === 'edit' && this.state.isStillFetching) {
       this.setState({
-        markdown: this.props.chapters.join('\n\n'),
-        title: this.props.title,
+        markdown: this.props.chapters[0].content,
+        fanficTitle: this.props.title,
+        categories: this.props.categories[0],
         category: this.props.category,
+        chapters: this.props.chapters,
         shortDescr: this.props.shortDescr,
         isStillFetching: false,
         suggestions: this.props.suggestions,
-        tags: this.props.tags.map(el => ({ id: 'old', name: el }))
+        tags: this.props.tags.map(el => ({ id: 'old', name: el })),
+        chapterTitle: this.props.chapters[0]['title']
+      });
+    }
+
+    if (!needToFetch && mode === 'read' && this.state.isStillFetching) {
+      this.setState({
+        fanficTitle: this.props.title,
+        category: this.props.category,
+        chapters: this.props.chapters,
+        shortDescr: this.props.shortDescr,
+        isStillFetching: false,
+        chapterTitle: this.props.chapters[this.state.activeChapter]['title']
       });
     }
 
     if (mode === 'create' && this.state.isStillFetching) {
       this.setState({
         isStillFetching: false,
-        suggestions: this.props.suggestions
+        suggestions: this.props.suggestions,
+        categories: this.props.categories[0],
+        chapterTitle: '',
+        chapters: [{ title: 'Unnamed', content: 'Add text here' }]
       });
     }
 
@@ -167,7 +243,7 @@ class Fanfic extends Component {
                   <Input
                     placeholder={t('Fanfic.title')}
                     id='fanficTitle'
-                    value={this.state.title}
+                    value={this.state.fanficTitle}
                     onChange={this.updateTitle.bind(this)}
                   />
                   <Select
@@ -198,6 +274,21 @@ class Fanfic extends Component {
                   />
                 </div>
               </section>
+              <ChapterNav
+                mode={mode}
+                label={t('Fanfic.chapters')}
+                selectorId='chaptersSelect'
+                chapters={this.state.chapters}
+                changeHandler={this.changeActiveChapter.bind(this)}
+                newChapterHandler={this.addNewChapter.bind(this)}
+                defaultSelectValue={this.state.activeChapter}
+              />
+              <Input
+                placeholder={t('Fanfic.chapterTitle')}
+                id='chapterTitle'
+                value={this.state.chapterTitle}
+                onChange={this.updateChapterTitle.bind(this)}
+              />
               <ReactMde
                 value={this.state.markdown}
                 onChange={value => this.updateMarkdown(value)}
@@ -220,7 +311,7 @@ class Fanfic extends Component {
             <>
               <section>
                 <div>
-                  <h1>{this.props.title}</h1>
+                  <h1>{this.props.fanficTitle}</h1>
                   <span>{this.props.category}</span>
                   {this.props.tags.map((el, index) => (
                     <span key={index}>{el}</span>
@@ -230,7 +321,7 @@ class Fanfic extends Component {
               <StarRatings
                 rating={this.state.rating}
                 starRatedColor='blue'
-                changeRating={rating => this.changeRating}
+                changeRating={this.changeRating.bind(this)}
                 numberOfStars={5}
                 name='rating'
               />
@@ -238,18 +329,17 @@ class Fanfic extends Component {
                 <span>Description:</span>
                 <span>{this.props.shortDescr}</span>
               </div>
-              <Select
-                id='chaptersSelect'
+              <ChapterNav
+                mode={mode}
                 label={t('Fanfic.chapters')}
-                defaultValue={0}
-                values={this.props.chapters.map((el, index) => ({
-                  title: el.title,
-                  value: index
-                }))}
-                handler={this.changeActiveChapter.bind(this)}
+                selectorId='chaptersSelect'
+                chapters={this.props.chapters}
+                changeHandler={this.changeActiveChapter.bind(this)}
               />
               <ReactMarkdown
-                source={this.props.chapters[this.state.activeChapter]['content']}
+                source={
+                  this.props.chapters[this.state.activeChapter]['content']
+                }
               />
               <LikeBtn
                 liked={this.state.liked}

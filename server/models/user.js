@@ -36,6 +36,14 @@ const UserSchema = new mongoose.Schema({
   achieves: {
     type: Object,
     required: false
+  },
+  likes: {
+    type: Array,
+    required: false
+  },
+  stars: {
+    type: Array,
+    required: false
   }
 });
 

@@ -19,7 +19,7 @@ export const readFanfic = (id) => {
   };
 };
 
-export const saveFanfic = (id, title, tags, category, shortDescr, userId, chapters, images) => {
+export const saveFanfic = (id, title, tags, category, shortDescr, userId, chapters, images, stars) => {
   return (dispatch, getState) => {
     fetch('/fanfic/save', {
       method: 'POST',
@@ -27,7 +27,7 @@ export const saveFanfic = (id, title, tags, category, shortDescr, userId, chapte
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({id, title, tags, category, shortDescr, userId, chapters, images })
+      body: JSON.stringify({id, title, tags, category, shortDescr, userId, chapters, images, stars })
     })
       .then(rs => rs.json())
       .then(payload => {
