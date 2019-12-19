@@ -1,11 +1,12 @@
+import { DELETE_FANFICS } from './types';
+
 import findIds from '../../utils/idsCollector';
 
-export const DELETE_FANFICS = 'DELETE_FANFICS';
 
 export const deleteFanfic = (userId) => {
   return (dispatch, getState) => {
     const ids = findIds();
-    fetch('/fanfic/delete', {
+    fetch('/api/fanfic/delete', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

@@ -11,43 +11,72 @@ import { logoutUser } from '../../redux/actions/authentication';
 import './NavBar.css';
 
 function NavBar(props) {
-  const { t, isAuth, isAdmin, currentId, actions, getUsers } = props;
-
-  const { isAuthenticated, user } = props.auth;
+  const { t, actions, getUsers, auth } = props;
+  const { isAuthenticated, user } = auth;
+  const isAdmin = user.role === 'admin';
 
   function onLogout(e) {
     e.preventDefault();
     actions.logoutUser(props.history);
   }
 
-  const authLinks = (
-    <ul className='navbar-nav ml-auto'>
-      <a href='#' className='nav-link' onClick={onLogout.bind(this)}>
-        <img
-          src={user.avatar}
-          alt={user.name}
-          title={user.name}
-          className='rounded-circle'
-          style={{ width: '25px', marginRight: '5px' }}
-        />
-        Logout
-      </a>
-    </ul>
+  const commonLinks = (
+    <li className='nav-item'>
+      <NavLink className='nav-link' to='/'>
+        {t('NavBar.home')}
+      </NavLink>
+    </li>
   );
+
   const guestLinks = (
     <ul className='navbar-nav ml-auto'>
       <li className='nav-item'>
         <NavLink className='nav-link' to='/register'>
-          Sign Up
+          {t('NavBar.register')}
         </NavLink>
       </li>
       <li className='nav-item'>
         <NavLink className='nav-link' to='/login'>
-          Sign In
+          {t('NavBar.login')}
         </NavLink>
       </li>
     </ul>
   );
+
+  const authLinks = (
+    <>
+      <li>
+        <NavLink
+          className='nav-link'
+          to={`/profile/${user.id}`}
+          onClick={() => actions.getProfile(user.id)}
+        >
+          <img
+            src={user.avatar}
+            alt={user.username}
+            title={user.username}
+            className='rounded-circle'
+            style={{ width: '25px', marginRight: '5px' }}
+          />
+          {`${user.username} - ${t('NavBar.profile')}`}
+        </NavLink>
+      </li>
+      <li className='nav-item'>
+        <a href='#' className='nav-link' onClick={onLogout.bind(this)}>
+          {t('NavBar.logout')}
+        </a>
+      </li>
+    </>
+  );
+
+  const adminLinks = (
+    <li className='nav-item'>
+      <NavLink className='nav-link' to='/admin' onClick={getUsers}>
+        {t('NavBar.adminPanel')}
+      </NavLink>
+    </li>
+  );
+
   return (
     <header className='NavBar container'>
       <nav className='navbar navbar-expand-lg navbar-light row justify-content-center'>
@@ -55,48 +84,18 @@ function NavBar(props) {
           className='navbar-toggler'
           type='button'
           data-toggle='collapse'
-          data-target='#navbarTogglerDemo02'
-          aria-controls='navbarTogglerDemo02'
+          data-target='#navbarToggler'
+          aria-controls='navbarToggler'
           aria-expanded='false'
           aria-label='Toggle navigation'
         >
           <span className='navbar-toggler-icon'></span>
         </button>
-
-        <div className='collapse navbar-collapse' id='navbarSupportedContent'>
-          {isAuthenticated ? authLinks : guestLinks}
-        </div>
-
-        <div className='collapse navbar-collapse' id='navbarTogglerDemo02'>
+        <div className='collapse navbar-collapse' id='navbarToggler'>
           <ul className='navbar-nav mr-auto mt-2 mt-lg-0'>
-            <li className='nav-item'>
-              <NavLink className='nav-link' to='/'>
-                {t('NavBar.home')}
-              </NavLink>
-            </li>
-            <li className='nav-item'>
-              <NavLink className='nav-link' to='/auth'>
-                {t('NavBar.register')}
-              </NavLink>
-            </li>
-            {isAdmin && isAuth ? (
-              <li className='nav-item'>
-                <NavLink className='nav-link' to='/admin' onClick={getUsers}>
-                  {t('NavBar.adminPanel')}
-                </NavLink>
-              </li>
-            ) : null}
-            {isAuth ? (
-              <li className='nav-item'>
-                <NavLink
-                  className='nav-link'
-                  to={`/profile/${currentId}`}
-                  onClick={() => actions.getProfile(currentId)}
-                >
-                  {t('NavBar.profile')}
-                </NavLink>
-              </li>
-            ) : null}
+            {isAuthenticated ? authLinks : guestLinks}
+            {commonLinks}
+            {isAdmin && adminLinks}
             <li>
               <LangSwitch />
             </li>

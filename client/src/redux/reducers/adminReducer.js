@@ -1,5 +1,4 @@
-import * as types from '../actions/adminActions';
-import { GET_USERS } from '../actions/preloadActions';
+import { GET_USERS, DELETE_USERS, USER_TO_ADMIN, ADMIN_TO_USER, BLOCK_USER, UNBLOCK_USER } from '../actions/types.js';
 
 let initialState = {};
 
@@ -7,15 +6,15 @@ const adminReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_USERS:
       return action.payload;
-    case types.DELETE_USERS:
+    case DELETE_USERS:
       return action.payload;
-    case types.USER_TO_ADMIN:
+    case USER_TO_ADMIN:
       return action.payload;
-    case types.ADMIN_TO_USER:
+    case ADMIN_TO_USER:
       return action.payload;
-    case types.BLOCK_USER:
+    case BLOCK_USER:
       return action.payload;
-    case types.UNBLOCK_USER:
+    case UNBLOCK_USER:
       return action.payload;
     default:
       return state;

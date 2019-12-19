@@ -1,14 +1,16 @@
 {
     "NavBar": {
         "home": "Home Page",
-        "register": "Authorization",
         "adminPanel": "Admin panel",
         "profile": "Profile",
         "lang": "Изменить язык",
         "search": "Search",
         "theme": "Theme",
         "dark": "Dark",
-        "light": "Light"
+        "light": "Light",
+        "register": "Sign up",
+        "login": "Login",
+        "logout": "Logout"
     },
     "Home": {
         "lastUpdate": "Last updated",

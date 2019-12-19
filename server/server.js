@@ -9,7 +9,9 @@ const path = require('path');
 const passport = require('passport');
 const migration = require('./utils/migration.js');
 
-const users = require('./routes/user.route.js'); 
+const users = require('./routes/user.route.js');
+const fanfic = require('./routes/fanfic.route.js');
+const tags = require('./routes/tags.route.js');
 
 const app = express();
 
@@ -28,6 +30,9 @@ app.use(
 );
 
 app.use('/api/users', users);
+app.use('/api/fanfic', fanfic);
+app.use('/api/tags', tags);
+
 
 mongoose
   .connect('mongodb://localhost/mordor')
@@ -38,58 +43,11 @@ const User = require('./models/user');
 const Fanfic = require('./models/fanfic');
 const Comment = require('./models/coments');
 const CONST = require('./models/const.js');
-const Tag = require('./models/tags.js');
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/../client/public/index.html'));
 });
 
-app.post('/register', (req, res, next) => {
-  const { email, password, username } = req.body;
-  User.create(
-    {
-      email: email,
-      password: password,
-      username: username,
-      role: 'user',
-      verified: false,
-      status: 'blocked'
-    },
-    (err, data) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.redirect('/profile');
-      }
-    }
-  );
-});
-
-function setId(obj) {
-  return obj.map(el => ({ ...el, id: el._id }));
-}
-
-app.post('/fanfic/lastUpdated', (req, res) => {
-  Fanfic.find({}, { title: 1, datestamp: 1 })
-    .sort({ datestamp: -1 })
-    .limit(5)
-    .then(rs => JSON.parse(JSON.stringify(rs)))
-    .then(fanfics => {
-      fanfics = setId(fanfics);
-      res.json(fanfics);
-    });
-});
-
-app.post('/fanfic/maxRated', (req, res) => {
-  Fanfic.find({}, { title: 1, rate: 1 })
-    .sort({ rate: -1 })
-    .limit(5)
-    .then(rs => JSON.parse(JSON.stringify(rs)))
-    .then(fanfics => {
-      fanfics = setId(fanfics);
-      res.json(fanfics);
-    });
-});
 
 app.post('/getProfile', (req, res) => {
   const id = req.body.id.toString();
@@ -127,186 +85,5 @@ app.post('/getConst', (req, res) => {
     });
 });
 
-app.post('/fanfic/get', (req, res, next) => {
-  const { id } = req.body;
-  Fanfic.find({ _id: id })
-    .then(rs => JSON.parse(JSON.stringify(rs)))
-    .then(fanfics => res.json(fanfics[0]));
-});
-
-app.post('/fanfic/delete', (req, res) => {
-  Fanfic.deleteMany({ _id: { $in: req.body.ids } }, (err, rs) => {
-    err && console.log(err);
-    Fanfic.find({ userId: req.body.userId }, { title: 1 })
-      .then(rs => JSON.parse(JSON.stringify(rs)))
-      .then(fanfics => res.json(fanfics.map(el => ({ ...el, id: el._id }))));
-  });
-});
-
-app.post('/fanfic/save', (req, res, next) => {
-  const {
-    id,
-    title,
-    tags,
-    category,
-    shortDescr,
-    userId,
-    chapters,
-    images,
-    stars
-  } = req.body;
-  if (id === 'new') {
-    Fanfic.create(
-      {
-        title,
-        userId,
-        tags,
-        category,
-        shortDescr,
-        datestamp: Date.now(),
-        chapters,
-        images,
-        stars
-      },
-      (err, data) => {
-        if (err) {
-          console.log(err); // error handler for client, dont clean store before write succesfully!
-        } else {
-          // socket - last updated, table in profile of author (for admin and user)
-          res.redirect(`/fanfic/read/${data._id}`);
-        }
-      }
-    );
-  } else {
-    Fanfic.updateMany(
-      { _id: id },
-      {
-        $set: {
-          title: title,
-          tags: tags,
-          category: category,
-          chapters: chapters,
-          images: images,
-          stars: stars
-        }
-      },
-      (err, rs) => {
-        err && console.log(err);
-      }
-    );
-    Fanfic.find({ _id: id })
-      .then(rs => JSON.parse(JSON.stringify(rs)))
-      .then(fanfics => {
-        res.json(fanfics[0]);
-      });
-  }
-});
-
-function getTags(res) {
-  Tag.find({})
-    .then(rs => JSON.parse(JSON.stringify(rs)))
-    .then(data => {
-      res.json(setId(data));
-    });
-}
-
-app.post('/tags/save', (req, res, next) => {
-  const { tags } = req.body;
-  console.log(tags);
-  Tag.insertMany(tags),
-    (err, data) => {
-      if (err) {
-        console.log(err);
-      } else {
-        getTags(res);
-      }
-    };
-});
-
-app.post('/tags/get', (req, res, next) => {
-  getTags(res);
-});
-
-// DRY
-// function getFanfic(params) {
-//       Fanfic.find({ _id: id })
-//       .then(rs => JSON.parse(JSON.stringify(rs)))
-//       .then(fanfics => res.json(fanfics[0]));
-// }
-
-function getUserlist(res) {
-  User.find({}, { username: 1, status: 1, email: 1, role: 1 })
-    .then(rs => JSON.parse(JSON.stringify(rs)))
-    .then(data => {
-      res.json({ userlist: data });
-    });
-}
-
-app.post('/getUsers', (req, res) => {
-  getUserlist(res);
-});
-
-app.post('/users/delete', (req, res) => {
-  User.deleteMany({ _id: { $in: req.body.ids } }, (err, rs) => {
-    err && console.log(err);
-    getUserlist(res);
-  });
-});
-
-app.post('/users/toadmin', (req, res) => {
-  User.updateMany(
-    { _id: { $in: req.body.ids } },
-    { $set: { role: 'admin' } },
-    (err, rs) => {
-      err && console.log(err);
-      getUserlist(res);
-    }
-  );
-});
-
-app.post('/users/touser', (req, res) => {
-  User.updateMany(
-    { _id: { $in: req.body.ids } },
-    { $set: { role: 'user' } },
-    (err, rs) => {
-      err && console.log(err);
-      getUserlist(res);
-    }
-  );
-});
-
-app.post('/users/block', (req, res) => {
-  User.updateMany(
-    { _id: { $in: req.body.ids } },
-    { $set: { status: 'blocked' } },
-    (err, rs) => {
-      err && console.log(err);
-      getUserlist(res);
-    }
-  );
-});
-
-app.post('/users/unblock', (req, res) => {
-  User.updateMany(
-    { _id: { $in: req.body.ids } },
-    { $set: { status: 'active' } },
-    (err, rs) => {
-      err && console.log(err);
-      getUserlist(res);
-    }
-  );
-});
-
-// function mustAuthenticatedMw(req, res, next) {
-//   if (req.isAuthenticated()) {
-//     newUserName = req.user.doc.username;
-//     res.sendFile(path.join(`${__dirname}/public/chat.html`));
-
-//   } else {
-//     res.redirect('/');
-//   }
-// }
-
-// app.get('/chat', mustAuthenticatedMw);
 
 app.listen(PORT, () => console.log(`Server is running on port = ${PORT}`));

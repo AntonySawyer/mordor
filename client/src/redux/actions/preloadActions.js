@@ -1,12 +1,9 @@
-export const GET_USERS = 'GET_USERS';
-export const GET_PROFILE = 'GET_PROFILE';
-export const GET_CONST = 'GET_CONST';
-export const GET_TAGS = 'GET_TAGS';
+import { GET_USERS, GET_PROFILE, GET_CONST, GET_TAGS } from './types';
 
 
 export const getUsers = () => {
   return (dispatch, getState) => {
-    fetch('/getUsers', {
+    fetch('/api/users/userlist', {
       method: 'POST',
       headers: {
         Accept: 'application/json'
@@ -51,7 +48,7 @@ export const getConst = () => {
 
 export const getTags = () => {
   return (dispatch, getState) => {
-    fetch('/tags/get', {
+    fetch('/api/tags/get', {
       method: 'POST',
       headers: {
         Accept: 'application/json'

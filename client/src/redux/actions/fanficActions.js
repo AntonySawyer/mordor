@@ -1,10 +1,9 @@
-export const SAVE_FANFIC = 'SAVE_FANFIC';
-export const READ_FANFIC = 'READ_FANFIC';
-export const SAVE_TAGS = 'SAVE_TAGS';
+import { READ_FANFIC, SAVE_FANFIC, SAVE_TAGS } from './types';
+
 
 export const readFanfic = (id) => {
   return (dispatch, getState) => {
-    fetch('/fanfic/get', {
+    fetch('/api/fanfic/get', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -21,7 +20,7 @@ export const readFanfic = (id) => {
 
 export const saveFanfic = (id, title, tags, category, shortDescr, userId, chapters, images, stars) => {
   return (dispatch, getState) => {
-    fetch('/fanfic/save', {
+    fetch('/api/fanfic/save', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -38,7 +37,7 @@ export const saveFanfic = (id, title, tags, category, shortDescr, userId, chapte
 
 export const saveTags = ( tags ) => {
   return (dispatch, getState) => {
-    fetch('/tags/save', {
+    fetch('/api/tags/save', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

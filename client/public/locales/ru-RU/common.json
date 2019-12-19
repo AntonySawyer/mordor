@@ -1,14 +1,16 @@
 {
     "NavBar": {
-        "home": "Домой",
-        "register": "Авторизация",
+        "home": "Главная",
         "adminPanel": "Панель администратора",
         "profile": "Профиль",
         "lang": "Change lang",
         "search": "Поиск",
         "theme": "Тема",
         "dark": "Тёмная",
-        "light": "Светлая"
+        "light": "Светлая",
+        "register": "Регистрация",
+        "login": "Вход",
+        "logout": "Выход"
     },
     "Home": {
         "lastUpdate": "Последние обновления",

@@ -1,4 +1,4 @@
-import { GET_LAST_UPDATED, GET_RATED, GET_TAGS } from '../actions/homeActions';
+import { GET_LAST_UPDATED, GET_RATED } from '../actions/types';
 
 let initialState = {
   lastUpdate: [],

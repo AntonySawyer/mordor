@@ -1,13 +1,12 @@
-import * as types from '../actions/fanficActions';
-
+import { SAVE_FANFIC, READ_FANFIC } from '../actions/types';
 
 let initialState = {};
 
 const profileReducer = (state = initialState, action) => {
   switch (action.type) {
-    case types.SAVE_FANFIC:
+    case SAVE_FANFIC:
       return action.payload;
-    case types.READ_FANFIC:
+    case READ_FANFIC:
       return action.payload;
     default:
       return state;

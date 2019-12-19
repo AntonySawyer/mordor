@@ -1,6 +1,5 @@
-import { SET_LANG, SET_THEME } from '../actions/syncActions';
-import { GET_CONST, GET_TAGS } from '../actions/preloadActions';
-import { SAVE_TAGS } from '../actions/fanficActions';
+import { GET_TAGS, GET_CONST, SAVE_TAGS, SET_LANG, SET_THEME } from '../actions/types';
+
 
 let initialState = { CONST: [] };
 

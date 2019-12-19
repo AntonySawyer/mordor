@@ -9,6 +9,14 @@ const validateLoginInput = require('../validation/login');
 
 const User = require('../models/user');
 
+function getUserlist(res) {
+  User.find({}, { username: 1, status: 1, email: 1, role: 1 })
+    .then(rs => JSON.parse(JSON.stringify(rs)))
+    .then(data => {
+      res.json({ userlist: data });
+    });
+}
+
 router.post('/register', function(req, res) {
   const { errors, isValid } = validateRegisterInput(req.body);
 
@@ -29,7 +37,7 @@ router.post('/register', function(req, res) {
         d: 'mm'
       });
       const newUser = new User({
-        name: req.body.name,
+        username: req.body.username,
         email: req.body.email,
         password: req.body.password,
         avatar,
@@ -75,7 +83,9 @@ router.post('/login', (req, res) => {
       if (isMatch) {
         const payload = {
           id: user.id,
-          name: user.name,
+          username: user.username,
+          role: user.role,
+          verified: user.verified,
           avatar: user.avatar
         };
         jwt.sign(
@@ -102,16 +112,59 @@ router.post('/login', (req, res) => {
   });
 });
 
-router.get(
-  '/me',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    return res.json({
-      id: req.user.id,
-      name: req.user.name,
-      email: req.user.email
-    });
-  }
-);
+router.post('/userlist', (req, res) => {
+  getUserlist(res);
+});
+
+router.post('/delete', (req, res) => {
+  User.deleteMany({ _id: { $in: req.body.ids } }, (err, rs) => {
+    err && console.log(err);
+    getUserlist(res);
+  });
+});
+
+router.post('/toadmin', (req, res) => {
+  User.updateMany(
+    { _id: { $in: req.body.ids } },
+    { $set: { role: 'admin' } },
+    (err, rs) => {
+      err && console.log(err);
+      getUserlist(res);
+    }
+  );
+});
+
+router.post('/touser', (req, res) => {
+  User.updateMany(
+    { _id: { $in: req.body.ids } },
+    { $set: { role: 'user' } },
+    (err, rs) => {
+      err && console.log(err);
+      getUserlist(res);
+    }
+  );
+});
+
+router.post('/block', (req, res) => {
+  User.updateMany(
+    { _id: { $in: req.body.ids } },
+    { $set: { status: 'blocked' } },
+    (err, rs) => {
+      err && console.log(err);
+      getUserlist(res);
+    }
+  );
+});
+
+router.post('/unblock', (req, res) => {
+  User.updateMany(
+    { _id: { $in: req.body.ids } },
+    { $set: { status: 'active' } },
+    (err, rs) => {
+      err && console.log(err);
+      getUserlist(res);
+    }
+  );
+});
 
 module.exports = router;

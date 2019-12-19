@@ -1,15 +1,16 @@
 import findIds from '../../utils/idsCollector';
-
-export const DELETE_USERS = 'DELETE_USERS';
-export const USER_TO_ADMIN = 'USER_TO_ADMIN';
-export const ADMIN_TO_USER = 'ADMIN_TO_USER';
-export const BLOCK_USER = 'BLOCK_USER';
-export const UNBLOCK_USER = 'UNBLOCK_USER';
+import {
+  DELETE_USERS,
+  USER_TO_ADMIN,
+  ADMIN_TO_USER,
+  BLOCK_USER,
+  UNBLOCK_USER
+} from './types';
 
 export const deleteUsers = () => {
   return (dispatch, getState) => {
     const ids = findIds();
-    fetch('/users/delete', {
+    fetch('/api/users/delete', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -27,7 +28,7 @@ export const deleteUsers = () => {
 export const userToAdmin = () => {
   return (dispatch, getState) => {
     const ids = findIds();
-    fetch('/users/toadmin', {
+    fetch('/api/users/toadmin', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -45,7 +46,7 @@ export const userToAdmin = () => {
 export const adminToUser = () => {
   return (dispatch, getState) => {
     const ids = findIds();
-    fetch('/users/touser', {
+    fetch('/api/users/touser', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -63,7 +64,7 @@ export const adminToUser = () => {
 export const blockUser = () => {
   return (dispatch, getState) => {
     const ids = findIds();
-    fetch('/users/block', {
+    fetch('/api/users/block', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -81,7 +82,7 @@ export const blockUser = () => {
 export const unblockUser = () => {
   return (dispatch, getState) => {
     const ids = findIds();
-    fetch('/users/unblock', {
+    fetch('/api/users/unblock', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

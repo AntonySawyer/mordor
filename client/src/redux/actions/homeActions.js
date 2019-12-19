@@ -1,11 +1,8 @@
-export const GET_LAST_UPDATED = 'GET_LAST_UPDATED';
-export const GET_RATED = 'GET_RATED';
-export const GET_TAGS = 'GET_TAGS'; //move to sync
-
+import { GET_LAST_UPDATED, GET_RATED } from './types';
 
 export const getLastUpdated = (id) => {
   return (dispatch, getState) => {
-    fetch('/fanfic/lastUpdated', {
+    fetch('/api/fanfic/lastUpdated', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -22,7 +19,7 @@ export const getLastUpdated = (id) => {
 
 export const getRated = (id) => {
   return (dispatch, getState) => {
-    fetch('/fanfic/maxRated', {
+    fetch('/api/fanfic/maxRated', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

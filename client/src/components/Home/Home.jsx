@@ -26,7 +26,6 @@ class Home extends Component {
   }
 
   render() {
-    console.log(this.props);
     const {
       lastUpdate,
       topRated,
@@ -90,15 +89,16 @@ class Home extends Component {
         <div className='row'>
           <div className='col'>
             <h3>{t('Home.tagCloud')}</h3>
-            {tags.map(tag => (
-              <a
-                key={tag.id}
-                href={`tag_${tag.id}`}
-                className='badge badge-primary'
-              >
-                {tag.name}
-              </a>
-            ))}
+            {tags !== undefined &&
+              tags.map(tag => (
+                <a
+                  key={tag.id}
+                  href={`tag_${tag.id}`}
+                  className='badge badge-primary'
+                >
+                  {tag.name}
+                </a>
+              ))}
           </div>
         </div>
       </section>
