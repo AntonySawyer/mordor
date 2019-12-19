@@ -7,6 +7,10 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { I18nextProvider } from 'react-i18next';
 import { languageChange } from 'i18next-redux-languagedetector';
 
+import jwt_decode from 'jwt-decode';
+import setAuthToken from './utils/setAuthToken';
+import { setCurrentUser, logoutUser } from './redux/actions/authentication';
+
 import configureI18n from './i18n';
 import Reducers from './redux/reducers/';
 import App from './App';
@@ -45,6 +49,18 @@ const i18n = configureI18n({
     }
   }
 });
+
+if (localStorage.jwtToken) {
+  setAuthToken(localStorage.jwtToken);
+  const decoded = jwt_decode(localStorage.jwtToken);
+  store.dispatch(setCurrentUser(decoded));
+
+  const currentTime = Date.now() / 1000;
+  if (decoded.exp < currentTime) {
+    store.dispatch(logoutUser());
+    window.location.href = '/login';
+  }
+}
 
 ReactDOM.render(
   <Provider store={store}>

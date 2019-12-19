@@ -3,14 +3,20 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as preloadActions from './redux/actions/preloadActions';
 
+
 import Auth from './components/Auth/';
 import Spinner from './components/common/Spinner/';
 import './App.css';
+
+import Register from './components/Register';
+import Login from './components/Login';
+
 const Home = lazy(() => import('./components/Home/'));
 const NavBar = lazy(() => import('./components/NavBar/'));
 const AdminPanel = lazy(() => import('./components/AdminPanel/'));
 const Profile = lazy(() => import('./components/Profile/'));
 const Fanfic = lazy(() => import('./components/Fanfic/'));
+
 
 class App extends React.Component {
   constructor(props) {
@@ -70,6 +76,8 @@ class App extends React.Component {
             currentId={this.userId}
           />
           <Route exact path='/' component={Home} />
+          <Route exact path='/register' component={Register} />
+          <Route exact path='/login' component={Login} />
           <Route path='/auth' component={Auth} />
           {this.isAdmin ? this.adminPreload() : null}
           {this.isAuth ? this.profilePreload() : null}

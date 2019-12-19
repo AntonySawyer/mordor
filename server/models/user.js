@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  username: {
+  name: {
     type: String,
     unique: true,
     required: true,
@@ -44,6 +44,9 @@ const UserSchema = new mongoose.Schema({
   stars: {
     type: Array,
     required: false
+  },
+  avatar: {
+    type: String
   }
 });
 

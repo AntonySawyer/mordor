@@ -5,13 +5,16 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
 const path = require('path');
-
+const passport = require('passport');
 const migration = require('./utils/migration.js');
 
+const users = require('./routes/user.route.js'); 
+
 const app = express();
+
+app.use(passport.initialize());
+require('./passport')(passport);
 
 app.use(express.static('public'));
 app.use(bodyParser.json());
@@ -24,6 +27,8 @@ app.use(
   })
 );
 
+app.use('/api/users', users);
+
 mongoose
   .connect('mongodb://localhost/mordor')
   .then(() => console.log('mongodb: connection successful'))
@@ -35,58 +40,9 @@ const Comment = require('./models/coments');
 const CONST = require('./models/const.js');
 const Tag = require('./models/tags.js');
 
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
-
-passport.deserializeUser((user, done) => {
-  done(null, user);
-});
-
-// Passport:
-app.use(passport.initialize());
-app.use(passport.session());
-
-passport.use(
-  new LocalStrategy(function(email, password, done) {
-    User.findOne({ email }, function(err, user) {
-      if (err) {
-        return done(err);
-      }
-      if (!user) {
-        return done(null, false);
-      }
-      if (!user.verifyPassword(password)) {
-        return done(null, false);
-      }
-      return done(null, user);
-    });
-  })
-);
-
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/../client/public/index.html'));
 });
-
-app.post('/login', (req, res, next) => {
-  passport.authenticate('local', (err, user, info) =>
-    err
-      ? next(err)
-      : user
-      ? req.logIn(user, function(err) {
-          return err ? next(err) : res.redirect('/profile');
-        })
-      : res.redirect('/profile')
-  )(req, res, next);
-});
-
-app.post(
-  '/login',
-  passport.authenticate('local', { failureRedirect: '/auth' }),
-  function(req, res) {
-    res.redirect('/profile');
-  }
-);
 
 app.post('/register', (req, res, next) => {
   const { email, password, username } = req.body;
@@ -107,22 +63,6 @@ app.post('/register', (req, res, next) => {
       }
     }
   );
-});
-
-app.post('/valid', function(req, res, next) {
-  const message = {};
-  const { email, username } = req.body;
-  User.findOne({ email }).then(emailExist => {
-    message.email = !emailExist;
-    User.findOne({ username })
-      .then(usernameExist => (message.username = !usernameExist))
-      .then(rs => res.json(message));
-  });
-});
-
-app.get('/logout', function(req, res) {
-  req.logout();
-  res.redirect('/');
 });
 
 function setId(obj) {
