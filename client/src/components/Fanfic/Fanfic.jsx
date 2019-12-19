@@ -146,7 +146,8 @@ class Fanfic extends Component {
       newStars[this.state.userStars - 1] -= 1;
     }
     newStars[rating - 1] += 1;
-    this.setState({ rating: rating, stars: newStars });
+    this.rateCount();
+    this.setState({ userStars: rating, stars: newStars }); //don't forget update in User.model
   }
 
   handleLike() {
@@ -216,6 +217,7 @@ class Fanfic extends Component {
         isStillFetching: false,
         chapterTitle: this.props.chapters[this.state.activeChapter]['title']
       });
+      this.rateCount();
     }
 
     if (mode === 'create' && this.state.isStillFetching) {
@@ -249,7 +251,7 @@ class Fanfic extends Component {
                   <Select
                     id='categorySelect'
                     label={t('Fanfic.category')}
-                    defaultValue={this.props.category}
+                    defaultValue={this.state.category}
                     values={categories.map(el => ({
                       title: el,
                       value: el
@@ -318,8 +320,9 @@ class Fanfic extends Component {
                   ))}
                 </div>
               </section>
+              <span>Average rate: {this.state.rating}</span>
               <StarRatings
-                rating={this.state.rating}
+                rating={this.state.userStars}
                 starRatedColor='blue'
                 changeRating={this.changeRating.bind(this)}
                 numberOfStars={5}
@@ -342,6 +345,9 @@ class Fanfic extends Component {
                 }
               />
               <LikeBtn
+                countLikes={
+                  this.state.chapters[this.state.activeChapter]['likes']
+                }
                 liked={this.state.liked}
                 handler={this.handleLike.bind(this)}
               />
