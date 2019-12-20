@@ -56,31 +56,31 @@ class ChapterNav extends Component {
       chapters,
       changeHandler,
       newChapterHandler,
-      defaultSelectValue
+      defaultSelectValue,
+      deleteChapterHandler
     } = this.props;
-console.log(mode);
     return (
       <>
         {mode !== 'read' && (
-          <ActionBtn title={'Add new'} handler={newChapterHandler} />
-        )}
-
-        {mode !== 'read' && (
-          <Container
-            onDrop={e =>
-              this.setState({ items: this.applyDrag(this.state.items, e) })
-            }
-          >
-            {this.state.items.map((p, index) => {
-              return (
-                <Draggable key={p.id}>
-                  <div className='draggable-item'>{`${index + 1} - ${
-                    p.data.title
-                  }`}</div>
-                </Draggable>
-              );
-            })}
-          </Container>
+          <>
+            <ActionBtn title={'Add new'} handler={newChapterHandler} />
+            <Container
+              onDrop={e =>
+                this.setState({ items: this.applyDrag(this.state.items, e) })
+              }
+            >
+              {this.state.items.map((p, index) => {
+                return (
+                  <Draggable key={p.id}>
+                    <div className='draggable-item'>{`${index + 1} - ${
+                      p.data.title
+                    }`}</div>
+                  </Draggable>
+                );
+              })}
+            </Container>
+            <ActionBtn title={'Delete active'} handler={deleteChapterHandler} />
+          </>
         )}
 
         <Select

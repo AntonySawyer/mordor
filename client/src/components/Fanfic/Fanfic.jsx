@@ -45,6 +45,10 @@ class Fanfic extends Component {
     document.title = `Fanfic - ${this.props.match.params.mode}`;
   }
 
+  redirectToEdit() {
+    this.props.history.push(`/fanfic/edit/${this.props._id}`);
+  }
+
   rateCount() {
     const votes = this.state.stars.reduce((a, b) => a + b, 0);
     const sum = this.state.stars
@@ -71,9 +75,8 @@ class Fanfic extends Component {
       this.props.saveTags(newTags);
     }
     const category = this.state.category;
-    const userId = this.props.userdata.id;
+    const userId = this.props.userId;
     const chapters = this.state.chapters; //utilFunc with return object in future
-    console.log(chapters);
     const images = 'sample.png';
     const likes = this.state.likes;
     const stars = this.state.stars;
@@ -182,6 +185,18 @@ class Fanfic extends Component {
     });
   }
 
+  deleteChapter() {
+    this.setState(PrevState => {
+      return {
+        chapters: PrevState.chapters.filter(
+          (el, i) => i != PrevState.activeChapter
+        ),
+        activeChapter:
+          PrevState.activeChapter > 0 ? PrevState.activeChapter - 1 : 0
+      };
+    });
+  }
+
   applyNewOrder(sortedChapters, addedIndex) {
     this.setState({ chapters: sortedChapters, activeChapter: addedIndex });
   }
@@ -279,9 +294,7 @@ class Fanfic extends Component {
                   />
                 </div>
               </section>
-              {((this.state.chapters !== undefined &&
-                this.state.chapters.length > 1) ||
-                mode === 'create') && (
+              {(this.state.chapters !== undefined || mode === 'create') && (
                 <ChapterNav
                   mode={mode}
                   label={t('Fanfic.chapters')}
@@ -290,6 +303,7 @@ class Fanfic extends Component {
                   orderHandler={this.applyNewOrder.bind(this)}
                   changeHandler={this.changeActiveChapter.bind(this)}
                   newChapterHandler={this.addNewChapter.bind(this)}
+                  deleteChapterHandler={this.deleteChapter.bind(this)}
                   defaultSelectValue={this.state.activeChapter}
                 />
               )}
@@ -319,6 +333,13 @@ class Fanfic extends Component {
 
           {!needToFetch && mode === 'read' && (
             <>
+              {(this.props.userId === this.props.auth.user.id ||
+                this.props.auth.user.role === 'admin') && (
+                <ActionBtn
+                  title={'Go to edit'}
+                  handler={this.redirectToEdit.bind(this)}
+                />
+              )}
               <section>
                 <div>
                   <h1>{this.props.fanficTitle}</h1>
@@ -370,6 +391,7 @@ class Fanfic extends Component {
 const mapStateToProps = state => ({
   ...state.fanfic,
   userdata: state.profilePage.userdata,
+  auth: state.auth,
   categories: state.syncParams.CONST.categories,
   suggestions: state.syncParams.tags
 });
