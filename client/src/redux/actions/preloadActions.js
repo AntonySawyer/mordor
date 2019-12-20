@@ -17,7 +17,7 @@ export const getUsers = () => {
 
 export const getProfile = id => {
   return (dispatch, getState) => {
-    fetch('/getProfile', {
+    fetch('/api/users/getProfile', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -34,7 +34,7 @@ export const getProfile = id => {
 
 export const getConst = () => {
   return (dispatch, getState) => {
-    fetch('/getConst', {
+    fetch('/api/categories/getlist', {
       method: 'POST',
       headers: {
         Accept: 'application/json'

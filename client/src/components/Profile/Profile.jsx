@@ -23,9 +23,6 @@ class Profile extends Component {
       achieves,
       fanfics,
       deleteFanfic,
-      editFanfic,
-      createFanfic,
-      readFanfic,
       t,
       profilePreload,
       match

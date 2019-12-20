@@ -8,6 +8,7 @@ const validateRegisterInput = require('../validation/register');
 const validateLoginInput = require('../validation/login');
 
 const User = require('../models/user');
+const Fanfic = require('../models/fanfic.js');
 
 function getUserlist(res) {
   User.find({}, { username: 1, status: 1, email: 1, role: 1 })
@@ -165,6 +166,29 @@ router.post('/unblock', (req, res) => {
       getUserlist(res);
     }
   );
+});
+
+router.post('/getProfile', (req, res) => {
+  const id = req.body.id.toString();
+  User.findOne({ _id: id })
+    .then(rs => JSON.parse(JSON.stringify(rs)))
+    .then(user => {
+      Fanfic.find({ userId: id }, { title: 1 })
+        .then(rs => JSON.parse(JSON.stringify(rs)))
+        .then(fanfics => {
+          const result = {
+            userdata: {
+              username: user.username,
+              email: user.email,
+              role: user.role,
+              id: user._id
+            },
+            achieves: user.achieves,
+            fanfics: fanfics.map(el => ({ ...el, id: el._id }))
+          };
+          res.json(result);
+        });
+    });
 });
 
 module.exports = router;

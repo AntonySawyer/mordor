@@ -34,7 +34,7 @@ export default function configureI18n({ i18nextConfig, redux }) {
       fallbackLng: i18nextConfig.fallbackLng,
       ns: i18nextConfig.ns,
       defaultNS: i18nextConfig.defaultNS,
-      debug: process.env.NODE_ENV !== 'production',
+      debug: false,
       interpolation: {
         escapeValue: false
       },

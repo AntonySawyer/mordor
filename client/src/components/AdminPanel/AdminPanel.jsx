@@ -60,7 +60,11 @@ class AdminPanel extends Component {
                   />
                 </td>
                 <td>
-                  <NavLink className='nav-link' to={`/profile/${user._id}`} onClick={() => profilePreload(user._id)}>
+                  <NavLink
+                    className='nav-link'
+                    to={`/profile/${user._id}`}
+                    onClick={() => profilePreload(user._id)}
+                  >
                     {user.username}
                   </NavLink>
                 </td>

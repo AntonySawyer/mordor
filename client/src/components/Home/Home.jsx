@@ -26,15 +26,7 @@ class Home extends Component {
   }
 
   render() {
-    const {
-      lastUpdate,
-      topRated,
-      tags,
-      syncParams,
-      t,
-      lng,
-      CONST
-    } = this.props;
+    const { lastUpdate, topRated, tags, t, lng, CONST } = this.props;
     return (
       <section className='Home container'>
         <div className='row'>
@@ -89,7 +81,9 @@ class Home extends Component {
         <div className='row'>
           <div className='col'>
             <h3>{t('Home.tagCloud')}</h3>
-            {tags !== undefined &&
+            {tags === undefined ? (
+              <Spinner />
+            ) : (
               tags.map(tag => (
                 <a
                   key={tag.id}
@@ -98,7 +92,8 @@ class Home extends Component {
                 >
                   {tag.name}
                 </a>
-              ))}
+              ))
+            )}
           </div>
         </div>
       </section>

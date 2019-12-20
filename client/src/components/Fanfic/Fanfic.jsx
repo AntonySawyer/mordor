@@ -8,7 +8,6 @@ import StarRatings from 'react-star-ratings';
 import 'react-mde/lib/styles/css/react-mde-all.css';
 
 import * as fanficActions from '../../redux/actions/fanficActions';
-import * as preloadActions from '../../redux/actions/preloadActions';
 
 import Spinner from '../common/Spinner/';
 import ActionBtn from '../common/ActionBtn/';

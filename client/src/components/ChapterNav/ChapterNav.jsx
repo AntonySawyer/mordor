@@ -1,7 +1,6 @@
 import React from 'react';
 import { withNamespaces } from 'react-i18next';
 import ActionBtn from '../common/ActionBtn/';
-import Input from '../common/Input/';
 import Select from '../common/Select/';
 import './ChapterNav.css';
 
