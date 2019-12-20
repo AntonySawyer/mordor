@@ -182,6 +182,10 @@ class Fanfic extends Component {
     });
   }
 
+  applyNewOrder(sortedChapters, addedIndex) {
+    this.setState({ chapters: sortedChapters, activeChapter: addedIndex });
+  }
+
   render() {
     const { t, match, categories, title } = this.props;
     const { id, mode } = match.params;
@@ -275,23 +279,28 @@ class Fanfic extends Component {
                   />
                 </div>
               </section>
-              <ChapterNav
-                mode={mode}
-                label={t('Fanfic.chapters')}
-                selectorId='chaptersSelect'
-                chapters={this.state.chapters}
-                changeHandler={this.changeActiveChapter.bind(this)}
-                newChapterHandler={this.addNewChapter.bind(this)}
-                defaultSelectValue={this.state.activeChapter}
-              />
+              {((this.state.chapters !== undefined &&
+                this.state.chapters.length > 1) ||
+                mode === 'create') && (
+                <ChapterNav
+                  mode={mode}
+                  label={t('Fanfic.chapters')}
+                  selectorId='chaptersSelect'
+                  chapters={this.state.chapters}
+                  orderHandler={this.applyNewOrder.bind(this)}
+                  changeHandler={this.changeActiveChapter.bind(this)}
+                  newChapterHandler={this.addNewChapter.bind(this)}
+                  defaultSelectValue={this.state.activeChapter}
+                />
+              )}
               <Input
                 placeholder={t('Fanfic.chapterTitle')}
                 id='chapterTitle'
-                value={this.state.chapterTitle}
+                value={this.state.chapters[this.state.activeChapter].title}
                 onChange={this.updateChapterTitle.bind(this)}
               />
               <ReactMde
-                value={this.state.markdown}
+                value={this.state.chapters[this.state.activeChapter].content}
                 onChange={value => this.updateMarkdown(value)}
                 l18n={{
                   write: t('Fanfic.write'),
