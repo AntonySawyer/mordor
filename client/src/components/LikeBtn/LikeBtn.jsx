@@ -7,7 +7,6 @@ function LikeBtn({ t, liked, countLikes, handler }) {
   const state = liked ? 'unlike' : 'like';
   return (
     <div className='likeBtnWrapper'>
-      <span>Total likes: {countLikes}</span>
       <ActionBtn
         className={`btn ${liked ? 'btn-info' : 'btn-outline-info'}`}
         title={t(`LikeBtn.${state}`)}

@@ -22,7 +22,7 @@ router.post('/lastUpdated', (req, res) => {
 });
 
 router.post('/maxRated', (req, res) => {
-  Fanfic.find({}, { title: 1, rate: 1 })
+  Fanfic.find({}, { title: 1, stars: 1 })
     .sort({ rate: -1 })
     .limit(5)
     .then(rs => JSON.parse(JSON.stringify(rs)))
@@ -91,7 +91,7 @@ router.post('/save', (req, res, next) => {
           images: images,
           stars: stars
         }
-      },
+      }, {upsert: true, setDefaultsOnInsert: true},
       (err, rs) => {
         err && console.log(err);
       }

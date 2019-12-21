@@ -1,8 +1,10 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import socket from './socket';
 import * as preloadActions from './redux/actions/preloadActions';
-
+import { updateLikes } from './redux/actions/fanficActions';
 
 import Spinner from './components/common/Spinner/';
 import './App.css';
@@ -16,7 +18,6 @@ const AdminPanel = lazy(() => import('./components/AdminPanel/'));
 const Profile = lazy(() => import('./components/Profile/'));
 const Fanfic = lazy(() => import('./components/Fanfic/'));
 
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -25,16 +26,28 @@ class App extends React.Component {
     this.isAdmin = this.props.user.role === 'admin';
     this.userId = this.props.user.id;
 
-    this.getProfile = this.props.getProfile;
-    this.getUsers = this.props.getUsers;
-    this.getRated = this.props.getRated;
-    this.getLastUpdated = this.props.getLastUpdated;
+    this.getProfile = this.props.actions.getProfile;
+    this.getUsers = this.props.actions.getUsers;
+    this.getRated = this.props.actions.getRated;
+    this.getLastUpdated = this.props.actions.getLastUpdated;
+    this.getConst = this.props.actions.getConst;
+    this.getTags = this.props.actions.getTags;
+    this.updateLikes = this.props.actions.updateLikes;
   }
 
   componentDidMount() {
     document.title = 'Mordor - fanfics home';
-    this.props.getConst();
-    this.props.getTags();
+    this.getConst();
+    this.getTags();
+
+    socket.on('newLikesCount', data => {
+      const needToHandleFanficUpdates =
+        this.props.fanfic._id !== undefined &&
+        this.props.fanfic.chapters.some(el => el._id === data.targetId);
+      if (needToHandleFanficUpdates) {
+        this.updateLikes(data);
+      }
+    });
   }
 
   adminPreload() {
@@ -92,6 +105,15 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = state => state.auth;
+const mapStateToProps = state => ({
+  ...state.auth,
+  fanfic: state.fanfic
+});
 
-export default connect(mapStateToProps, preloadActions)(App);
+const mapDispatchToProps = dispatch => {
+  return {
+    actions: bindActionCreators({ ...preloadActions, updateLikes }, dispatch)
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

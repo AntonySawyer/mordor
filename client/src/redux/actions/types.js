@@ -14,6 +14,7 @@ export const GET_RATED = 'GET_RATED';
 export const SAVE_FANFIC = 'SAVE_FANFIC';
 export const READ_FANFIC = 'READ_FANFIC';
 export const DELETE_FANFICS = 'DELETE_FANFICS';
+export const UPDATE_LIKES = 'UPDATE_LIKES';
 
 export const GET_TAGS = 'GET_TAGS';
 export const SAVE_TAGS = 'SAVE_TAGS';

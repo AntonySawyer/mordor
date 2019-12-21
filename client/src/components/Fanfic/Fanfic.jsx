@@ -15,6 +15,7 @@ import Input from '../common/Input/';
 import Select from '../common/Select/';
 import LikeBtn from '../LikeBtn';
 import ChapterNav from '../ChapterNav/';
+import Comments from '../Comments/';
 
 import './Fanfic.css';
 
@@ -153,14 +154,15 @@ class Fanfic extends Component {
   }
 
   handleLike() {
+    const change = this.state.liked ? -1 : 1;
     this.setState((PrevState, props) => {
-      const newChapters = PrevState.chapters.slice(0);
-      const prevLikesCount = +newChapters[PrevState.activeChapter]['likes'];
-      PrevState.liked
-        ? (newChapters[PrevState.activeChapter]['likes'] = prevLikesCount - 1)
-        : (newChapters[PrevState.activeChapter]['likes'] = prevLikesCount + 1);
-      return { liked: !PrevState.liked, chapters: newChapters };
+      return { liked: !PrevState.liked };
     });
+
+    this.props.sendLike(
+      this.state.chapters[this.state.activeChapter]._id,
+      change
+    );
   }
 
   changeActiveChapter(e) {
@@ -342,7 +344,7 @@ class Fanfic extends Component {
               )}
               <section>
                 <div>
-                  <h1>{this.props.fanficTitle}</h1>
+                  <h1>{this.props.title}</h1>
                   <span>{this.props.category}</span>
                   {this.props.tags.map((el, index) => (
                     <span key={index}>{el}</span>
@@ -350,13 +352,15 @@ class Fanfic extends Component {
                 </div>
               </section>
               <span>Average rate: {this.state.rating}</span>
-              <StarRatings
-                rating={this.state.userStars}
-                starRatedColor='blue'
-                changeRating={this.changeRating.bind(this)}
-                numberOfStars={5}
-                name='rating'
-              />
+              {this.props.auth.isAuthenticated && (
+                <StarRatings
+                  rating={this.state.userStars}
+                  starRatedColor='blue'
+                  changeRating={this.changeRating.bind(this)}
+                  numberOfStars={5}
+                  name='rating'
+                />
+              )}
               <div>
                 <span>Description:</span>
                 <span>{this.props.shortDescr}</span>
@@ -373,13 +377,19 @@ class Fanfic extends Component {
                   this.props.chapters[this.state.activeChapter]['content']
                 }
               />
-              <LikeBtn
-                countLikes={
-                  this.state.chapters[this.state.activeChapter]['likes']
-                }
-                liked={this.state.liked}
-                handler={this.handleLike.bind(this)}
-              />
+              <span>{`Total likes: ${
+                this.props.chapters[this.state.activeChapter]['likes']
+              }`}</span>
+              {this.props.auth.isAuthenticated && (
+                <LikeBtn
+                  countLikes={
+                    this.state.chapters[this.state.activeChapter]['likes']
+                  }
+                  liked={this.state.liked}
+                  handler={this.handleLike.bind(this)}
+                />
+              )}
+              {this.props.auth.isAuthenticated && <Comments />}
             </>
           )}
         </section>

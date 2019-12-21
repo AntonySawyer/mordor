@@ -1,5 +1,14 @@
 const mongoose = require('mongoose');
 
+const ChapterSchema = new mongoose.Schema({
+  title: String,
+  content: String,
+  likes: {
+    type: Number,
+    default: 0
+  }
+});
+
 const FanficSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -29,10 +38,7 @@ const FanficSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
-  chapters: {
-    type: Array,
-    required: true
-  },
+  chapters: [ChapterSchema],
   images: {
     type: Object,
     required: false

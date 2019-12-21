@@ -1,7 +1,7 @@
-import { READ_FANFIC, SAVE_FANFIC, SAVE_TAGS } from './types';
+import { READ_FANFIC, SAVE_FANFIC, SAVE_TAGS, UPDATE_LIKES } from './types';
+import socket from '../../socket';
 
-
-export const readFanfic = (id) => {
+export const readFanfic = id => {
   return (dispatch, getState) => {
     fetch('/api/fanfic/get', {
       method: 'POST',
@@ -18,7 +18,17 @@ export const readFanfic = (id) => {
   };
 };
 
-export const saveFanfic = (id, title, tags, category, shortDescr, userId, chapters, images, stars) => {
+export const saveFanfic = (
+  id,
+  title,
+  tags,
+  category,
+  shortDescr,
+  userId,
+  chapters,
+  images,
+  stars
+) => {
   return (dispatch, getState) => {
     fetch('/api/fanfic/save', {
       method: 'POST',
@@ -26,7 +36,17 @@ export const saveFanfic = (id, title, tags, category, shortDescr, userId, chapte
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({id, title, tags, category, shortDescr, userId, chapters, images, stars })
+      body: JSON.stringify({
+        id,
+        title,
+        tags,
+        category,
+        shortDescr,
+        userId,
+        chapters,
+        images,
+        stars
+      })
     })
       .then(rs => rs.json())
       .then(payload => {
@@ -35,7 +55,7 @@ export const saveFanfic = (id, title, tags, category, shortDescr, userId, chapte
   };
 };
 
-export const saveTags = ( tags ) => {
+export const saveTags = tags => {
   return (dispatch, getState) => {
     fetch('/api/tags/save', {
       method: 'POST',
@@ -49,5 +69,17 @@ export const saveTags = ( tags ) => {
       .then(payload => {
         return dispatch({ type: SAVE_TAGS, payload });
       });
+  };
+};
+
+export const sendLike = ( chapterId, change) => {
+  return (dispatch, getState) => {
+    socket.emit('setLike', { chapterId, change});
+  };
+};
+
+export const updateLikes = ({ targetId, likes }) => {
+  return (dispatch, getState) => {
+      return dispatch({ type: UPDATE_LIKES, payload: likes, targetId });
   };
 };
