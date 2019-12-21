@@ -15,7 +15,8 @@ export const SAVE_FANFIC = 'SAVE_FANFIC';
 export const READ_FANFIC = 'READ_FANFIC';
 export const DELETE_FANFICS = 'DELETE_FANFICS';
 export const UPDATE_LIKES = 'UPDATE_LIKES';
-
+export const UPDATE_STARS = 'UPDATE_STARS';
+export const SAVE_OWN_VOTE = 'SAVE_OWN_VOTE';
 export const GET_TAGS = 'GET_TAGS';
 export const SAVE_TAGS = 'SAVE_TAGS';
 

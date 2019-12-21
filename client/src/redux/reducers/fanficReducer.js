@@ -1,4 +1,4 @@
-import { SAVE_FANFIC, READ_FANFIC, UPDATE_LIKES } from '../actions/types';
+import { SAVE_FANFIC, READ_FANFIC, UPDATE_LIKES, UPDATE_STARS } from '../actions/types';
 
 let initialState = {};
 
@@ -11,6 +11,8 @@ const profileReducer = (state = initialState, action) => {
     case UPDATE_LIKES:
       const newChapters = state.chapters.map(el => el._id == action.chapterId ? {...el, likes: action.payload} : el); // Just active from state in future
       return {...state, chapters: newChapters} 
+    case UPDATE_STARS:
+      return {...state, stars: action.payload} 
     default:
       return state;
   }

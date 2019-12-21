@@ -1,4 +1,11 @@
-import { READ_FANFIC, SAVE_FANFIC, SAVE_TAGS, UPDATE_LIKES } from './types';
+import {
+  READ_FANFIC,
+  SAVE_FANFIC,
+  SAVE_TAGS,
+  UPDATE_LIKES,
+  UPDATE_STARS,
+  SAVE_OWN_VOTE
+} from './types';
 import socket from '../../socket';
 
 export const readFanfic = id => {
@@ -72,15 +79,27 @@ export const saveTags = tags => {
   };
 };
 
-export const sendLike = ( chapterId, change, userId) => {
+export const sendLike = (chapterId, change, userId) => {
   return (dispatch, getState) => {
-    socket.emit('setLike', { chapterId, change, userId});
+    socket.emit('setLike', { chapterId, change, userId });
   };
 };
 
 export const updateLikes = ({ chapterId, likes }) => {
-  console.log('update');
   return (dispatch, getState) => {
-      return dispatch({ type: UPDATE_LIKES, payload: likes, chapterId });
+    return dispatch({ type: UPDATE_LIKES, payload: likes, chapterId });
+  };
+};
+
+export const sendStars = (fanficId, oldRating, newRating, userId) => {
+  return (dispatch, getState) => {
+    socket.emit('setStar', { fanficId, oldRating, newRating, userId });
+    return dispatch({ type: SAVE_OWN_VOTE, payload: newRating, fanficId });
+  };
+};
+
+export const updateStars = ({ fanficId, stars }) => {
+  return (dispatch, getState) => {
+    return dispatch({ type: UPDATE_STARS, payload: stars, fanficId });
   };
 };

@@ -55,7 +55,7 @@ class Fanfic extends Component {
     const sum = this.state.stars
       .map((el, i) => el * (i + 1))
       .reduce((a, b) => a + b, 0);
-    const calcRate = sum / votes;
+    const calcRate = (sum / votes).toFixed(2);
     this.setState({ rating: calcRate });
   }
 
@@ -149,8 +149,17 @@ class Fanfic extends Component {
       newStars[this.state.userStars - 1] -= 1;
     }
     newStars[rating - 1] += 1;
+    const fanficId = this.props.match.params.id;
+    const userStarForCurrentFanfic = this.props.auth.user.stars.filter(
+      el => el.fanficId == fanficId
+    );
+    const oldRating =
+      userStarForCurrentFanfic.length === 1
+        ? userStarForCurrentFanfic[0].value
+        : null;
+    this.props.sendStars(fanficId, oldRating, rating, this.props.auth.user.id);
+    this.setState({ userStars: rating, stars: newStars });
     this.rateCount();
-    this.setState({ userStars: rating, stars: newStars }); //don't forget update in User.model
   }
 
   handleLike() {
@@ -241,9 +250,21 @@ class Fanfic extends Component {
         chapterTitle: this.props.chapters[this.state.activeChapter]['title']
       });
       if (this.props.auth.isAuthenticated) {
+        console.log(this.props.auth.user.stars); //FIXME
+        const userStarForCurrentFanfic =
+          this.props.auth.user.stars.length > 0
+            ? this.props.auth.user.stars.filter(
+                el => el.fanficId == this.props.match.params.id
+              )
+            : [];
+        const userStars =
+          userStarForCurrentFanfic.length == 1
+            ? userStarForCurrentFanfic[0].value
+            : 0;
         this.setState({
           liked: this.props.auth.user.likes.includes(
-            this.props.chapters[this.state.activeChapter]._id
+            this.props.chapters[this.state.activeChapter]._id,
+            userStars
           )
         });
       }

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import socket from './socket';
 import * as preloadActions from './redux/actions/preloadActions';
-import { updateLikes } from './redux/actions/fanficActions';
+import { updateLikes, updateStars } from './redux/actions/fanficActions';
 
 import Spinner from './components/common/Spinner/';
 import './App.css';
@@ -33,6 +33,7 @@ class App extends React.Component {
     this.getConst = this.props.actions.getConst;
     this.getTags = this.props.actions.getTags;
     this.updateLikes = this.props.actions.updateLikes;
+    this.updateStars = this.props.actions.updateStars;
   }
 
   componentDidMount() {
@@ -42,10 +43,21 @@ class App extends React.Component {
 
     socket.on('newLikesCount', data => {
       const needToHandleFanficUpdates =
+        this.props.isAuthenticated &&
         this.props.fanfic._id !== undefined &&
         this.props.fanfic.chapters.some(el => el._id === data.chapterId);
       if (needToHandleFanficUpdates) {
         this.updateLikes(data);
+      }
+    });
+
+    socket.on('newRate', data => {
+      const needToHandleFanficUpdates =
+        this.props.isAuthenticated &&
+        this.props.fanfic._id !== undefined &&
+        this.props.fanfic._id === data.fanficId;
+      if (needToHandleFanficUpdates) {
+        this.updateStars(data);
       }
     });
   }
@@ -112,7 +124,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
   return {
-    actions: bindActionCreators({ ...preloadActions, updateLikes }, dispatch)
+    actions: bindActionCreators(
+      { ...preloadActions, updateLikes, updateStars },
+      dispatch
+    )
   };
 };
 

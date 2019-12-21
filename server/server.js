@@ -75,6 +75,71 @@ io.on('connection', client => {
       (err, rs) => err && console.log(err)
     );
   });
+  client.on('setStar', params => {
+    const { fanficId, oldRating, newRating, userId } = params;
+    fanficModel
+      .find({ _id: fanficId })
+      .then(rs => JSON.parse(JSON.stringify(rs)))
+      .then(data => {
+        const newStars = data[0].stars.slice(0).map((el, index) => {
+          if (oldRating !== newRating) {
+            if (index + 1 === newRating) {
+              return el + 1;
+            } else if (index + 1 === oldRating) {
+              return el - 1;
+            } else {
+              return el;
+            }
+          } else {
+            return el;
+          }
+        });
+        const votes = newStars.reduce((a, b) => a + b, 0);
+        const sum = newStars
+          .map((el, i) => el * (i + 1))
+          .reduce((a, b) => a + b, 0);
+        const newRate = (sum / votes).toFixed(2);
+        fanficModel.findOneAndUpdate(
+          { _id: fanficId },
+          { $set: { stars: newStars, rate: newRate } },
+          (err, rs) => {
+            err && console.log(err);
+            io.emit('newRate', {
+              fanficId,
+              stars: newStars
+            });
+          }
+        );
+        userModel
+          .find({ _id: userId })
+          .then(rs => JSON.parse(JSON.stringify(rs)))
+          .then(data => {
+            if (
+              data[0].stars.filter(el => el.fanficId == fanficId).length > 0
+            ) {
+              const newStarsForUserData = data[0].stars.some(
+                el => el.fanficId == fanficId
+              )
+                ? [
+                    ...data[0].stars.filter(el => el.fanficId != fanficId),
+                    { fanficId, value: newRating }
+                  ]
+                : [...data[0].stars, { fanficId, value: newRating }];
+              userModel.findOneAndUpdate(
+                { _id: userId },
+                { $set: { stars: newStarsForUserData } },
+                (err, rs) => err && console.log(err)
+              );
+            } else {
+              userModel.findOneAndUpdate(
+                { _id: userId },
+                { $push: { stars: { fanficId, value: newRating } } },
+                (err, rs) => err && console.log(err)
+              );
+            }
+          });
+      });
+  });
 });
 
 const port = 8000;
