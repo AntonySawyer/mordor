@@ -47,22 +47,32 @@ app.use('/api/tags', tagsRoute);
 app.use('/api/categories', categoriesRoute);
 
 const fanficModel = require('./models/fanfic.js');
+const userModel = require('./models/user.js');
 
 const io = require('socket.io')();
 
 io.on('connection', client => {
   client.on('setLike', params => {
-    const { chapterId, change } = params;
+    const { chapterId, change, userId } = params;
     fanficModel.findOneAndUpdate(
       { 'chapters._id': chapterId },
       { $inc: { 'chapters.$.likes': change } },
       (err, rs) => {
         err && console.log(err);
         io.emit('newLikesCount', {
-          targetId: chapterId,
+          chapterId,
           likes: rs.chapters.filter(el => el._id == chapterId)[0].likes + change
         });
       }
+    );
+    const updateParam =
+      change > 0
+        ? { $addToSet: { likes: chapterId } }
+        : { $pull: { likes: chapterId } };
+    userModel.findOneAndUpdate(
+      { _id: userId },
+      updateParam,
+      (err, rs) => err && console.log(err)
     );
   });
 });

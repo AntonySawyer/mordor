@@ -9,7 +9,7 @@ const profileReducer = (state = initialState, action) => {
     case READ_FANFIC:
       return action.payload;
     case UPDATE_LIKES:
-      const newChapters = state.chapters.map(el => el._id == action.targetId ? {...el, likes: action.payload} : el); // Just active from state in future
+      const newChapters = state.chapters.map(el => el._id == action.chapterId ? {...el, likes: action.payload} : el); // Just active from state in future
       return {...state, chapters: newChapters} 
     default:
       return state;

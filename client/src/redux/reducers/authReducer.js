@@ -1,4 +1,4 @@
-import { SET_CURRENT_USER } from '../actions/types';
+import { SET_CURRENT_USER, UPDATE_LIKES } from '../actions/types';
 import isEmpty from '../../utils/is-empty';
 
 const initialState = {
@@ -14,6 +14,15 @@ export default function(state = initialState, action) {
         isAuthenticated: !isEmpty(action.payload),
         user: action.payload
       };
+    case UPDATE_LIKES:
+      const chapterId = action.chapterId;
+      const newUser = {
+        ...state.user,
+        likes: state.user.likes.includes(chapterId)
+          ? state.user.likes.filter(el => el != chapterId)
+          : [...state.user.likes, chapterId]
+      };
+      return { ...state, user: newUser };
     default:
       return state;
   }

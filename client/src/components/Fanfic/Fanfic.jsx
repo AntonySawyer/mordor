@@ -161,7 +161,8 @@ class Fanfic extends Component {
 
     this.props.sendLike(
       this.state.chapters[this.state.activeChapter]._id,
-      change
+      change,
+      this.props.auth.user.id
     );
   }
 
@@ -170,7 +171,9 @@ class Fanfic extends Component {
       activeChapter: +e.target.value,
       chapterTitle: this.state.chapters[+e.target.value]['title'],
       markdown: this.state.chapters[+e.target.value]['content'],
-      liked: false //fix me
+      liked: this.props.auth.user.likes.includes(
+        this.state.chapters[+e.target.value]._id
+      )
     });
   }
 
@@ -237,6 +240,13 @@ class Fanfic extends Component {
         isStillFetching: false,
         chapterTitle: this.props.chapters[this.state.activeChapter]['title']
       });
+      if (this.props.auth.isAuthenticated) {
+        this.setState({
+          liked: this.props.auth.user.likes.includes(
+            this.props.chapters[this.state.activeChapter]._id
+          )
+        });
+      }
       this.rateCount();
     }
 

@@ -43,7 +43,7 @@ class App extends React.Component {
     socket.on('newLikesCount', data => {
       const needToHandleFanficUpdates =
         this.props.fanfic._id !== undefined &&
-        this.props.fanfic.chapters.some(el => el._id === data.targetId);
+        this.props.fanfic.chapters.some(el => el._id === data.chapterId);
       if (needToHandleFanficUpdates) {
         this.updateLikes(data);
       }

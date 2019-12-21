@@ -72,14 +72,15 @@ export const saveTags = tags => {
   };
 };
 
-export const sendLike = ( chapterId, change) => {
+export const sendLike = ( chapterId, change, userId) => {
   return (dispatch, getState) => {
-    socket.emit('setLike', { chapterId, change});
+    socket.emit('setLike', { chapterId, change, userId});
   };
 };
 
-export const updateLikes = ({ targetId, likes }) => {
+export const updateLikes = ({ chapterId, likes }) => {
+  console.log('update');
   return (dispatch, getState) => {
-      return dispatch({ type: UPDATE_LIKES, payload: likes, targetId });
+      return dispatch({ type: UPDATE_LIKES, payload: likes, chapterId });
   };
 };

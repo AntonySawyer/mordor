@@ -43,7 +43,6 @@ router.post('/register', function(req, res) {
         password: req.body.password,
         avatar,
         role: 'user',
-        verified: false,
         status: 'blocked'
       });
 
@@ -82,12 +81,15 @@ router.post('/login', (req, res) => {
     }
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
+        console.log(user);
         const payload = {
           id: user.id,
           username: user.username,
           role: user.role,
           verified: user.verified,
-          avatar: user.avatar
+          avatar: user.avatar,
+          likes: user.likes,
+          stars: user.stars
         };
         jwt.sign(
           payload,
