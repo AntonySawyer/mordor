@@ -4,7 +4,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import socket from './socket';
 import * as preloadActions from './redux/actions/preloadActions';
-import { updateLikes, updateStars } from './redux/actions/fanficActions';
+import {
+  updateLikes,
+  updateStars,
+  updateComments
+} from './redux/actions/fanficActions';
 
 import Spinner from './components/common/Spinner/';
 import './App.css';
@@ -34,6 +38,7 @@ class App extends React.Component {
     this.getTags = this.props.actions.getTags;
     this.updateLikes = this.props.actions.updateLikes;
     this.updateStars = this.props.actions.updateStars;
+    this.updateComments = this.props.actions.updateComments;
   }
 
   componentDidMount() {
@@ -58,6 +63,16 @@ class App extends React.Component {
         this.props.fanfic._id === data.fanficId;
       if (needToHandleFanficUpdates) {
         this.updateStars(data);
+      }
+    });
+
+    socket.on('updateComments', data => {
+      const needToHandleFanficUpdates =
+        this.props.isAuthenticated &&
+        this.props.fanfic._id !== undefined &&
+        this.props.fanfic._id === data.fanficId;
+      if (needToHandleFanficUpdates) {
+        this.updateComments(data);
       }
     });
   }
@@ -125,7 +140,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => {
   return {
     actions: bindActionCreators(
-      { ...preloadActions, updateLikes, updateStars },
+      { ...preloadActions, updateLikes, updateStars, updateComments },
       dispatch
     )
   };

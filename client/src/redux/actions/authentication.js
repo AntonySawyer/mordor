@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { GET_ERRORS, SET_CURRENT_USER } from './types';
+import { browserHistory } from 'history';
 import setAuthToken from '../../utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
 
@@ -44,5 +45,9 @@ export const logoutUser = history => dispatch => {
   localStorage.removeItem('jwtToken');
   setAuthToken(false);
   dispatch(setCurrentUser({}));
-  history.push('/login');
+  if (history !== undefined) {
+    history.push('/login');
+  } else {
+    window.location.pathname = '/login';
+  }
 };

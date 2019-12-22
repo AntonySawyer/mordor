@@ -48,6 +48,7 @@ app.use('/api/categories', categoriesRoute);
 
 const fanficModel = require('./models/fanfic.js');
 const userModel = require('./models/user.js');
+const commentsModel = require('./models/comments.js');
 
 const io = require('socket.io')();
 
@@ -106,7 +107,7 @@ io.on('connection', client => {
             err && console.log(err);
             io.emit('newRate', {
               fanficId,
-              stars: newStars
+              rate: newRate
             });
           }
         );
@@ -139,6 +140,17 @@ io.on('connection', client => {
             }
           });
       });
+  });
+  client.on('sendComment', params => {
+    const { fanficId, username, avatar, message } = params;
+    const newComment = new commentsModel({
+      username,
+      avatar,
+      fanficId,
+      message,
+      datestamp: Date.now()
+    });
+    newComment.save().then(() => io.emit('updateComments', newComment));
   });
 });
 

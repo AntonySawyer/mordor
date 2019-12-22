@@ -19,6 +19,7 @@ export const UPDATE_STARS = 'UPDATE_STARS';
 export const SAVE_OWN_VOTE = 'SAVE_OWN_VOTE';
 export const GET_TAGS = 'GET_TAGS';
 export const SAVE_TAGS = 'SAVE_TAGS';
+export const UPDATE_COMMENTS = 'UPDATE_COMMENTS';
 
 export const SET_LANG = 'SET_LANG';
 export const SET_THEME = 'SET_THEME';

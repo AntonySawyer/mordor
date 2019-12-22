@@ -4,7 +4,8 @@ import {
   SAVE_TAGS,
   UPDATE_LIKES,
   UPDATE_STARS,
-  SAVE_OWN_VOTE
+  SAVE_OWN_VOTE,
+  UPDATE_COMMENTS
 } from './types';
 import socket from '../../socket';
 
@@ -98,8 +99,20 @@ export const sendStars = (fanficId, oldRating, newRating, userId) => {
   };
 };
 
-export const updateStars = ({ fanficId, stars }) => {
+export const updateStars = ({ fanficId, rate }) => {
   return (dispatch, getState) => {
-    return dispatch({ type: UPDATE_STARS, payload: stars, fanficId });
+    return dispatch({ type: UPDATE_STARS, payload: rate, fanficId });
+  };
+};
+
+export const sendComment = (fanficId, username, avatar, message) => {
+  return (dispatch, getState) => {
+    socket.emit('sendComment', { fanficId, username, avatar, message });
+  };
+};
+
+export const updateComments = (payload) => {
+  return (dispatch, getState) => {
+    return dispatch({ type: UPDATE_COMMENTS, payload });
   };
 };

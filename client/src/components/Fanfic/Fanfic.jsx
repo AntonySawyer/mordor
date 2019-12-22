@@ -36,8 +36,8 @@ class Fanfic extends Component {
       activeChapter: 0,
       chapters: [{ title: 'Unnamed', content: 'Add text here' }],
       chapterTitle: '',
-      stars: [1, 2, 4, 8, 3],
-      userStars: 0
+      userStars: 0,
+      rate: this.props.rate || 'Unknown'
     };
     this.updateMarkdown = this.updateMarkdown.bind(this);
   }
@@ -46,17 +46,14 @@ class Fanfic extends Component {
     document.title = `Fanfic - ${this.props.match.params.mode}`;
   }
 
+  
+  componentWillReceiveProps(nextProps) {
+    this.setState({rating: nextProps.rate})
+  }
+  
+
   redirectToEdit() {
     this.props.history.push(`/fanfic/edit/${this.props._id}`);
-  }
-
-  rateCount() {
-    const votes = this.state.stars.reduce((a, b) => a + b, 0);
-    const sum = this.state.stars
-      .map((el, i) => el * (i + 1))
-      .reduce((a, b) => a + b, 0);
-    const calcRate = (sum / votes).toFixed(2);
-    this.setState({ rating: calcRate });
   }
 
   setSelectedTab() {
@@ -144,11 +141,6 @@ class Fanfic extends Component {
   }
 
   changeRating(rating) {
-    const newStars = this.state.stars.slice(0);
-    if (this.state.userStars !== 0) {
-      newStars[this.state.userStars - 1] -= 1;
-    }
-    newStars[rating - 1] += 1;
     const fanficId = this.props.match.params.id;
     const userStarForCurrentFanfic = this.props.auth.user.stars.filter(
       el => el.fanficId == fanficId
@@ -158,8 +150,7 @@ class Fanfic extends Component {
         ? userStarForCurrentFanfic[0].value
         : null;
     this.props.sendStars(fanficId, oldRating, rating, this.props.auth.user.id);
-    this.setState({ userStars: rating, stars: newStars });
-    this.rateCount();
+    this.setState({ userStars: rating });
   }
 
   handleLike() {
@@ -247,7 +238,8 @@ class Fanfic extends Component {
         chapters: this.props.chapters,
         shortDescr: this.props.shortDescr,
         isStillFetching: false,
-        chapterTitle: this.props.chapters[this.state.activeChapter]['title']
+        chapterTitle: this.props.chapters[this.state.activeChapter]['title'],
+        rating: this.props.rate
       });
       if (this.props.auth.isAuthenticated) {
         console.log(this.props.auth.user.stars); //FIXME
@@ -257,10 +249,12 @@ class Fanfic extends Component {
                 el => el.fanficId == this.props.match.params.id
               )
             : [];
+            console.log(userStarForCurrentFanfic);
         const userStars =
           userStarForCurrentFanfic.length == 1
             ? userStarForCurrentFanfic[0].value
             : 0;
+            console.log(userStars);
         this.setState({
           liked: this.props.auth.user.likes.includes(
             this.props.chapters[this.state.activeChapter]._id,
@@ -268,7 +262,6 @@ class Fanfic extends Component {
           )
         });
       }
-      this.rateCount();
     }
 
     if (mode === 'create' && this.state.isStillFetching) {

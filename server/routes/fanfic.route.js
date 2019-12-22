@@ -2,12 +2,19 @@ const express = require('express');
 const router = express.Router();
 
 const Fanfic = require('../models/fanfic.js');
+const Comments = require('../models/comments.js');
 const setId = require('../utils/setId');
 
 function getFanfic(id, res) {
   Fanfic.find({ _id: id })
     .then(rs => JSON.parse(JSON.stringify(rs)))
-    .then(fanfics => res.json(fanfics[0]));
+    .then(fanfics => {
+      const result = fanfics[0];
+      Comments.find({ fanficId: id })
+        .then(rs => JSON.parse(JSON.stringify(rs)))
+        .then(comments => (result.comments = comments.slice(0)))
+        .then(data => res.json(result));
+    });
 }
 
 router.post('/lastUpdated', (req, res) => {
@@ -91,7 +98,8 @@ router.post('/save', (req, res, next) => {
           images: images,
           stars: stars
         }
-      }, {upsert: true, setDefaultsOnInsert: true},
+      },
+      { upsert: true, setDefaultsOnInsert: true },
       (err, rs) => {
         err && console.log(err);
       }
