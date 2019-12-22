@@ -3,7 +3,7 @@ import { withNamespaces } from 'react-i18next';
 import ActionBtn from '../common/ActionBtn/';
 import './LikeBtn.css';
 
-function LikeBtn({ t, liked, countLikes, handler }) {
+function LikeBtn({ t, liked, handler }) {
   const state = liked ? 'unlike' : 'like';
   return (
     <div className='likeBtnWrapper'>

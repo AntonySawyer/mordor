@@ -1,54 +1,66 @@
 .detailBox {
-    width:320px;
-    border:1px solid #bbb;
-    margin:50px;
+    width: 75vw;
+    border: 1px solid #bbb;
+    margin: 50px;
 }
+
 .titleBox {
-    background-color:#fdfdfd;
-    padding:10px;
+    background-color: #fdfdfd;
+    padding: 10px;
 }
+
 .titleBox label{
-  color:#444;
-  margin:0;
-  display:inline-block;
+  color: #444;
+  margin: 0;
+  display: inline-block;
 }
 
 .actionBox .form-group * {
-    width:100%;
+    width: 100%;
+}
+
+.actionBox .form-group:first-child {
+    width: 80%;
 }
 
 .commentList {
-    padding:0;
-    list-style:none;
-    max-height:200px;
-    overflow:auto;
+    padding: 0;
+    list-style: none;
+    overflow: auto;
 }
+
 .commentList li {
-    margin:0;
-    margin-top:10px;
+    margin: 0;
+    margin-top: 45px;
 }
+
 .commentList li > div {
-    display:table-cell;
+    display: table-cell;
 }
+
 .commenterImage {
-    width:30px;
-    margin-right:5px;
-    height:100%;
-    float:left;
+    width: 60px;
+    margin-right: 5px;
+    height: 100%;
+    float: left;
 }
+
 .commenterImage img {
-    width:100%;
-    border-radius:50%;
+    width: 100%;
+    border-radius: 50%;
 }
+
 .commentText p {
-    margin:0;
+    margin: 0;
 }
+
 .sub-text {
-    color:#aaa;
-    font-family:verdana;
-    font-size:11px;
+    color: #aaa;
+    font-family: verdana;
+    font-size: 11px;
 }
+
 .actionBox {
-    border-top:1px dotted #bbb;
-    padding:10px;
+    border-top: 1px dotted #bbb;
+    padding: 10px;
 }

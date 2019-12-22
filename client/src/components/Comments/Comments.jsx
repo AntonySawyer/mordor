@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import * as fanficActions from '../../redux/actions/fanficActions';
+import dateFormat from '../../utils/dateFormat';
 import ActionBtn from '../common/ActionBtn/';
 import Input from '../common/Input/';
 import './Comments.css';
@@ -34,38 +35,35 @@ class Comments extends Component {
   render() {
     const comments = this.props.fanfic.comments;
     return (
-      <div>
-        <div class='detailBox'>
-          <div class='titleBox'>
-            <label>Comment Box</label>
-          </div>
-          <div class='actionBox'>
-            <ul class='commentList'>
-              {comments.map(el => (
-                <li key={el._id}>
-                  <div class='commenterImage'>
-                    <img src={el.avatar} />
-                    <span>{el.username}</span>
-                  </div>
-                  <div class='commentText'>
-                    <p>{el.message}</p>
-                    <span class='date sub-text'>{el.datestamp}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <form class='form-inline' role='form'>
-              <div class='form-group'>
-                <Input
-                  value={this.state.message}
-                  onChange={this.handleComment}
-                />
-              </div>
-              <div class='form-group'>
-                <ActionBtn title={'Add'} handler={this.prepareCommentToSend} />
-              </div>
-            </form>
-          </div>
+      <div class='detailBox'>
+        <div class='titleBox'>
+          <label>Comment Box</label>
+        </div>
+        <div class='actionBox'>
+          <form class='form-inline' role='form'>
+            <div class='form-group'>
+              <Input value={this.state.message} onChange={this.handleComment} />
+            </div>
+            <div class='form-group'>
+              <ActionBtn title={'Add'} handler={this.prepareCommentToSend} />
+            </div>
+          </form>
+          <ul class='commentList'>
+            {comments.map(el => (
+              <li key={el._id}>
+                <div class='commenterImage'>
+                  <img src={el.avatar} />
+                  <span>{el.username}</span>
+                </div>
+                <div class='commentText'>
+                  <span class='date sub-text'>
+                    {dateFormat(el.datestamp, this.props.lng)}
+                  </span>
+                  <p>{el.message}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     );

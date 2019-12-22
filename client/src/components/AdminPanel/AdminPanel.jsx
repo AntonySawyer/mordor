@@ -43,10 +43,6 @@ class AdminPanel extends Component {
               <th>{t('Admin.email')}</th>
               <th>{t('Admin.role')}</th>
               <th>{t('Admin.status')}</th>
-              <th>{t('Admin.fanficCount')}</th>
-              <th>{t('Admin.commentCount')}</th>
-              <th>{t('Admin.registerDate')}</th>
-              <th>{t('Admin.lastLoginDate')}</th>
             </tr>
           </thead>
           <tbody>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import FilterableTable from 'react-filterable-table';
-
+import dateFormat from '../../utils/dateFormat';
 import * as profileActions from '../../redux/actions/profileActions';
 import ActionBtn from '../common/ActionBtn/';
 import { checkAll, setIndeterminate } from '../../utils/checkboxWorker';
@@ -59,7 +59,7 @@ class Profile extends Component {
               handler={this.fanficAction.bind(this, 'edit', el.id)}
             />
           ),
-          createdAt: 'some data'
+          createdAt: dateFormat(el.datestamp, this.props.lng)
         })
       );
     }
@@ -107,16 +107,39 @@ class Profile extends Component {
         <h3>{t('Profile.title')}</h3>
         <section className='row'>
           <article className='col'>
-            <ul>
-              <li>{`${t('Profile.username')}: ${userdata.username}`}</li>
-              <li>{`${t('Profile.email')}: ${userdata.email}`}</li>
-              <li>{`${t('Profile.role')}: ${
-                userdata.role === 'admin'
-                  ? t('Profile.admin')
-                  : t('Profile.user')
-              }`}</li>
-              <li>Maybe password reset btn(?)</li>
-            </ul>
+            <div className='card mb-3'>
+              <div class='row no-gutters'>
+                <div class='col-md-2'>
+                  <img
+                    className='card-img-top'
+                    src={userdata.avatar}
+                    alt={`${userdata.username} avatar`}
+                  />
+                </div>
+                <div class='col-md-8'>
+                  <div class='card-body'>
+                    <ul className='list-group list-group-flush'>
+                      <li className='list-group-item'>{`${t(
+                        'Profile.username'
+                      )}: ${userdata.username}`}</li>
+                      <li className='list-group-item'>{`${t(
+                        'Profile.email'
+                      )}: ${userdata.email}`}</li>
+                      <li className='list-group-item'>{`${t('Profile.role')}: ${
+                        userdata.role === 'admin'
+                          ? t('Profile.admin')
+                          : t('Profile.user')
+                      }`}</li>
+                      <li className='list-group-item'>
+                        Maybe password reset btn(?)
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div className='card-body'></div>
+            </div>
           </article>
           {achieves !== undefined && (
             <article className='col'>
@@ -142,7 +165,8 @@ class Profile extends Component {
           noRecordsMessage='There are no fanfics to display'
           noFilteredRecordsMessage='No fanfics match your filters!'
           pagersVisible={false}
-          iconSort={'▲'} 
+          headerVisible={false}
+          iconSort={'▲'}
           iconSortedDesc={'▼'}
         />
       </section>
