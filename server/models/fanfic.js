@@ -46,7 +46,8 @@ const FanficSchema = new mongoose.Schema({
   },
   stars: {
     type: Array,
-    required: true
+    required: true,
+    default: [0, 0, 0, 0, 0]
   },
   rate: {
     type: Number,

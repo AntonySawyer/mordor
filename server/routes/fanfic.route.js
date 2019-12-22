@@ -18,7 +18,7 @@ function getFanfic(id, res) {
 }
 
 router.post('/lastUpdated', (req, res) => {
-  Fanfic.find({}, { title: 1, datestamp: 1 })
+  Fanfic.find({}, { title: 1, datestamp: 1, shortDescr: 1 })
     .sort({ datestamp: -1 })
     .limit(5)
     .then(rs => JSON.parse(JSON.stringify(rs)))
@@ -29,7 +29,7 @@ router.post('/lastUpdated', (req, res) => {
 });
 
 router.post('/maxRated', (req, res) => {
-  Fanfic.find({}, { title: 1, rate: 1 })
+  Fanfic.find({}, { title: 1, rate: 1, shortDescr: 1 })
     .sort({ rate: -1 })
     .limit(5)
     .then(rs => JSON.parse(JSON.stringify(rs)))
@@ -107,5 +107,18 @@ router.post('/save', (req, res, next) => {
     getFanfic(id, res);
   }
 });
+
+router.post('/byTag', (req, res) => {
+  Fanfic.find({tags: req.body.tag }, { title: 1, shortDescr: 1 })
+    .then(rs => JSON.parse(JSON.stringify(rs)))
+    .then(fanfics => res.json(setId(fanfics)));
+});
+
+router.post('/byCategory', (req, res) => {
+  Fanfic.find({category: req.body.category }, { title: 1, shortDescr: 1 })
+    .then(rs => JSON.parse(JSON.stringify(rs)))
+    .then(fanfics => res.json(setId(fanfics)));
+});
+
 
 module.exports = router;

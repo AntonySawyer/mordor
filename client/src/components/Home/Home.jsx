@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
-
+import dateFormat from '../../utils/dateFormat';
 import * as homeActions from '../../redux/actions/homeActions';
 import Badge from '../common/Badge/';
 import Spinner from '../common/Spinner/';
@@ -34,48 +34,62 @@ class Home extends Component {
             <h3>{t('Home.categoriesMenu')}</h3>
             {CONST.categories &&
               CONST.categories.map((category, index) => (
-                <a
+                <NavLink
                   key={index}
-                  href={`category_${category}`}
-                  className='badge badge-primary'
+                  to={`/search/category/${category}`}
+                  className='badge badge-success'
                 >
                   {category}
-                </a>
+                </NavLink>
               ))}
           </div>
         </div>
         <div className='row'>
           <div className='col'>
             <h3>{t('Home.lastUpdate')}</h3>
-            <ul>
+            <div class='list-group'>
               {lastUpdate.map(el => (
-                <li key={el.id}>
-                  <p>
-                    <Badge
-                      title={new Date(el.datestamp).toLocaleDateString(lng)}
-                      className='badge-secondary badge-light'
-                    />
-                    <NavLink to={`/fanfic/read/${el.id}`}>{el.title}</NavLink>
-                  </p>
-                </li>
+                <NavLink
+                  key={el.id}
+                  to={`/fanfic/read/${el.id}`}
+                  class='list-group-item list-group-item-action flex-column align-items-start'
+                >
+                  <div class='d-flex w-100 justify-content-between'>
+                    <h5 class='mb-1'>{el.title}</h5>
+                    <small>
+                      <Badge
+                        title={dateFormat(el.datestamp, lng)}
+                        className='badge-secondary badge-light'
+                      />
+                    </small>
+                  </div>
+                  <p class='mb-1'>{el.shortDescr}</p>
+                </NavLink>
               ))}
-            </ul>
+            </div>
           </div>
           <div className='col'>
             <h3>{t('Home.topRate')}</h3>
-            <ul>
+            <div class='list-group'>
               {topRated.map(el => (
-                <li key={el.id}>
-                  <p>
-                    <Badge
-                      title={el.rate}
-                      className='badge-pill badge-warning'
-                    />
-                    <NavLink to={`/fanfic/read/${el.id}`}>{el.title}</NavLink>
-                  </p>
-                </li>
+                <NavLink
+                  key={el.id}
+                  to={`/fanfic/read/${el.id}`}
+                  class='list-group-item list-group-item-action flex-column align-items-start'
+                >
+                  <div class='d-flex w-100 justify-content-between'>
+                    <h5 class='mb-1'>{el.title}</h5>
+                    <small>
+                      <Badge
+                        title={el.rate}
+                        className='badge-pill badge-warning'
+                      />
+                    </small>
+                  </div>
+                  <p class='mb-1'>{el.shortDescr}</p>
+                </NavLink>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
         <div className='row'>
@@ -85,13 +99,13 @@ class Home extends Component {
               <Spinner />
             ) : (
               tags.map(tag => (
-                <a
+                <NavLink
                   key={tag.id}
-                  href={`tag_${tag.id}`}
+                  to={`/search/tag/${tag.name}`}
                   className='badge badge-primary'
                 >
                   {tag.name}
-                </a>
+                </NavLink>
               ))
             )}
           </div>

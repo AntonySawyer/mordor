@@ -15,13 +15,12 @@ import './App.css';
 
 import Register from './components/Register';
 import Login from './components/Login';
-
+import SearchResult from './components/SearchResult/';
 const Home = lazy(() => import('./components/Home/'));
 const NavBar = lazy(() => import('./components/NavBar/'));
 const AdminPanel = lazy(() => import('./components/AdminPanel/'));
 const Profile = lazy(() => import('./components/Profile/'));
 const Fanfic = lazy(() => import('./components/Fanfic/'));
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -125,6 +124,10 @@ class App extends React.Component {
             render={matchProps => (
               <Fanfic {...matchProps} userId={this.userId} />
             )}
+          />
+          <Route
+            path='/search/:mode/:param'
+            render={matchProps => <SearchResult {...matchProps} />}
           />
         </Suspense>
       </Router>

@@ -174,7 +174,7 @@ router.post('/getProfile', (req, res) => {
   User.findOne({ _id: id })
     .then(rs => JSON.parse(JSON.stringify(rs)))
     .then(user => {
-      Fanfic.find({ userId: id }, { title: 1 })
+      Fanfic.find({ userId: id }, { title: 1, datestamp: 1 })
         .then(rs => JSON.parse(JSON.stringify(rs)))
         .then(fanfics => {
           const result = {
@@ -182,7 +182,8 @@ router.post('/getProfile', (req, res) => {
               username: user.username,
               email: user.email,
               role: user.role,
-              id: user._id
+              id: user._id,
+              avatar: user.avatar
             },
             achieves: user.achieves,
             fanfics: fanfics.map(el => ({ ...el, id: el._id }))

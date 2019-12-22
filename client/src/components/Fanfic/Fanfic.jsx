@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
+import { NavLink } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import ReactMde from 'react-mde';
 import ReactTags from 'react-tag-autocomplete';
@@ -10,6 +11,7 @@ import 'react-mde/lib/styles/css/react-mde-all.css';
 import * as fanficActions from '../../redux/actions/fanficActions';
 
 import Spinner from '../common/Spinner/';
+import Badge from '../common/Badge/';
 import ActionBtn from '../common/ActionBtn/';
 import Input from '../common/Input/';
 import Select from '../common/Select/';
@@ -46,11 +48,9 @@ class Fanfic extends Component {
     document.title = `Fanfic - ${this.props.match.params.mode}`;
   }
 
-  
   componentWillReceiveProps(nextProps) {
-    this.setState({rating: nextProps.rate})
+    this.setState({ rating: nextProps.rate });
   }
-  
 
   redirectToEdit() {
     this.props.history.push(`/fanfic/edit/${this.props._id}`);
@@ -249,12 +249,12 @@ class Fanfic extends Component {
                 el => el.fanficId == this.props.match.params.id
               )
             : [];
-            console.log(userStarForCurrentFanfic);
+        console.log(userStarForCurrentFanfic);
         const userStars =
           userStarForCurrentFanfic.length == 1
             ? userStarForCurrentFanfic[0].value
             : 0;
-            console.log(userStars);
+        console.log(userStars);
         this.setState({
           liked: this.props.auth.user.likes.includes(
             this.props.chapters[this.state.activeChapter]._id,
@@ -303,6 +303,7 @@ class Fanfic extends Component {
                     handler={this.updateCategory.bind(this)}
                   />
                   <textarea
+                    placeholder='Type short description here'
                     id='shortDescr'
                     cols='30'
                     rows='10'
@@ -369,9 +370,19 @@ class Fanfic extends Component {
               <section>
                 <div>
                   <h1>{this.props.title}</h1>
-                  <span>{this.props.category}</span>
+                  <span>
+                    Category:
+                    <NavLink to={`/search/category/${this.props.category}`}>
+                      <Badge
+                        title={this.props.category}
+                        className='badge-success'
+                      />
+                    </NavLink>
+                  </span>
                   {this.props.tags.map((el, index) => (
-                    <span key={index}>{el}</span>
+                    <NavLink key={index} to={`/search/tag/${el}`}>
+                      <Badge title={el} className='badge-secondary' />
+                    </NavLink>
                   ))}
                 </div>
               </section>
@@ -401,18 +412,17 @@ class Fanfic extends Component {
                   this.props.chapters[this.state.activeChapter]['content']
                 }
               />
-              <span>{`Total likes: ${
-                this.props.chapters[this.state.activeChapter]['likes']
-              }`}</span>
-              {this.props.auth.isAuthenticated && (
-                <LikeBtn
-                  countLikes={
-                    this.state.chapters[this.state.activeChapter]['likes']
-                  }
-                  liked={this.state.liked}
-                  handler={this.handleLike.bind(this)}
-                />
-              )}
+              <div className='likesWrapper'>
+                <span>{`Total likes: ${
+                  this.props.chapters[this.state.activeChapter]['likes']
+                }`}</span>
+                {this.props.auth.isAuthenticated && (
+                  <LikeBtn
+                    liked={this.state.liked}
+                    handler={this.handleLike.bind(this)}
+                  />
+                )}
+              </div>
               {this.props.auth.isAuthenticated && <Comments />}
             </>
           )}

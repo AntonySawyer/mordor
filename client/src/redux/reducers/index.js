@@ -8,10 +8,12 @@ import syncReducer from "./syncReducer";
 import fanficReducer from "./fanficReducer";
 import errorReducer from "./errorReducer";
 import authReducer from "./authReducer";
+import searchReducer from './searchReducer';
 
 const redusers = combineReducers({
   auth: authReducer,
   errors: errorReducer,
+  search: searchReducer,
   syncParams: syncReducer,
   i18next: i18nextReducer,
   homePage: homeReducer,

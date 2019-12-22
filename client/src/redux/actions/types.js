@@ -21,6 +21,9 @@ export const GET_TAGS = 'GET_TAGS';
 export const SAVE_TAGS = 'SAVE_TAGS';
 export const UPDATE_COMMENTS = 'UPDATE_COMMENTS';
 
+export const GET_BY_TAG = 'GET_BY_TAG';
+export const GET_BY_CATEGORY = 'GET_BY_CATEGORY';
+
 export const SET_LANG = 'SET_LANG';
 export const SET_THEME = 'SET_THEME';
 export const GET_CONST = 'GET_CONST';
