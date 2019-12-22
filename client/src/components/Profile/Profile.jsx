@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
+import FilterableTable from 'react-filterable-table';
 
 import * as profileActions from '../../redux/actions/profileActions';
 import ActionBtn from '../common/ActionBtn/';
@@ -29,9 +30,78 @@ class Profile extends Component {
     } = this.props;
 
     const id = match.params.id;
-    if (id !== userdata.id) {
+    if (userdata === undefined || id !== userdata.id) {
       profilePreload(id);
     }
+
+    const data = [];
+
+    if (fanfics !== undefined) {
+      fanfics.map(el =>
+        data.push({
+          checkbox: (
+            <input
+              type='checkbox'
+              onChange={setIndeterminate}
+              value={`fanfic_${el.id}`}
+            />
+          ),
+          fanficTitle: el.title,
+          link: (
+            <ActionBtn
+              title={t('Profile.read')}
+              handler={this.fanficAction.bind(this, 'read', el.id)}
+            />
+          ),
+          edit: (
+            <ActionBtn
+              title={t('Profile.edit')}
+              handler={this.fanficAction.bind(this, 'edit', el.id)}
+            />
+          ),
+          createdAt: 'some data'
+        })
+      );
+    }
+
+    const fields = [
+      {
+        name: 'checkbox',
+        displayName: (
+          <input type='checkbox' id='mainCheckbox' onChange={checkAll} />
+        ),
+        inputFilterable: false,
+        sortable: false
+      },
+      {
+        name: 'fanficTitle',
+        displayName: t('Profile.fanficTitle'),
+        inputFilterable: true,
+        sortable: true
+      },
+      {
+        name: 'link',
+        displayName: t('Profile.link'),
+        inputFilterable: false,
+        exactFilterable: false,
+        sortable: false
+      },
+      {
+        name: 'edit',
+        displayName: t('Profile.edit'),
+        inputFilterable: false,
+        exactFilterable: false,
+        sortable: false
+      },
+      {
+        name: 'createdAt',
+        displayName: t('Profile.createdAt'),
+        inputFilterable: true,
+        exactFilterable: true,
+        sortable: true
+      }
+    ];
+
     return (
       <section className='profile container'>
         <h3>{t('Profile.title')}</h3>
@@ -56,42 +126,25 @@ class Profile extends Component {
             </article>
           )}
         </section>
-        <ActionBtn title={t('Profile.create')} handler={this.fanficAction.bind(this, 'create', 'new')} />
-        <ActionBtn title={t('Profile.delete')} handler={() => deleteFanfic(userdata.id)} />
-        <table className='table table-hover'>
-          <thead>
-            <tr>
-              <th>
-                <input type='checkbox' id='mainCheckbox' onChange={checkAll} />
-              </th>
-              <th>{t('Profile.fanficTitle')}</th>
-              <th>{t('Profile.link')}</th>
-              <th>{t('Profile.edit')}</th>
-              <th>{t('Profile.createdAt')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {fanfics !== undefined &&
-              fanfics.map(el => (
-                <tr key={el.id}>
-                  <td>
-                    <input
-                      type='checkbox'
-                      onChange={setIndeterminate}
-                      value={`fanfic_${el.id}`}
-                    />
-                  </td>
-                  <td>{el.title}</td>
-                  <td>
-                    <ActionBtn title={t('Profile.read')} handler={this.fanficAction.bind(this, 'read', el.id)} />
-                  </td>
-                  <td>
-                    <ActionBtn title={t('Profile.edit')} handler={this.fanficAction.bind(this, 'edit', el.id)} />
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+        <ActionBtn
+          title={t('Profile.create')}
+          handler={this.fanficAction.bind(this, 'create', 'new')}
+        />
+        <ActionBtn
+          title={t('Profile.delete')}
+          handler={() => deleteFanfic(userdata.id)}
+        />
+        <FilterableTable
+          namespace='Fanfics'
+          initialSort='name'
+          data={data}
+          fields={fields}
+          noRecordsMessage='There are no fanfics to display'
+          noFilteredRecordsMessage='No fanfics match your filters!'
+          pagersVisible={false}
+          iconSort={'▲'} 
+          iconSortedDesc={'▼'}
+        />
       </section>
     );
   }
