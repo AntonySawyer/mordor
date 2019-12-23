@@ -20,7 +20,10 @@ const Home = lazy(() => import('./components/Home/'));
 const NavBar = lazy(() => import('./components/NavBar/'));
 const AdminPanel = lazy(() => import('./components/AdminPanel/'));
 const Profile = lazy(() => import('./components/Profile/'));
-const Fanfic = lazy(() => import('./components/Fanfic/'));
+const ReadFanfic = lazy(() => import('./components/ReadFanfic/'));
+const EditFanfic = lazy(() => import('./components/EditFanfic/'));
+const CreateFanfic = lazy(() => import('./components/CreateFanfic/'));
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -91,9 +94,21 @@ class App extends React.Component {
             render={matchProps => <Profile {...matchProps} />}
           />
           <Route
-            path='/fanfic/:mode/:id'
+            path='/fanfic/read/:id'
             render={matchProps => (
-              <Fanfic {...matchProps} userId={this.userId} />
+              <ReadFanfic {...matchProps} userId={this.userId} />
+            )}
+          />
+          <Route
+            path='/fanfic/edit/:id'
+            render={matchProps => (
+              <EditFanfic {...matchProps} userId={this.userId} />
+            )}
+          />
+          <Route
+            path='/fanfic/create/:id'
+            render={matchProps => (
+              <CreateFanfic {...matchProps} userId={this.userId} />
             )}
           />
           <Route

@@ -183,7 +183,9 @@ router.post('/getProfile', (req, res) => {
               email: user.email,
               role: user.role,
               id: user._id,
-              avatar: user.avatar
+              avatar: user.avatar,
+              likes: user.likes,
+              stars: user.stars
             },
             achieves: user.achieves,
             fanfics: fanfics.map(el => ({ ...el, id: el._id }))

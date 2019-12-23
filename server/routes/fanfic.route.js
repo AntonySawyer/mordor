@@ -95,8 +95,7 @@ router.post('/save', (req, res, next) => {
           tags: tags,
           category: category,
           chapters: chapters,
-          images: images,
-          stars: stars
+          images: images
         }
       },
       { upsert: true, setDefaultsOnInsert: true },

@@ -122,10 +122,11 @@ io.on('connection', client => {
                 el => el.fanficId == fanficId
               )
                 ? [
-                    ...data[0].stars.filter(el => el.fanficId != fanficId),
+                    ...data[0].stars.filter(el => el.fanficId !== fanficId),
                     { fanficId, value: newRating }
                   ]
                 : [...data[0].stars, { fanficId, value: newRating }];
+                console.log(newStarsForUserData);
               userModel.findOneAndUpdate(
                 { _id: userId },
                 { $set: { stars: newStarsForUserData } },
