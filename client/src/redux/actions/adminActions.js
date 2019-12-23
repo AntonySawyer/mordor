@@ -4,8 +4,23 @@ import {
   USER_TO_ADMIN,
   ADMIN_TO_USER,
   BLOCK_USER,
-  UNBLOCK_USER
+  UNBLOCK_USER,
+  GET_USERS
 } from './types';
+
+export const getUsers = () => {
+  return (dispatch, getState) => {
+    fetch('/api/users/userlist', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json'
+      }})
+      .then(rs => rs.json())
+      .then(payload => {
+        return dispatch({ type: GET_USERS, payload });
+      });
+  };
+};
 
 export const deleteUsers = () => {
   return (dispatch, getState) => {

@@ -15,24 +15,33 @@ class Profile extends Component {
     this.state = {};
   }
 
+  componentWillMount() {
+    const isAdmin = this.props.auth.user.role === 'admin'
+    const isOwner = this.props.match.params.id === this.props.auth.user.id
+    if (!isAdmin && !isOwner) {
+      this.props.history.push('/login');
+    }
+  }
+
   fanficAction(mode, id) {
     this.props.history.push(`/fanfic/${mode}/${id}`);
   }
 
   render() {
+    console.log(this.props);
     const {
       userdata,
       achieves,
       fanfics,
       deleteFanfic,
       t,
-      profilePreload,
+      getProfile,
       match
     } = this.props;
 
-    const id = match.params.id;
+    const { id } = match.params;
     if (userdata === undefined || id !== userdata.id) {
-      profilePreload(id);
+      getProfile(id);
     }
 
     const data = [];
@@ -117,7 +126,7 @@ class Profile extends Component {
                   <div className='col-md-2'>
                     <img
                       className='card-img-top'
-                      src={userdata.avatar}
+                      src={this.props.userdata.avatar}
                       alt={`${userdata.username} avatar`}
                     />
                   </div>
@@ -183,7 +192,10 @@ class Profile extends Component {
   }
 }
 
-const mapStateToProps = state => state.profilePage;
+const mapStateToProps = state => ({
+  ...state.profilePage,
+  auth: state.auth
+});
 
 export default withNamespaces('common')(
   connect(mapStateToProps, profileActions)(Profile)

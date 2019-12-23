@@ -24,15 +24,9 @@ const Fanfic = lazy(() => import('./components/Fanfic/'));
 class App extends React.Component {
   constructor(props) {
     super(props);
-
     this.isAuth = this.props.isAuthenticated;
     this.isAdmin = this.props.user.role === 'admin';
     this.userId = this.props.user.id;
-
-    this.getProfile = this.props.actions.getProfile;
-    this.getUsers = this.props.actions.getUsers;
-    this.getRated = this.props.actions.getRated;
-    this.getLastUpdated = this.props.actions.getLastUpdated;
     this.getConst = this.props.actions.getConst;
     this.getTags = this.props.actions.getTags;
     this.updateLikes = this.props.actions.updateLikes;
@@ -44,12 +38,13 @@ class App extends React.Component {
     document.title = 'Mordor - fanfics home';
     this.getConst();
     this.getTags();
+    const { isAuthenticated, fanfic } = this.props;
 
     socket.on('newLikesCount', data => {
       const needToHandleFanficUpdates =
-        this.props.isAuthenticated &&
-        this.props.fanfic._id !== undefined &&
-        this.props.fanfic.chapters.some(el => el._id === data.chapterId);
+        isAuthenticated &&
+        fanfic._id !== undefined &&
+        fanfic.chapters.some(el => el._id === data.chapterId);
       if (needToHandleFanficUpdates) {
         this.updateLikes(data);
       }
@@ -57,9 +52,9 @@ class App extends React.Component {
 
     socket.on('newRate', data => {
       const needToHandleFanficUpdates =
-        this.props.isAuthenticated &&
-        this.props.fanfic._id !== undefined &&
-        this.props.fanfic._id === data.fanficId;
+        isAuthenticated &&
+        fanfic._id !== undefined &&
+        fanfic._id === data.fanficId;
       if (needToHandleFanficUpdates) {
         this.updateStars(data);
       }
@@ -67,49 +62,20 @@ class App extends React.Component {
 
     socket.on('updateComments', data => {
       const needToHandleFanficUpdates =
-        this.props.isAuthenticated &&
-        this.props.fanfic._id !== undefined &&
-        this.props.fanfic._id === data.fanficId;
+        isAuthenticated &&
+        fanfic._id !== undefined &&
+        fanfic._id === data.fanficId;
       if (needToHandleFanficUpdates) {
         this.updateComments(data);
       }
     });
   }
 
-  adminPreload() {
-    this.getUsers();
-    return (
-      <Route
-        path='/admin'
-        render={() => (
-          <AdminPanel profilePreload={this.profilePreload.bind(this)} />
-        )}
-      />
-    );
-  }
-
-  profilePreload(id = this.userId) {
-    if (id === this.userId || this.isAdmin) {
-      this.getProfile(id);
-      return (
-        <Route
-          path='/profile/:id'
-          component={matchProps => (
-            <Profile
-              {...matchProps}
-              profilePreload={this.profilePreload.bind(this)}
-            />
-          )}
-        />
-      );
-    }
-  }
-
   render() {
     return (
       <Router>
         <Suspense fallback={<Spinner />}>
-          <NavBar 
+          <NavBar
             isAuth={this.isAuth}
             isAdmin={this.isAdmin}
             currentId={this.userId}
@@ -117,8 +83,14 @@ class App extends React.Component {
           <Route exact path='/' component={Home} />
           <Route exact path='/register' component={Register} />
           <Route exact path='/login' component={Login} />
-          {this.isAdmin ? this.adminPreload() : null}
-          {this.isAuth ? this.profilePreload() : null}
+          <Route
+            path='/admin'
+            render={matchProps => <AdminPanel {...matchProps} />}
+          />
+          <Route
+            path='/profile/:id'
+            render={matchProps => <Profile {...matchProps} />}
+          />
           <Route
             path='/fanfic/:mode/:id'
             render={matchProps => (

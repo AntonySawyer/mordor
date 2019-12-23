@@ -6,7 +6,6 @@ import { bindActionCreators } from 'redux';
 import SearchBar from '../SearchBar/';
 import LangSwitch from '../LangSwitch/';
 import ThemeSwitch from '../ThemeSwitch/';
-import { getProfile } from '../../redux/actions/preloadActions';
 import { logoutUser } from '../../redux/actions/authentication';
 import './NavBar.css';
 
@@ -46,11 +45,7 @@ function NavBar(props) {
   const authLinks = (
     <>
       <li>
-        <NavLink
-          className='nav-link'
-          to={`/profile/${user.id}`}
-          onClick={() => actions.getProfile(user.id)}
-        >
+        <NavLink className='nav-link' to={`/profile/${user.id}`}>
           <img
             src={user.avatar}
             alt={user.username}
@@ -116,7 +111,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
   return {
-    actions: bindActionCreators({ getProfile, logoutUser }, dispatch)
+    actions: bindActionCreators({ logoutUser }, dispatch)
   };
 };
 
