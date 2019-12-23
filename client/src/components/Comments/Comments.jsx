@@ -35,28 +35,28 @@ class Comments extends Component {
   render() {
     const comments = this.props.fanfic.comments;
     return (
-      <div class='detailBox'>
-        <div class='titleBox'>
+      <div className='detailBox'>
+        <div className='titleBox'>
           <label>Comment Box</label>
         </div>
-        <div class='actionBox'>
-          <form class='form-inline' role='form'>
-            <div class='form-group'>
+        <div className='actionBox'>
+          <form className='form-inline' role='form'>
+            <div className='form-group'>
               <Input value={this.state.message} onChange={this.handleComment} />
             </div>
-            <div class='form-group'>
+            <div className='form-group'>
               <ActionBtn title={'Add'} handler={this.prepareCommentToSend} />
             </div>
           </form>
-          <ul class='commentList'>
+          <ul className='commentList'>
             {comments.map(el => (
               <li key={el._id}>
-                <div class='commenterImage'>
+                <div className='commenterImage'>
                   <img src={el.avatar} />
                   <span>{el.username}</span>
                 </div>
-                <div class='commentText'>
-                  <span class='date sub-text'>
+                <div className='commentText'>
+                  <span className='date sub-text'>
                     {dateFormat(el.datestamp, this.props.lng)}
                   </span>
                   <p>{el.message}</p>

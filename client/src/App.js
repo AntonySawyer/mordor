@@ -38,13 +38,12 @@ class App extends React.Component {
     document.title = 'Mordor - fanfics home';
     this.getConst();
     this.getTags();
-    const { isAuthenticated, fanfic } = this.props;
 
     socket.on('newLikesCount', data => {
       const needToHandleFanficUpdates =
-        isAuthenticated &&
-        fanfic._id !== undefined &&
-        fanfic.chapters.some(el => el._id === data.chapterId);
+        this.props.isAuthenticated &&
+        this.props.fanfic._id !== undefined &&
+        this.props.fanfic.chapters.some(el => el._id === data.chapterId);
       if (needToHandleFanficUpdates) {
         this.updateLikes(data);
       }
@@ -52,9 +51,9 @@ class App extends React.Component {
 
     socket.on('newRate', data => {
       const needToHandleFanficUpdates =
-        isAuthenticated &&
-        fanfic._id !== undefined &&
-        fanfic._id === data.fanficId;
+        this.props.isAuthenticated &&
+        this.props.fanfic._id !== undefined &&
+        this.props.fanfic._id === data.fanficId;
       if (needToHandleFanficUpdates) {
         this.updateStars(data);
       }
@@ -62,9 +61,9 @@ class App extends React.Component {
 
     socket.on('updateComments', data => {
       const needToHandleFanficUpdates =
-        isAuthenticated &&
-        fanfic._id !== undefined &&
-        fanfic._id === data.fanficId;
+        this.props.isAuthenticated &&
+        this.props.fanfic._id !== undefined &&
+        this.props.fanfic._id === data.fanficId;
       if (needToHandleFanficUpdates) {
         this.updateComments(data);
       }
