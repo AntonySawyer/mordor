@@ -51,7 +51,7 @@
         "blocked": "Blocked"
     },
     "Profile": {
-        "title": "Your profile",
+        "title": "Profile",
         "username": "Username",
         "email": "Email",
         "role": "Role",
@@ -79,5 +79,13 @@
     "LikeBtn": {
         "like": "Like",
         "unlike": "Unlike"
+    },
+    "SearchPage": {
+        "resultsFor": "Results for",
+        "notFound": "Nothing found, try another params.",
+        "items": "items",
+        "category": "category",
+        "tag": "tag",
+        "text": "text"
     }
 }

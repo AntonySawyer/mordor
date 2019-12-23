@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 import { loginUser } from '../../redux/actions/authentication';
 import classnames from 'classnames';
+import ActionBtn from '../common/ActionBtn/';
 
 class Login extends Component {
   constructor() {
@@ -50,14 +52,15 @@ class Login extends Component {
 
   render() {
     const { errors } = this.state;
+    const { t } = this.props;
     return (
       <div className='container' style={{ marginTop: '50px', width: '700px' }}>
-        <h2 style={{ marginBottom: '40px' }}>Login</h2>
+        <h2 style={{ marginBottom: '40px' }}>{t('Auth.login')}</h2>
         <form onSubmit={this.handleSubmit}>
           <div className='form-group'>
             <input
               type='email'
-              placeholder='Email'
+              placeholder={t('Auth.emailInput')}
               className={classnames('form-control form-control-lg', {
                 'is-invalid': errors.email
               })}
@@ -72,7 +75,7 @@ class Login extends Component {
           <div className='form-group'>
             <input
               type='password'
-              placeholder='Password'
+              placeholder={t('Auth.passwordInput')}
               className={classnames('form-control form-control-lg', {
                 'is-invalid': errors.password
               })}
@@ -85,9 +88,7 @@ class Login extends Component {
             )}
           </div>
           <div className='form-group'>
-            <button type='submit' className='btn btn-primary'>
-              Login User
-            </button>
+            <ActionBtn type='submit' title={t('Auth.login')} />
           </div>
         </form>
       </div>
@@ -99,9 +100,11 @@ Login.propTypes = {
   errors: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => ({
-    auth: state.auth,
-    errors: state.errors
-})
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
 
-export default connect(mapStateToProps, { loginUser })(Login);
+export default withNamespaces('common')(
+  connect(mapStateToProps, { loginUser })(Login)
+);

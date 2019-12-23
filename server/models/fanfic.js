@@ -10,6 +10,8 @@ const ChapterSchema = new mongoose.Schema({
   }
 });
 
+ChapterSchema.index({ content: 'text' });
+
 const FanficSchema = new mongoose.Schema({
   title: {
     type: String,

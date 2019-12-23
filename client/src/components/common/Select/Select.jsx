@@ -13,6 +13,7 @@ export default ({ id, label, defaultValue, values, handler }) => {
         className='custom-select'
         id={id}
         value={defaultValue}
+        defaultValue={defaultValue}
         onChange={handler}
       >
         {values.map((el, index) => (

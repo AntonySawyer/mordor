@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { withRouter } from 'react-router-dom';
 import { registerUser } from '../../redux/actions/authentication';
 import classnames from 'classnames';
+import ActionBtn from '../common/ActionBtn/';
 
 class Register extends Component {
   constructor() {
@@ -55,14 +57,15 @@ class Register extends Component {
 
   render() {
     const { errors } = this.state;
+    const { t } = this.props;
     return (
       <div className='container' style={{ marginTop: '50px', width: '700px' }}>
-        <h2 style={{ marginBottom: '40px' }}>Registration</h2>
+        <h2 style={{ marginBottom: '40px' }}>{t('Auth.register')}</h2>
         <form onSubmit={this.handleSubmit}>
           <div className='form-group'>
             <input
               type='text'
-              placeholder='Name'
+              placeholder={t('Auth.usernameInput')}
               className={classnames('form-control form-control-lg', {
                 'is-invalid': errors.name
               })}
@@ -77,7 +80,7 @@ class Register extends Component {
           <div className='form-group'>
             <input
               type='email'
-              placeholder='Email'
+              placeholder={t('Auth.emailInput')}
               className={classnames('form-control form-control-lg', {
                 'is-invalid': errors.email
               })}
@@ -92,7 +95,7 @@ class Register extends Component {
           <div className='form-group'>
             <input
               type='password'
-              placeholder='Password'
+              placeholder={t('Auth.passwordInput')}
               className={classnames('form-control form-control-lg', {
                 'is-invalid': errors.password
               })}
@@ -107,7 +110,7 @@ class Register extends Component {
           <div className='form-group'>
             <input
               type='password'
-              placeholder='Confirm Password'
+              placeholder={t('Auth.passwordInput')}
               className={classnames('form-control form-control-lg', {
                 'is-invalid': errors.password_confirm
               })}
@@ -120,9 +123,7 @@ class Register extends Component {
             )}
           </div>
           <div className='form-group'>
-            <button type='submit' className='btn btn-primary'>
-              Register User
-            </button>
+            <ActionBtn type='submit' title={t('Auth.register')} />
           </div>
         </form>
       </div>
@@ -140,4 +141,6 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(mapStateToProps, { registerUser })(withRouter(Register));
+export default withNamespaces('common')(
+  connect(mapStateToProps, { registerUser })(withRouter(Register))
+);

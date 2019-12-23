@@ -12,27 +12,31 @@ class SearchResult extends Component {
     this.state = {};
     this.getByTag = this.props.getByTag;
     this.getByCategory = this.props.getByCategory;
+    this.getByText = this.props.getByText;
   }
 
   componentDidMount() {
     const { mode, param } = this.props.match.params;
     mode === 'tag' && this.getByTag(param);
     mode === 'category' && this.getByCategory(param);
-    // mode === 'text' && this.getByText(param);
+    mode === 'text' && this.getByText(param);
   }
 
   render() {
-    console.log(this.props);
-    const resultIsReady = this.props.result[0] !== undefined;
-    const notFound = resultIsReady && this.props.result[0] === 'empty';
+    const { t, result, match } = this.props;
+    const { mode, param } = match.params;
+    const resultIsReady = result[0] !== undefined;
+    const notFound = resultIsReady && result[0] === 'empty';
     return (
       <section className='container'>
         {!resultIsReady && <Spinner />}
-        {notFound && <p>Nothing there</p>}
+        {notFound && <p>{t('SearchPage.notFound')}</p>}
         {resultIsReady && !notFound && (
-          <div className='row'>
-            <h3>{'search res'}</h3>
-            <div class='list-group'>
+          <div className='col'>
+            <h3>{`${t('SearchPage.resultsFor')} ${t(`SearchPage.${mode}`)}: '${param}' (${
+              result.length
+            } ${t('SearchPage.items')})`}</h3>
+            <div className='list-group'>
               {this.props.result.map(el => (
                 <NavLink
                   key={el.id}
@@ -53,7 +57,7 @@ class SearchResult extends Component {
   }
 }
 
-const mapStateToProps = state => ({result: state.search});
+const mapStateToProps = state => ({ result: state.search });
 
 export default withNamespaces('common')(
   connect(mapStateToProps, searchActions)(SearchResult)

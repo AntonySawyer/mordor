@@ -109,16 +109,21 @@ router.post('/save', (req, res, next) => {
 });
 
 router.post('/byTag', (req, res) => {
-  Fanfic.find({tags: req.body.tag }, { title: 1, shortDescr: 1 })
+  Fanfic.find({ tags: req.body.tag }, { title: 1, shortDescr: 1 })
     .then(rs => JSON.parse(JSON.stringify(rs)))
     .then(fanfics => res.json(setId(fanfics)));
 });
 
 router.post('/byCategory', (req, res) => {
-  Fanfic.find({category: req.body.category }, { title: 1, shortDescr: 1 })
+  Fanfic.find({ category: req.body.category }, { title: 1, shortDescr: 1 })
     .then(rs => JSON.parse(JSON.stringify(rs)))
     .then(fanfics => res.json(setId(fanfics)));
 });
 
+router.post('/byText', (req, res) => {
+  Fanfic.find({ $text: { $search: req.body.str } }, { title: 1, shortDescr: 1 })
+    .then(rs => JSON.parse(JSON.stringify(rs)))
+    .then(fanfics => res.json(setId(fanfics)));
+});
 
 module.exports = router;

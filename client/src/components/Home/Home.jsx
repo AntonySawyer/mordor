@@ -47,15 +47,15 @@ class Home extends Component {
         <div className='row'>
           <div className='col'>
             <h3>{t('Home.lastUpdate')}</h3>
-            <div class='list-group'>
+            <div className='list-group'>
               {lastUpdate.map(el => (
                 <NavLink
                   key={el.id}
                   to={`/fanfic/read/${el.id}`}
-                  class='list-group-item list-group-item-action flex-column align-items-start'
+                  className='list-group-item list-group-item-action flex-column align-items-start'
                 >
-                  <div class='d-flex w-100 justify-content-between'>
-                    <h5 class='mb-1'>{el.title}</h5>
+                  <div className='d-flex w-100 justify-content-between'>
+                    <h5 className='mb-1'>{el.title}</h5>
                     <small>
                       <Badge
                         title={dateFormat(el.datestamp, lng)}
@@ -63,22 +63,22 @@ class Home extends Component {
                       />
                     </small>
                   </div>
-                  <p class='mb-1'>{el.shortDescr}</p>
+                  <p className='mb-1'>{el.shortDescr}</p>
                 </NavLink>
               ))}
             </div>
           </div>
           <div className='col'>
             <h3>{t('Home.topRate')}</h3>
-            <div class='list-group'>
+            <div className='list-group'>
               {topRated.map(el => (
                 <NavLink
                   key={el.id}
                   to={`/fanfic/read/${el.id}`}
-                  class='list-group-item list-group-item-action flex-column align-items-start'
+                  className='list-group-item list-group-item-action flex-column align-items-start'
                 >
-                  <div class='d-flex w-100 justify-content-between'>
-                    <h5 class='mb-1'>{el.title}</h5>
+                  <div className='d-flex w-100 justify-content-between'>
+                    <h5 className='mb-1'>{el.title}</h5>
                     <small>
                       <Badge
                         title={el.rate}
@@ -86,7 +86,7 @@ class Home extends Component {
                       />
                     </small>
                   </div>
-                  <p class='mb-1'>{el.shortDescr}</p>
+                  <p className='mb-1'>{el.shortDescr}</p>
                 </NavLink>
               ))}
             </div>

@@ -1,4 +1,4 @@
-import { GET_BY_TAG, GET_BY_CATEGORY } from './types';
+import { GET_BY_TAG, GET_BY_CATEGORY, GET_BY_TEXT } from './types';
 
 export const getByTag = (tag) => {
   return (dispatch, getState) => {
@@ -30,6 +30,23 @@ export const getByCategory = (category) => {
       .then(rs => rs.json())
       .then(payload => {
         return dispatch({ type: GET_BY_CATEGORY, payload });
+      });
+  };
+};
+
+export const getByText = (str) => {
+  return (dispatch, getState) => {
+    fetch('/api/fanfic/byText', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ str })
+    })
+      .then(rs => rs.json())
+      .then(payload => {
+        return dispatch({ type: GET_BY_TEXT, payload });
       });
   };
 };

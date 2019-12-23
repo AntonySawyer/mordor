@@ -23,6 +23,7 @@ export const UPDATE_COMMENTS = 'UPDATE_COMMENTS';
 
 export const GET_BY_TAG = 'GET_BY_TAG';
 export const GET_BY_CATEGORY = 'GET_BY_CATEGORY';
+export const GET_BY_TEXT = 'GET_BY_TEXT';
 
 export const SET_LANG = 'SET_LANG';
 export const SET_THEME = 'SET_THEME';

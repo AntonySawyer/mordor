@@ -4,7 +4,7 @@ import './ActionBtn.css';
 export default ({type, className, handler, title}) => {
   return (
     <button
-      type='button'
+      type={type === undefined ? 'button' : type}
       className={className || 'btn btn-outline-info'}
       onClick={handler}
     >

@@ -30,7 +30,7 @@ class Fanfic extends Component {
       rating: 0,
       fanficTitle: '',
       shortDescr: '',
-      category: [],
+      category: '',
       isStillFetching: true,
       tags: [],
       suggestions: [],
@@ -89,6 +89,7 @@ class Fanfic extends Component {
       images,
       stars
     );
+    this.props.history.push('/');
   }
 
   updateMarkdown(value) {
@@ -268,10 +269,13 @@ class Fanfic extends Component {
       this.setState({
         isStillFetching: false,
         suggestions: this.props.suggestions,
-        categories: this.props.categories[0],
         chapterTitle: '',
         chapters: [{ title: 'Unnamed', content: 'Add text here' }]
       });
+    }
+
+    if (mode === 'create' && this.state.category === '') {
+      this.setState({ category: this.props.categories[0] });
     }
 
     return (

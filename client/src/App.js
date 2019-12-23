@@ -109,7 +109,7 @@ class App extends React.Component {
     return (
       <Router>
         <Suspense fallback={<Spinner />}>
-          <NavBar
+          <NavBar 
             isAuth={this.isAuth}
             isAdmin={this.isAdmin}
             currentId={this.userId}

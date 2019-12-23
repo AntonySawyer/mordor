@@ -5,6 +5,7 @@ import FilterableTable from 'react-filterable-table';
 import dateFormat from '../../utils/dateFormat';
 import * as profileActions from '../../redux/actions/profileActions';
 import ActionBtn from '../common/ActionBtn/';
+import Spinner from '../common/Spinner/';
 import { checkAll, setIndeterminate } from '../../utils/checkboxWorker';
 import './Profile.css';
 
@@ -102,53 +103,61 @@ class Profile extends Component {
       }
     ];
 
+    const dataIsReady = userdata !== undefined;
+
     return (
       <section className='profile container'>
         <h3>{t('Profile.title')}</h3>
-        <section className='row'>
-          <article className='col'>
-            <div className='card mb-3'>
-              <div class='row no-gutters'>
-                <div class='col-md-2'>
-                  <img
-                    className='card-img-top'
-                    src={userdata.avatar}
-                    alt={`${userdata.username} avatar`}
-                  />
-                </div>
-                <div class='col-md-8'>
-                  <div class='card-body'>
-                    <ul className='list-group list-group-flush'>
-                      <li className='list-group-item'>{`${t(
-                        'Profile.username'
-                      )}: ${userdata.username}`}</li>
-                      <li className='list-group-item'>{`${t(
-                        'Profile.email'
-                      )}: ${userdata.email}`}</li>
-                      <li className='list-group-item'>{`${t('Profile.role')}: ${
-                        userdata.role === 'admin'
-                          ? t('Profile.admin')
-                          : t('Profile.user')
-                      }`}</li>
-                      <li className='list-group-item'>
-                        Maybe password reset btn(?)
-                      </li>
-                    </ul>
+        {!dataIsReady && <Spinner />}
+        {dataIsReady && (
+          <section className='row'>
+            <article className='col'>
+              <div className='card mb-3'>
+                <div className='row no-gutters'>
+                  <div className='col-md-2'>
+                    <img
+                      className='card-img-top'
+                      src={userdata.avatar}
+                      alt={`${userdata.username} avatar`}
+                    />
+                  </div>
+                  <div className='col-md-8'>
+                    <div className='card-body'>
+                      <ul className='list-group list-group-flush'>
+                        <li className='list-group-item'>{`${t(
+                          'Profile.username'
+                        )}: ${userdata.username}`}</li>
+                        <li className='list-group-item'>{`${t(
+                          'Profile.email'
+                        )}: ${userdata.email}`}</li>
+                        <li className='list-group-item'>{`${t(
+                          'Profile.role'
+                        )}: ${
+                          userdata.role === 'admin'
+                            ? t('Profile.admin')
+                            : t('Profile.user')
+                        }`}</li>
+                        <li className='list-group-item'>
+                          Maybe password reset btn(?)
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className='card-body'></div>
-            </div>
-          </article>
-          {achieves !== undefined && (
-            <article className='col'>
-              {achieves.map(el => (
-                <p key={el.id}>{el.title}</p>
-              ))}
+                <div className='card-body'></div>
+              </div>
             </article>
-          )}
-        </section>
+            {achieves !== undefined && (
+              <article className='col'>
+                {achieves.map(el => (
+                  <p key={el.id}>{el.title}</p>
+                ))}
+              </article>
+            )}
+          </section>
+        )}
+
         <ActionBtn
           title={t('Profile.create')}
           handler={this.fanficAction.bind(this, 'create', 'new')}

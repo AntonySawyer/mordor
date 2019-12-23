@@ -58,7 +58,7 @@ function NavBar(props) {
             className='rounded-circle'
             style={{ width: '25px', marginRight: '5px' }}
           />
-          {`${user.username} - ${t('NavBar.profile')}`}
+          {t('NavBar.profile')}
         </NavLink>
       </li>
       <li className='nav-item'>
